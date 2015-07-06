@@ -1,0 +1,363 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/white"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                style="@style/white_bg"
+                android:layout_width="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@+id/headLayout"
+                    style="@style/part_linear" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="头像" />
+
+                    <com.weidi.common.CircularImage
+                        android:id="@+id/headView"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY" />
+                </LinearLayout>
+
+                <include layout="@layout/line" />
+
+                <LinearLayout style="@style/part_linear" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="登录名" />
+
+                    <TextView
+                        android:id="@+id/usernameView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_fill"
+                        android:textColor="@color/dark_grey" />
+                </LinearLayout>
+
+                <include layout="@layout/line" />
+
+                <LinearLayout
+                    android:id="@+id/nameLayout"
+                    style="@style/part_linear" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="姓名" />
+
+                    <TextView
+                        android:id="@+id/nameView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_fill"
+                        android:textColor="@color/dark_grey" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/arrow_right" />
+                </LinearLayout>
+
+                <include layout="@layout/line" />
+
+                <LinearLayout
+                    android:id="@+id/emailLayout"
+                    style="@style/part_linear" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/email" />
+
+                    <TextView
+                        android:id="@+id/emailView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_fill"
+                        android:textColor="@color/dark_grey" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/arrow_right" />
+                </LinearLayout>
+
+                <include layout="@layout/line" />
+
+                <LinearLayout
+                    android:id="@+id/phoneLayout"
+                    style="@style/part_linear" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/phone" />
+
+                    <TextView
+                        android:id="@+id/phoneView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_fill"
+                        android:textColor="@color/dark_grey" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/arrow_right" />
+                </LinearLayout>
+
+                <include layout="@layout/line" />
+
+                <LinearLayout
+                    android:id="@+id/adrLayout"
+                    style="@style/part_linear" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="地区" />
+
+                    <TextView
+                        android:id="@+id/adrView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_fill"
+                        android:textColor="@color/dark_grey" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/arrow_right" />
+                </LinearLayout>
+
+                <include layout="@layout/line" />
+
+                <LinearLayout
+                    android:id="@+id/pwdLayout"
+                    style="@style/part_linear" >
+
+                    <TextView
+                        android:id="@+id/tv_me_change_password"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="密码修改" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/arrow_right" />
+                </LinearLayout>
+
+                <include layout="@layout/line" />
+
+                <LinearLayout
+                    android:id="@+id/sexLayout"
+                    style="@style/part_linear" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="性别" />
+
+                    <TextView
+                        android:id="@+id/sexView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_fill"
+                        android:textColor="@color/dark_grey" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/arrow_right" />
+                </LinearLayout>
+
+                <include layout="@layout/line" />
+
+                <LinearLayout
+                    android:id="@+id/signLayout"
+                    style="@style/part_linear" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="签名" />
+
+                    <TextView
+                        android:id="@+id/signView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_fill"
+                        android:textColor="@color/dark_grey" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/arrow_right" />
+                </LinearLayout>
+
+                <include layout="@layout/line" />
+
+                <LinearLayout
+                    android:id="@+id/soundLayout"
+                    style="@style/part_linear" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="声音" />
+
+                    <CheckBox
+                        android:id="@+id/soundBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/img_radio_btn"
+                        android:button="@null"
+                        android:checked="true" />
+                </LinearLayout>
+
+                <include layout="@layout/line" />
+
+                <LinearLayout
+                    android:id="@+id/shakeLayout"
+                    style="@style/part_linear" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="震动" />
+
+                    <CheckBox
+                        android:id="@+id/shakeBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/img_radio_btn"
+                        android:button="@null"
+                        android:checked="true" />
+                </LinearLayout>
+
+                <include layout="@layout/line" />
+
+                <LinearLayout
+                    android:id="@+id/shareLayout"
+                    style="@style/part_linear" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="是否共享位置" />
+
+                    <CheckBox
+                        android:id="@+id/shareBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/img_radio_btn"
+                        android:button="@null"
+                        android:checked="true" />
+                </LinearLayout>
+
+                <include layout="@layout/line" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/exitBtn"
+                style="@style/white20Text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/btn"
+                android:text="退出登录" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/changeAdrLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="10dp"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dip"
+                android:orientation="horizontal" >
+
+                <com.weidi.view.wheel.WheelView
+                    android:id="@+id/id_province"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <com.weidi.view.wheel.WheelView
+                    android:id="@+id/id_city"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <com.weidi.view.wheel.WheelView
+                    android:id="@+id/id_district"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/sureBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:gravity="center"
+                android:text="确定"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <include  layout="@layout/change_user_info"/>
+       
+    </RelativeLayout>
+
+</ScrollView>
