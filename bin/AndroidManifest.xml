@@ -104,11 +104,9 @@
         <activity
             android:name="com.weidi.activity.ImageGridActivity"
             android:screenOrientation="portrait" />
-        
-         <activity
+        <activity
             android:name="com.weidi.activity.TradeActivity"
             android:screenOrientation="portrait" />
-        
         <activity
             android:name="com.weidi.activity.FujinActivity"
             android:screenOrientation="portrait" />
@@ -116,21 +114,34 @@
         <activity
             android:name="com.weidi.activity.SearchActivity"
             android:screenOrientation="portrait" />
-        <activity android:name="com.weidi.activity.FriendActivity" android:screenOrientation="portrait"/>
-        <activity android:name="com.weidi.activity.NewFriendActivity" android:screenOrientation="portrait"/>
-        <activity android:name="com.weidi.activity.MeEditActivity" android:screenOrientation="portrait"/>
-        <activity android:name="com.weidi.activity.CropImageActivity" android:screenOrientation="portrait"/>
-        <activity android:name="com.weidi.activity.PicSrcPickerActivity" android:screenOrientation="portrait"/>
-        <activity android:name="com.weidi.activity.ChangePwdActivity" android:screenOrientation="portrait"/>
-        
-         <activity
+        <activity
+            android:name="com.weidi.activity.FriendActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.NewFriendActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.MeEditActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.CropImageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.PicSrcPickerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.ChangePwdActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.weidi.image.ImagePagerActivity"
             android:screenOrientation="portrait" />
-         
-         <activity
+        <activity
+            android:name="com.weidi.chat.groupchat.CreatChatRoomActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.weidi.activity.SettingActivity"
             android:screenOrientation="portrait" />
-         
+
         <service android:name="com.weidi.service.MsfService" />
     </application>
 
