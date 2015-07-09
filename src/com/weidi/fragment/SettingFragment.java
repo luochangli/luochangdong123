@@ -67,8 +67,9 @@ public class SettingFragment extends BaseFragment implements OnClickListener,
 	private EditText changeText;
 	private RadioGroup sexGroup;
 	private RadioButton manRadio, womanRadio;
-	private Button subBtn, sureBtn, cancelBtn;
+	private Button subBtn, sureBtn, cancelBtn, btnCancle;
 	private ScrollView scrollView;
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -223,7 +224,8 @@ public class SettingFragment extends BaseFragment implements OnClickListener,
 		subBtn = (Button) mRootView.findViewById(R.id.subBtn);
 		sureBtn = (Button) mRootView.findViewById(R.id.sureBtn);
 		cancelBtn = (Button) mRootView.findViewById(R.id.cancelBtn);
-		
+		btnCancle = (Button) mRootView.findViewById(R.id.btnCancle);
+
 		scrollView = (ScrollView) mRootView.findViewById(R.id.scrollView);
 	}
 
@@ -241,6 +243,13 @@ public class SettingFragment extends BaseFragment implements OnClickListener,
 		subBtn.setOnClickListener(this);
 		sureBtn.setOnClickListener(this);
 		cancelBtn.setOnClickListener(this);
+		btnCancle.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				changeAdrLayout.setVisibility(View.GONE);
+			}
+		});
 
 		civHeadImg.setOnClickListener(this);
 		sexGroup.setOnCheckedChangeListener(new android.widget.RadioGroup.OnCheckedChangeListener() {
@@ -433,8 +442,7 @@ public class SettingFragment extends BaseFragment implements OnClickListener,
 	}
 
 	private void showSelectedResult() {
-		String adr = mCurrentProviceName + " " + mCurrentCityName + " "
-				+ mCurrentDistrictName;
+		String adr = mCurrentCityName + " " + mCurrentDistrictName;
 		Toast.makeText(
 				getActivity(),
 				"当前选中:" + mCurrentProviceName + "," + mCurrentCityName + ","
@@ -444,6 +452,7 @@ public class SettingFragment extends BaseFragment implements OnClickListener,
 		Const.loginUser.getvCard().setField("adr", adr);
 		XmppUtil.getInstance().changeVcard(Const.loginUser.getvCard());
 		changeAdrLayout.setVisibility(View.GONE);
+		Const.loginUser = new User(XmppUtil.getUserInfo(null));// 加载用户数据
 	}
 
 	/**
@@ -458,7 +467,7 @@ public class SettingFragment extends BaseFragment implements OnClickListener,
 		changeLayout.setVisibility(View.VISIBLE);
 		if (field.equals("sex")) {
 			sexGroup.setVisibility(View.VISIBLE);
-			changeText.setVisibility(View.INVISIBLE);
+			changeText.setVisibility(View.GONE);
 		} else {
 			sexGroup.setVisibility(View.GONE);
 			changeText.setVisibility(View.VISIBLE);

@@ -34,6 +34,7 @@ import com.weidi.QApp;
 import com.weidi.R;
 import com.weidi.activity.ChatActivity;
 import com.weidi.activity.NewFriendActivity;
+import com.weidi.activity.SearchActivity;
 import com.weidi.bean.Friend;
 import com.weidi.bean.User;
 import com.weidi.common.CharacterParser;
@@ -70,7 +71,7 @@ public class NewConstactFragment extends BaseFragment {
 	private TextView tvTotal, newFriCount;
 	private FriendsOnlineStatusReceiver friendsOnlineStatusReceiver;
 	private Context mContext;
-	private RelativeLayout tvNewFriend;
+	private RelativeLayout tvNewFriend, rlAddFriend;
 	private PopupWindow popFriendInfo;// 好友信息
 	FriendPopWindow addPopWindow;// 好友更多
 	private LayoutInflater layoutInflater;
@@ -84,7 +85,7 @@ public class NewConstactFragment extends BaseFragment {
 	 */
 	private CharacterParser characterParser;
 	public static List<SortModel> sourceDateList;
-    
+
 	/**
 	 * 根据拼音来排列ListView里面的数据类
 	 */
@@ -135,6 +136,7 @@ public class NewConstactFragment extends BaseFragment {
 		// 新的朋友
 		tvNewFriend = (RelativeLayout) headView
 				.findViewById(R.id.re_newfriends);
+		rlAddFriend = (RelativeLayout) headView.findViewById(R.id.rlAddFriend);
 		newFriCount = (TextView) headView.findViewById(R.id.tv_unread);
 		tvTotal = (TextView) footerView.findViewById(R.id.tv_total);
 		mClearEditText = (ClearEditText) mRootView
@@ -204,7 +206,13 @@ public class NewConstactFragment extends BaseFragment {
 
 			}
 		});
+		rlAddFriend.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(mContext, SearchActivity.class));
+			}
+		});
 	}
 
 	/**
@@ -215,18 +223,19 @@ public class NewConstactFragment extends BaseFragment {
 	 */
 	private List<SortModel> filledData(List<String> data) {
 		List<SortModel> mSortList = new ArrayList<SortModel>();
-        
+
 		User user;
 		for (int i = 0; i < data.size(); i++) {
 			SortModel sortModel = new SortModel();
-			user =  VCardDao.getInstance().isContain(data.get(i));
+			user = VCardDao.getInstance().isContain(data.get(i));
 			if (user == null) {
-				 user = new User(XmppUtil.getUserInfo(data.get(i)));
+				user = new User(XmppUtil.getUserInfo(data.get(i)));
 			}
-			    String nick = user.getNickname() == null?user.getUsername():user.getNickname();
-			    sortModel.setName(nick);
-	            sortModel.setValue(user.getUsername());
-			
+			String nick = user.getNickname() == null ? user.getUsername()
+					: user.getNickname();
+			sortModel.setName(nick);
+			sortModel.setValue(user.getUsername());
+
 			// 汉字转换成拼音
 			String pinyin = characterParser.getSelling(nick);
 			String sortString = pinyin.substring(0, 1).toUpperCase();
@@ -277,7 +286,7 @@ public class NewConstactFragment extends BaseFragment {
 	protected void handleMsg(Message msg) {
 		switch (msg.what) {
 		case 1:
-			
+
 			initData();
 			tvTotal.setText(String.valueOf(sourceDateList.size()) + "位联系人");
 			adapter.updateListView(sourceDateList);
@@ -312,9 +321,9 @@ public class NewConstactFragment extends BaseFragment {
 		for (Friend friend : friends) {
 			friendData.add(friend.username);
 		}
-		
+
 		if (friendData.size() > 0) {
-		     
+
 			sourceDateList = filledData(friendData);
 			Logger.i(TAG, "好友数量=" + sourceDateList.size());
 		} else {
@@ -438,7 +447,7 @@ public class NewConstactFragment extends BaseFragment {
 					friend = new User(vCard);
 					fillFriendInfo();
 					popFriendWeidi.setText(friendWeidi);
-					 VCardDao.getInstance().insertUser(friend);
+					VCardDao.getInstance().insertUser(friend);
 				}
 			}
 
@@ -465,7 +474,7 @@ public class NewConstactFragment extends BaseFragment {
 			@Override
 			protected Object load() {
 
-				friend =  VCardDao.getInstance().isContain(friendWeidi);
+				friend = VCardDao.getInstance().isContain(friendWeidi);
 				if (friend == null) {
 					return XmppUtil.getUserInfo(friendWeidi);
 				} else {

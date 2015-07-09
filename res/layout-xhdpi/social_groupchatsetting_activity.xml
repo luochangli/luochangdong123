@@ -9,10 +9,10 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_top_bar"
-        android:background="@color/common_top_bar_blue" >
+        android:background="@color/green" >
 
         <ImageView
-            android:id="@+id/iv_back"
+            android:id="@+id/ivBack"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
@@ -31,30 +31,27 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:layout_toRightOf="@id/iv_back"
-            android:background="#14191A" />
+            android:layout_toRightOf="@id/ivBack"
+            android:background="@color/white" />
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/view_temp"
-            android:text="聊天信息"
-            android:textColor="#ffffff"
+            android:text="群聊名称"
+            android:textColor="@color/white"
             android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/tv_m_total"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/tv_title"
-            android:text="(0)"
-            android:textColor="#ffffff"
-            android:textSize="18sp" >
-        </TextView>
+            android:layout_marginRight="@dimen/margin_15"
+            android:src="@drawable/icon_groupchat" />
+
     </RelativeLayout>
 
     <ScrollView
@@ -91,7 +88,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="群名称"
-                    android:textColor="#353535"
+                    android:textColor="@color/text_color_deep"
                     android:textSize="16sp"
                     android:typeface="serif" />
 
@@ -105,7 +102,8 @@
                     android:ellipsize="end"
                     android:maxWidth="200dp"
                     android:singleLine="true"
-                    android:textColor="#AAAAAA"
+                    android:text="未命名"
+                    android:textColor="@color/text_color_light"
                     android:textSize="12sp" />
             </RelativeLayout>
 
@@ -115,10 +113,75 @@
                 android:background="#dadada" />
 
             <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:background="@color/white"
+                android:padding="10dip" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="群二维码扫描"
+                    android:textColor="@color/text_color_deep"
+                    android:textSize="16sp"
+                    android:typeface="serif" />
+
+                <ImageView
+                    android:layout_width="45dip"
+                    android:layout_height="45dip"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/margin_10"
+                    android:src="@drawable/group2code" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="#dadada" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:background="@color/white"
+                android:padding="10dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="群聊大小"
+                    android:textColor="@color/text_color_deep"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="#dadada" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:background="@color/white"
+                android:padding="10dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="群聊图片"
+                    android:textColor="@color/text_color_deep"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/rl_switch_chattotop"
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
-                android:background="#ffffff"
+                android:layout_marginTop="20dp"
+                android:background="@color/white"
                 android:padding="10dip" >
 
                 <TextView
@@ -126,7 +189,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="置顶聊天"
-                    android:textColor="#353535"
+                    android:textColor="@color/text_color_deep"
                     android:textSize="16sp"
                     android:typeface="serif" />
 
@@ -165,8 +228,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="屏蔽群消息"
-                    android:textColor="#353535"
+                    android:text="消息免打扰"
+                    android:textColor="@color/text_color_deep"
                     android:textSize="16sp"
                     android:typeface="serif" />
 
@@ -190,21 +253,67 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:background="#ffffff"
+                android:padding="10dip" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="保存到通讯录"
+                    android:textColor="@color/text_color_deep"
+                    android:textSize="16sp"
+                    android:typeface="serif" />
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/open_icon"
+                    android:visibility="invisible" />
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/close_icon"
+                    android:visibility="visible" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/re_clear"
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
-                android:layout_marginTop="20dp"
-                android:background="#ffffff"
+                android:layout_marginTop="@dimen/margin_15"
+                android:background="@color/white"
                 android:padding="10dp" >
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="清空聊天记录"
-                    android:textColor="#353535"
+                    android:text="我在本群的昵称"
+                    android:textColor="@color/text_color_deep"
                     android:textSize="16sp"
                     android:typeface="serif" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="12dp"
+                    android:ellipsize="end"
+                    android:maxWidth="200dp"
+                    android:singleLine="true"
+                    android:text="昵称"
+                    android:textColor="@color/text_color_light"
+                    android:textSize="@dimen/text_size_12" />
+
             </RelativeLayout>
 
             <Button
@@ -213,9 +322,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="11dp"
                 android:background="@drawable/btn_style_alert_dialog_special"
+                android:gravity="center"
                 android:onClick="exitGroup"
                 android:paddingBottom="7dp"
-                android:gravity="center"
                 android:paddingTop="7dp"
                 android:text="删除并退出"
                 android:textColor="@android:color/white"

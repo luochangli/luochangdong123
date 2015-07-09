@@ -3,11 +3,23 @@ package com.weidi.chat.groupchat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jivesoftware.smack.PacketCollector;
+import org.jivesoftware.smack.SmackConfiguration;
+import org.jivesoftware.smack.filter.AndFilter;
+import org.jivesoftware.smack.filter.PacketFilter;
+import org.jivesoftware.smack.filter.PacketIDFilter;
+import org.jivesoftware.smack.filter.PacketTypeFilter;
+import org.jivesoftware.smack.packet.IQ;
+import org.jivesoftware.smack.provider.ProviderManager;
+
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,7 +34,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.weidi.QApp;
 import com.weidi.R;
+import com.weidi.chat.ChatGroupOrder;
+import com.weidi.chat.GroupChatSettingActi;
 import com.weidi.common.CircularImage;
 import com.weidi.common.CommonAdapter;
 import com.weidi.common.SortModel;
@@ -30,6 +45,13 @@ import com.weidi.common.ViewHolder;
 import com.weidi.common.base.BaseActivity;
 import com.weidi.common.image.ImgConfig;
 import com.weidi.fragment.NewConstactFragment;
+import com.weidi.provider.CreateMUCIQ;
+import com.weidi.provider.CreateMUCProvider;
+import com.weidi.provider.NearTime;
+import com.weidi.provider.ObtainMUCInfoIQ;
+import com.weidi.provider.ObtainMUCListIQ;
+import com.weidi.util.Const;
+import com.weidi.util.Logger;
 import com.weidi.view.CircleImageView;
 
 /**
@@ -39,6 +61,7 @@ import com.weidi.view.CircleImageView;
  */
 public class CreatChatRoomActivity extends BaseActivity {
 
+	private static String TAG = "CreatChatRoomActivity";
 	private ImageView iv_search, ivBack;
 	private TextView tvSubmit;
 	private ListView listView;
@@ -111,9 +134,6 @@ public class CreatChatRoomActivity extends BaseActivity {
 						&& exitingMembers.contains(item.getValue())) {
 					checkBox.setButtonDrawable(R.drawable.btn_check);
 					checkBox.setChecked(true);
-				} else if (addList != null && addList.contains(item.getValue())) {
-					checkBox.setButtonDrawable(R.drawable.check_blue);
-					checkBox.setChecked(true);
 				}
 
 				checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -124,46 +144,51 @@ public class CreatChatRoomActivity extends BaseActivity {
 						// 群组中原来的成员一直设为选中状态
 						if (exitingMembers.contains(item.getValue())) {
 							isChecked = true;
-							checkBox.setChecked(true);
+							checkBox.setChecked(false);
 						}
 
 						if (isChecked) {
-							// 选中用户显示在滑动栏显示
-							addList.add(item.getValue());
-							total++;
-							showCheckImage(item.getValue());
-
+							setChecked(item, checkBox);
 						} else {
 							total--;
 							deleteImage(item.getValue());
 							addList.remove(item.getValue());
 						}
 					}
+
+					private void setChecked(final SortModel item,
+							final CheckBox checkBox) {
+						// 选中用户显示在滑动栏显示
+						addList.add(item.getValue());
+						total++;
+						tvSubmit.setText("确定(" + total + ")");
+						if (total > 0) {
+							if (iv_search.getVisibility() == View.VISIBLE) {
+								iv_search.setVisibility(View.GONE);
+							}
+						}
+						View view = LayoutInflater.from(mContext).inflate(
+								R.layout.item_chatroom_header_item, null);
+						CircularImage friendHead = (CircularImage) view
+								.findViewById(R.id.iv_avatar);
+						friendHead.setOnClickListener(new OnClickListener() {
+
+							@SuppressLint("NewApi")
+							@Override
+							public void onClick(View v) {
+								checkBox.setChecked(false);
+							}
+						});
+						// 设置id，方便后面删除
+						view.setTag(item.getValue());
+						ImgConfig.showHeadImg(item.getValue(), friendHead);
+						menuLinerLayout.addView(view);
+					}
 				});
 
 			}
 		};
 		listView.setAdapter(adapter);
-	}
-
-	private void showCheckImage(String friend) {
-		tvSubmit.setText("确定(" + total + ")");
-		if (total > 0) {
-			if (iv_search.getVisibility() == View.VISIBLE) {
-				iv_search.setVisibility(View.GONE);
-			}
-		}
-		// 包含TextView的LinearLayout
-		// 参数设置
-
-		View view = LayoutInflater.from(this).inflate(
-				R.layout.item_chatroom_header_item, null);
-		CircularImage friendHead = (CircularImage) view.findViewById(R.id.iv_avatar);
-
-		// 设置id，方便后面删除
-		view.setTag(friend);
-		ImgConfig.showHeadImg(friend, friendHead);
-		menuLinerLayout.addView(view);
 	}
 
 	private void deleteImage(String friend) {
@@ -205,7 +230,10 @@ public class CreatChatRoomActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// save();
+				ChatGroupOrder.getInstance().createMUCRoom("测试群昵称", "测试群描述",
+						Const.loginUser.getNickname());
+                    startActivity(new Intent(mContext, GroupChatSettingActi.class));
+                    finish();
 			}
 
 		});

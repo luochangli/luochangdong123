@@ -2,6 +2,7 @@ package com.weidi.common.base;
 
 import com.weidi.QApp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +19,7 @@ import android.view.WindowManager;
  */
 public abstract class BaseActivity extends FragmentActivity{
 	protected QApp mApp;
+	protected Context mContext;
 	protected LocalBroadcastManager mLocalBroadcastManager;
 	protected Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -30,7 +32,7 @@ public abstract class BaseActivity extends FragmentActivity{
 		super.onCreate(savedInstanceState);
 		mApp = QApp.getInstance();
 		mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
-	
+		mContext = this;
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		initView(savedInstanceState);
 		setListener();

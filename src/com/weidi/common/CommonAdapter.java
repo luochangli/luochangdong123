@@ -19,6 +19,11 @@ public abstract class CommonAdapter<T> extends BaseAdapter
 	protected List<T> mDatas;
 	protected final int mItemLayoutId;
 
+	/**
+	 * @param context
+	 * @param mDatas
+	 * @param itemLayoutId
+	 */
 	public CommonAdapter(Context context, List<T> mDatas, int itemLayoutId)
 	{
 		this.mContext = context;

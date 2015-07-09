@@ -145,6 +145,10 @@
             android:name="com.weidi.activity.DevelopmentActi"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name="com.weidi.chat.GroupChatSettingActi"
+            android:screenOrientation="portrait" >
+        </activity>
 
         <service android:name="com.weidi.service.MsfService" />
     </application>

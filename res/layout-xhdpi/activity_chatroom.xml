@@ -32,7 +32,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:layout_toRightOf="@id/iv_back"
-            android:background="#14191A" />
+            android:background="@color/white" />
 
         <TextView
             android:id="@+id/tv_title"

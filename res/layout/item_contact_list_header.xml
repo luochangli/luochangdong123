@@ -19,7 +19,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            android:src="@drawable/default_fmessage" />
+            android:src="@drawable/default_servicebrand_contact" />
 
         <TextView
             android:id="@+id/tv_newfriends"
@@ -68,7 +68,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            android:src="@drawable/default_chatroom" />
+            android:src="@drawable/icon_groupchat" />
 
         <TextView
             android:id="@+id/tv_chatroom"
@@ -87,13 +87,15 @@
         android:layout_height="0.1dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:background="#d9d9d9" />
+        android:background="#d9d9d9" 
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:background="@drawable/btn_list_item_bg"
-        android:clickable="true" >
+        android:clickable="true"
+        android:visibility="gone" >
 
         <ImageView
             android:id="@+id/iv_avatar3"
@@ -124,6 +126,7 @@
         android:background="#d9d9d9" />
 
     <RelativeLayout
+        android:id="@+id/rlAddFriend"
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:background="@drawable/btn_list_item_bg"
@@ -136,7 +139,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            android:src="@drawable/default_servicebrand_contact" />
+            android:src="@drawable/icon_addfriend" />
 
         <TextView
             android:id="@+id/tv_servicebrand_contact"
@@ -145,7 +148,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
             android:layout_toRightOf="@id/iv_avatar4"
-            android:text="公共号"
+            android:text="添加朋友"
             android:textColor="#353535"
             android:textSize="16sp" />
     </RelativeLayout>

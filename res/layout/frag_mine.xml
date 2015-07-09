@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="fill_parent" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="160dp"
                 android:background="@color/green"
                 android:gravity="center" >
 
@@ -24,42 +24,42 @@
                     android:id="@+id/civHeadImg"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:layout_centerVertical="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/margin_15"
                     android:scaleType="centerCrop"
                     android:src="@drawable/circle_head_img" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center" >
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/margin_10"
                     android:orientation="vertical" >
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/margin_20" >
+                        android:layout_gravity="center" 
+                        android:layout_marginTop="@dimen/margin_10">
 
                         <TextView
                             android:id="@+id/tvNickName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="我的昵称"
-                            android:textColor="@color/black"
+                            android:layout_centerHorizontal="true"
+                            android:textColor="@color/white"
                             android:textSize="@dimen/text_size_18" />
 
                         <ImageView
                             android:id="@+id/ivSex"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:layout_marginLeft="@dimen/margin_10"
+                            android:layout_marginLeft="@dimen/margin_20"
                             android:layout_toRightOf="@id/tvNickName"
+                            android:layout_centerVertical="true"
                             android:src="@drawable/female" />
 
                         <TextView
@@ -67,7 +67,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="男"
-                            android:textColor="@color/black"
+                            android:textColor="@color/white"
                             android:textSize="@dimen/text_size_18"
                             android:visibility="gone" />
                     </RelativeLayout>
@@ -76,13 +76,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/margin_8" >
+                        android:layout_marginTop="@dimen/margin_8" 
+                        android:layout_marginBottom="@dimen/margin_14">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="微迪号："
-                            android:textColor="@color/black"
+                            android:textColor="@color/white"
                             android:textSize="@dimen/text_size_12" />
 
                         <TextView
@@ -90,16 +91,23 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="1000221"
-                            android:textColor="@color/black"
+                            android:textColor="@color/white"
                             android:textSize="@dimen/text_size_12" />
                     </LinearLayout>
 
-                    <View
+                    <!-- <View
                         android:layout_width="200dp"
                         android:layout_height="0.1dip"
                         android:layout_marginTop="@dimen/margin_20"
-                        android:background="@color/gray" />
+                        android:background="@color/gray" /> -->
                 </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center" >
             </RelativeLayout>
 
           
@@ -118,14 +126,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/margin_8" >
+                        android:layout_marginTop="@dimen/margin_15" >
 
                         <TextView
                             android:id="@+id/tvlableNick"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="昵称："
-                            android:textColor="@color/black"
+                            android:textColor="@color/text_color_deep"
                             android:textSize="@dimen/text_size_18" />
 
                         <TextView
@@ -134,7 +142,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toRightOf="@id/tvlableNick"
                             android:text="我的昵称"
-                            android:textColor="@color/black"
+                            android:textColor="@color/text_color_light"
                             android:textSize="@dimen/text_size_18" />
 
                         <ImageView
@@ -159,7 +167,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="地区："
-                            android:textColor="@color/black"
+                            android:textColor="@color/text_color_deep"
                             android:textSize="@dimen/text_size_18" />
 
                         <TextView
@@ -168,7 +176,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toRightOf="@id/lableAdr"
                             android:text="广东 深圳 罗湖"
-                            android:textColor="@color/black"
+                            android:textColor="@color/text_color_light"
                             android:textSize="@dimen/text_size_18" />
 
                         <ImageView
@@ -193,19 +201,17 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="个性签名："
-                            android:textColor="@color/black"
+                            android:textColor="@color/text_color_deep"
                             android:textSize="@dimen/text_size_18" />
 
                         <TextView
                             android:id="@+id/tvSign"
-                            android:layout_toRightOf="@id/lableSign"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxEms="7"
-                            android:singleLine="true"
+                            android:layout_toRightOf="@id/lableSign"
+                            android:maxLines="2"
                             android:text="今天天晴"
-                            android:textColor="@color/black"
+                            android:textColor="@color/text_color_light"
                             android:textSize="@dimen/text_size_18" />
 
                         <ImageView
@@ -233,9 +239,7 @@
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/margin_5" >
+                        android:layout_height="wrap_content" >
 
                         <RelativeLayout
                             android:layout_width="wrap_content"
@@ -245,8 +249,8 @@
 
                             <ImageView
                                 android:id="@+id/ivGallery"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
                                 android:src="@drawable/gallery" />
 
                             <TextView
@@ -255,7 +259,7 @@
                                 android:layout_below="@+id/ivGallery"
                                 android:layout_centerHorizontal="true"
                                 android:text="相册"
-                                android:textColor="@color/black"
+                                android:textColor="@color/text_color_deep"
                                 android:textSize="12sp" />
                         </RelativeLayout>
 
@@ -267,8 +271,8 @@
 
                             <ImageView
                                 android:id="@+id/ivCollect"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
                                 android:src="@drawable/collect" />
 
                             <TextView
@@ -277,7 +281,7 @@
                                 android:layout_below="@+id/ivCollect"
                                 android:layout_centerHorizontal="true"
                                 android:text="收藏"
-                                android:textColor="@color/black"
+                                android:textColor="@color/text_color_deep"
                                 android:textSize="12sp" />
                         </RelativeLayout>
                     </LinearLayout>
@@ -295,8 +299,8 @@
 
                             <ImageView
                                 android:id="@+id/ivWallet"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
                                 android:layout_marginRight="@dimen/margin_14"
                                 android:src="@drawable/wallet" />
 
@@ -306,7 +310,7 @@
                                 android:layout_below="@+id/ivWallet"
                                 android:layout_centerHorizontal="true"
                                 android:text="钱包"
-                                android:textColor="@color/black"
+                                android:textColor="@color/text_color_deep"
                                 android:textSize="12sp" />
                         </RelativeLayout>
 
@@ -317,8 +321,8 @@
 
                             <ImageView
                                 android:id="@+id/ivQRcode"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
                                 android:src="@drawable/rqcode" />
 
                             <TextView
@@ -327,7 +331,7 @@
                                 android:layout_below="@+id/ivQRcode"
                                 android:layout_centerHorizontal="true"
                                 android:text="二维码"
-                                android:textColor="@color/black"
+                                android:textColor="@color/text_color_deep"
                                 android:textSize="12sp" />
                         </RelativeLayout>
                     </LinearLayout>

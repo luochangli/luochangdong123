@@ -53,7 +53,7 @@ public class WheelView extends View {
 	private static final int PADDING = 10;
 
 	/** Default count of visible items */
-	private static final int DEF_VISIBLE_ITEMS = 5;
+	private static final int DEF_VISIBLE_ITEMS = 3;
 
 	// Wheel Values
 	private int currentItem = 0;
@@ -84,7 +84,7 @@ public class WheelView extends View {
 	private int scrollingOffset;
 
 	// Cyclic
-	boolean isCyclic = false;
+	boolean isCyclic = true;
 
 	// Items layout
 	private LinearLayout itemsLayout;
