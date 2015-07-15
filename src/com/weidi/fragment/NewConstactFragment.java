@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.packet.VCard;
 
 import android.content.BroadcastReceiver;
@@ -13,9 +14,11 @@ import android.content.IntentFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,10 +36,12 @@ import android.widget.TextView;
 import com.weidi.QApp;
 import com.weidi.R;
 import com.weidi.activity.ChatActivity;
+import com.weidi.activity.FriendActivity;
 import com.weidi.activity.NewFriendActivity;
 import com.weidi.activity.SearchActivity;
 import com.weidi.bean.Friend;
 import com.weidi.bean.User;
+import com.weidi.chat.groupchat.GroupListActivity;
 import com.weidi.common.CharacterParser;
 import com.weidi.common.ClearEditText;
 import com.weidi.common.PinyinComparator;
@@ -47,9 +52,11 @@ import com.weidi.common.SortModel;
 import com.weidi.common.ViewHolder;
 import com.weidi.common.base.BaseFragment;
 import com.weidi.db.NewFriendDao;
+import com.weidi.db.SessionDao;
 import com.weidi.db.VCardDao;
 import com.weidi.util.Const;
 import com.weidi.util.Logger;
+import com.weidi.util.ShowPopWindow;
 import com.weidi.util.ToastUtil;
 import com.weidi.util.XmppLoadThread;
 import com.weidi.util.XmppUtil;
@@ -63,15 +70,16 @@ import com.weidi.view.FriendPopWindow;
  */
 public class NewConstactFragment extends BaseFragment {
 	private static String TAG = "NewConstactFragment";
+	public static final String REFRESH_CONSTACT = "refresh_constacts";
+	public static final String SHOW_NEW_FRIEND = "show_new_friend";
 	private ListView sortListView;
 	private SideBar sideBar;
 	private TextView dialog;
 	private SortAdapter adapter;
 	private ClearEditText mClearEditText;
 	private TextView tvTotal, newFriCount;
-	private FriendsOnlineStatusReceiver friendsOnlineStatusReceiver;
 	private Context mContext;
-	private RelativeLayout tvNewFriend, rlAddFriend;
+	private RelativeLayout tvNewFriend, rlAddFriend, re_chatroom;
 	private PopupWindow popFriendInfo;// 好友信息
 	FriendPopWindow addPopWindow;// 好友更多
 	private LayoutInflater layoutInflater;
@@ -80,6 +88,7 @@ public class NewConstactFragment extends BaseFragment {
 	private CircleImageView civHeadImg;
 	private ImageView popFriendGender, popFriendClose, popFriendMore;
 	private User friend;
+	List<String> friendData;
 	/**
 	 * 汉字转换成拼音的类
 	 */
@@ -92,29 +101,57 @@ public class NewConstactFragment extends BaseFragment {
 	private PinyinComparator pinyinComparator;
 
 	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		Log.i("hui lai", "ggggg");
+
+	}
+
+	@Override
 	protected void initView(Bundle savedInstanceState) {
 		setRootView(R.layout.frag_constact);
-
+		Log.i("hui lai", "hhhhh");
 		mContext = getActivity();
-		friendsOnlineStatusReceiver = new FriendsOnlineStatusReceiver();
-		IntentFilter intentFilter = new IntentFilter(
-				Const.ACTION_FRIENDS_ONLINE_STATUS_CHANGE);
-		mContext.registerReceiver(friendsOnlineStatusReceiver, intentFilter);
 		// 实例化汉字转拼音类
 		characterParser = CharacterParser.getInstance();
 		layoutInflater = (LayoutInflater) mContext
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		pinyinComparator = new PinyinComparator();
 		sourceDateList = new ArrayList<SortModel>();
-		// 获取好友列表
-		XmppUtil.getInstance().getFriends(QApp.xmppConnection.getRoster());
+		friendData = new ArrayList<String>();
 		initView();
-
+		pinyinComparator = new PinyinComparator();
+		sourceDateList = new ArrayList<SortModel>();
 		initData();
-
 		tvTotal.setText(String.valueOf(sourceDateList.size()) + "位联系人");
 		adapter = new SortAdapter(mApp, sourceDateList);
 		sortListView.setAdapter(adapter);
+		initBroadcast();
+
+	}
+
+	private void initBroadcast() {
+		mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
+		mReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (intent.getAction().equals(REFRESH_CONSTACT)) {
+					mHandler.sendEmptyMessage(1);// 更新界面
+					QApp.mLocalBroadcastManager.sendBroadcast(new Intent(
+							FriendActivity.SHOW_IS_FRIEND));
+				}
+				if (intent.getAction().equals(SHOW_NEW_FRIEND)) {
+					updateConstant();
+				}
+
+			}
+		};
+		mLocalBroadcastManager.registerReceiver(mReceiver, new IntentFilter(
+				REFRESH_CONSTACT));
+		mLocalBroadcastManager.registerReceiver(mReceiver, new IntentFilter(
+				SHOW_NEW_FRIEND));
 	}
 
 	private void initView() {
@@ -141,6 +178,7 @@ public class NewConstactFragment extends BaseFragment {
 		tvTotal = (TextView) footerView.findViewById(R.id.tv_total);
 		mClearEditText = (ClearEditText) mRootView
 				.findViewById(R.id.filter_edit);
+		re_chatroom = (RelativeLayout) headView.findViewById(R.id.re_chatroom);
 	}
 
 	@Override
@@ -168,6 +206,7 @@ public class NewConstactFragment extends BaseFragment {
 				if (position != 0 && position != sourceDateList.size() + 1) {
 					String from = ((SortModel) adapter.getItem(position - 1))
 							.getValue();
+					// ShowPopWindow mm=new ShowPopWindow(mContext, 0);
 					showPopupWindow(view, from);
 
 				}
@@ -213,6 +252,14 @@ public class NewConstactFragment extends BaseFragment {
 				startActivity(new Intent(mContext, SearchActivity.class));
 			}
 		});
+
+		re_chatroom.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				startActivity(new Intent(mContext, GroupListActivity.class));
+			}
+		});
 	}
 
 	/**
@@ -226,28 +273,35 @@ public class NewConstactFragment extends BaseFragment {
 
 		User user;
 		for (int i = 0; i < data.size(); i++) {
-			SortModel sortModel = new SortModel();
-			user = VCardDao.getInstance().isContain(data.get(i));
-			if (user == null) {
-				user = new User(XmppUtil.getUserInfo(data.get(i)));
+			try {
+				SortModel sortModel = new SortModel();
+				user = VCardDao.getInstance().isContain(
+						StringUtils.parseName(data.get(i)));
+				if (user == null) {
+					user = new User(XmppUtil.getUserInfo(StringUtils
+							.parseName(data.get(i))));
+				}
+				String nick = user.getNickname() == null ? user.getUsername()
+						: user.getNickname();
+				sortModel.setName(nick);
+				sortModel.setValue(user.getUsername());
+
+				// 汉字转换成拼音
+				String pinyin = characterParser.getSelling(nick);
+				String sortString = pinyin.substring(0, 1).toUpperCase();
+
+				// 正则表达式，判断首字母是否是英文字母
+				if (sortString.matches("[A-Z]")) {
+					sortModel.setSortLetters(sortString.toUpperCase());
+				} else {
+					sortModel.setSortLetters("#");
+				}
+
+				mSortList.add(sortModel);
+			} catch (Exception e) {
+
 			}
-			String nick = user.getNickname() == null ? user.getUsername()
-					: user.getNickname();
-			sortModel.setName(nick);
-			sortModel.setValue(user.getUsername());
 
-			// 汉字转换成拼音
-			String pinyin = characterParser.getSelling(nick);
-			String sortString = pinyin.substring(0, 1).toUpperCase();
-
-			// 正则表达式，判断首字母是否是英文字母
-			if (sortString.matches("[A-Z]")) {
-				sortModel.setSortLetters(sortString.toUpperCase());
-			} else {
-				sortModel.setSortLetters("#");
-			}
-
-			mSortList.add(sortModel);
 		}
 		return mSortList;
 
@@ -300,38 +354,16 @@ public class NewConstactFragment extends BaseFragment {
 	}
 
 	private void initData() {
-		// XMPPConnection conn = QApp.xmppConnection;
-		// if (conn == null)
-		// return;
-		// Roster roster = conn.getRoster();
-		// List<RosterEntry> entries = XmppUtil.getAllEntries(roster);
-		//
-		// for (RosterEntry entry : entries) {
-		// Logger.i(TAG, entry.getUser() + "type:" + entry.getType().name());
-		// if (entry.getType().name().equals("both")) {
-		//
-		// firendData.add(StringUtils.parseName(entry.getUser()));
-		// Logger.i(TAG, entry.getUser());
-		//
-		// }
-		// }
-
-		List<String> friendData = new ArrayList<String>();
-		List<Friend> friends = XmppUtil.getInstance().getFriendBothList();
-		for (Friend friend : friends) {
-			friendData.add(friend.username);
-		}
-
+		friendData.clear();
+		sourceDateList.clear();
+		friendData = XmppUtil.getRosterBoth(QApp.getXmppConnection()
+				.getRoster());
 		if (friendData.size() > 0) {
-
 			sourceDateList = filledData(friendData);
 			Logger.i(TAG, "好友数量=" + sourceDateList.size());
-		} else {
-			ToastUtil.showShortToast(mContext, "暂无好友");
 		}
 		// 根据a-z进行排序源数据
 		Collections.sort(sourceDateList, pinyinComparator);
-		updateConstant();
 	}
 
 	private void showPopupWindow(View parent, String friendWeidi) {
@@ -372,12 +404,13 @@ public class NewConstactFragment extends BaseFragment {
 
 					@Override
 					public void onClick(View v) {
-						XmppUtil.getInstance().removeUser(friendWeidi);
+						XmppUtil.removeUser(QApp.getXmppConnection()
+								.getRoster(), XmppUtil
+								.getFullUsername(friendWeidi));
 						ToastUtil.showShortToast(mContext, "移除成功");
-						QApp.getInstance()
-								.sendBroadcast(
-										new Intent(
-												Const.ACTION_FRIENDS_ONLINE_STATUS_CHANGE));
+						mLocalBroadcastManager.sendBroadcast(new Intent(
+								REFRESH_CONSTACT));
+						SessionDao.getInstance().deleteYou(friendWeidi);
 						closePop();
 					}
 				});
@@ -405,11 +438,11 @@ public class NewConstactFragment extends BaseFragment {
 
 		});
 		popFriendMore.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 
-				addPopWindow.showPopupWindow(tvNewFriend);
+				addPopWindow.showPopupWindow(mClearEditText);
+				Log.i("TAG", "GGGGGGGGG");
 			}
 		});
 		popSendMsg.setOnClickListener(new OnClickListener() {
@@ -438,9 +471,18 @@ public class NewConstactFragment extends BaseFragment {
 			protected void result(Object object) {
 
 				if (friend != null) {
+					// boolean aa=compareContent(friend);
+					Log.i("GGGGGG", "这不是第一次创建friend但他们的内容改变了");
+					friend = new User(XmppUtil.getUserInfo(friendWeidi));
 					fillFriendInfo();
-					popFriendWeidi.setText(friend.getUsername());
-					friend = null;
+					popFriendWeidi.setText(friendWeidi);
+					VCardDao.getInstance().insertUser(friend);
+					/*
+					 * Log.i("GGGGGG", "这不是第一次创建friend"); fillFriendInfo();
+					 * popFriendWeidi.setText(friend.getUsername()); friend =
+					 * null;
+					 */
+
 				} else {
 
 					VCard vCard = (VCard) object;
@@ -448,7 +490,9 @@ public class NewConstactFragment extends BaseFragment {
 					fillFriendInfo();
 					popFriendWeidi.setText(friendWeidi);
 					VCardDao.getInstance().insertUser(friend);
+					Log.i("GGGGGG", "这是第一次创建friend");
 				}
+
 			}
 
 			private void fillFriendInfo() {
@@ -480,14 +524,13 @@ public class NewConstactFragment extends BaseFragment {
 				} else {
 					return friend;
 				}
-
 			}
 		};
 	}
 
 	public void updateConstant() {
 		// 更新界面
-		int count = NewFriendDao.getInstance(mContext).getUnDealCount();
+		int count = NewFriendDao.getInstance().getUnDealCount();
 		if (count > 0) {
 			newFriCount.setVisibility(View.VISIBLE);
 			newFriCount.setText("" + count);
@@ -496,28 +539,29 @@ public class NewConstactFragment extends BaseFragment {
 		}
 	}
 
-	class FriendsOnlineStatusReceiver extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context arg0, Intent intent) {
-			/*
-			 * String from = intent.getStringExtra("from"); int status =
-			 * intent.getIntExtra("status", 0); if (!TextUtils.isEmpty(from)) {
-			 * if (status == 1) { ToastUtil.showShortToast(mApp, from + "上线了");
-			 * } else if (status == 0) { ToastUtil.showShortToast(mApp, from +
-			 * "下线了"); } }
-			 */
-			if (intent.getAction().equals(
-					Const.ACTION_FRIENDS_ONLINE_STATUS_CHANGE)) {
-				mHandler.sendEmptyMessage(1);// 更新界面
+	public boolean compareContent(User friend) {
+		String old_sex = friend.getSex();
+		String old_intro = friend.getIntro();
+		String old_nickname = friend.getNickname();
+		String old_adr = friend.getAdr();
+		VCard vcard = XmppUtil.getUserInfo(friend.getUsername());
+		String new_sex = vcard.getField("sex");
+		String new_nickname = vcard.getField("nickName");
+		String new_adr = vcard.getField("adr");
+		String new_intro = vcard.getField("intro");
+		if (new_sex.equals(old_sex) && new_nickname.equals(old_nickname)
+				&& new_adr.equals(old_adr) && new_intro.equals(old_intro)) {
+			Log.i("GGG", "内容没有变换");
+			return false;
 
-			}
-
+		} else {
+			return true;
 		}
 	}
 
 	@Override
 	public void onDestroy() {
-		mContext.unregisterReceiver(friendsOnlineStatusReceiver);
+		mLocalBroadcastManager.unregisterReceiver(mReceiver);
 		super.onDestroy();
 	}
 }

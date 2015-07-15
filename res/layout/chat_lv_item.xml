@@ -35,7 +35,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/ic_launcher"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/chatfrom_content"
@@ -115,7 +116,8 @@
                 <FrameLayout
                     android:id="@+id/from_chatting_click_area"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" >
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/chatfrom_bg" >
 
                     <ImageView
                         android:id="@+id/from_chatting_content_iv"
@@ -187,7 +189,8 @@
                 android:layout_height="40dp"
                 android:layout_alignParentRight="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/ic_launcher"
+                android:visibility="gone" />
 
             <com.weidi.common.function.progress.SinkingView
                 android:id="@+id/toSinking"
@@ -230,8 +233,8 @@
                 android:id="@+id/iv_tovoice"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
+                android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@id/chatto_icon"
                 android:background="@drawable/chatto_bg"
                 android:src="@drawable/chatto_voice_playing"
                 android:visibility="gone" />
@@ -315,14 +318,13 @@
                         </LinearLayout>
                     </FrameLayout>
                 </LinearLayout>
-           </com.weidi.common.function.progress.SinkingView>
+            </com.weidi.common.function.progress.SinkingView>
 
             <TextView
                 android:id="@+id/chatto_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/chatto_icon"
-                android:layout_alignRight="@+id/toSinking"
+                android:layout_alignRight="@+id/chatto_icon"
                 android:background="@drawable/chatto_bg"
                 android:gravity="center_vertical"
                 android:textColor="@color/whites"

@@ -1,0 +1,197 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="@color/white">
+
+    <com.weidi.view.TitleBarView
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_alignParentTop="true" />
+
+    <LinearLayout
+        android:id="@+id/llbuttom"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_2x"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/buttom_news"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:layout_width="45dp"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:id="@+id/ivTabMsg"
+                    style="@style/ButtomBarImgBtn"
+                    android:layout_gravity="center"
+                    android:background="@drawable/icon_msg_nomal" />
+
+                <TextView
+                    android:id="@+id/tv_newmsg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|right"
+                    android:background="@drawable/tip_pop_red"
+                    android:gravity="center"
+                    android:text="99+"
+                    android:textColor="#FFFFFF"
+                    android:textSize="9sp" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tvTabMsg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="信息"
+                android:textColor="@color/text_tab_buttom"
+                android:textSize="@dimen/text_size_12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/buttom_constact"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" >
+
+                <ImageView
+                    android:id="@+id/ivTabConstant"
+                    style="@style/ButtomBarImgBtn"
+                    android:layout_gravity="center"
+                    android:background="@drawable/icon_contast_nomal" />
+
+                <TextView
+                    android:id="@+id/notiConstact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|right"
+                    android:background="@drawable/tip_pop_red"
+                    android:gravity="center"
+                    android:text="99+"
+                    android:textColor="#FFFFFF"
+                    android:textSize="9sp" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tvTabConstant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="联系人"
+                android:textColor="@color/text_tab_buttom"
+                android:textSize="@dimen/text_size_12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/buttom_setting"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/ivTabMe"
+                style="@style/ButtomBarImgBtn"
+                android:layout_gravity="center"
+                android:background="@drawable/icon_me_nomal" />
+
+            <TextView
+                android:id="@+id/tvTabMe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我"
+                android:textColor="@color/text_tab_buttom"
+                android:textSize="@dimen/text_size_12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="invisible" >
+
+            <ImageView
+                style="@style/ButtomBarImgBtn"
+                android:layout_gravity="center"
+                android:background="@drawable/icon_me_nomal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_16" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_above="@id/llbuttom"
+        android:background="@color/devide_line" />
+
+    <FrameLayout
+        android:id="@+id/fl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/line"
+        android:layout_below="@id/title_bar" >
+
+        <fragment
+            android:id="@+id/fragment_news"
+            android:name="com.weidi.fragment.NewsFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <fragment
+            android:id="@+id/fragment_constact"
+            android:name="com.weidi.fragment.NewConstactFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <fragment
+            android:id="@+id/fragment_find"
+            android:name="com.weidi.fragment.FindFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <fragment
+            android:id="@+id/fragment_setting"
+            android:name="com.weidi.fragment.SettingFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/image_window_more"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_alignBottom="@id/llbuttom"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/margin_10"
+        android:src="@drawable/window_more_new" />
+
+</RelativeLayout>

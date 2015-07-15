@@ -57,7 +57,7 @@
                             android:id="@+id/ivSex"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_20"
+                            android:layout_marginLeft="@dimen/margin_30"
                             android:layout_toRightOf="@id/tvNickName"
                             android:layout_centerVertical="true"
                             android:src="@drawable/female" />
@@ -104,15 +104,11 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center" >
-            </RelativeLayout>
-
+       
           
 
             <RelativeLayout
+                android:layout_marginTop="@dimen/margin_20"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center" >
@@ -121,40 +117,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/margin_15" >
-
-                        <TextView
-                            android:id="@+id/tvlableNick"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="昵称："
-                            android:textColor="@color/text_color_deep"
-                            android:textSize="@dimen/text_size_18" />
-
-                        <TextView
-                            android:id="@+id/tvSetNick"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_toRightOf="@id/tvlableNick"
-                            android:text="我的昵称"
-                            android:textColor="@color/text_color_light"
-                            android:textSize="@dimen/text_size_18" />
-
-                        <ImageView
-                            android:id="@+id/ivEditNickName"
-                            android:layout_width="12dp"
-                            android:layout_height="20dp"
-                            android:layout_alignBottom="@id/tvSetNick"
-                            android:layout_marginLeft="@dimen/margin_5"
-                            android:layout_toRightOf="@id/tvSetNick"
-                            android:src="@drawable/pensor" />
-
-                    </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
@@ -209,7 +171,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_toRightOf="@id/lableSign"
-                            android:maxLines="2"
+                            android:maxLength="9"
                             android:text="今天天晴"
                             android:textColor="@color/text_color_light"
                             android:textSize="@dimen/text_size_18" />

@@ -25,7 +25,9 @@ import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 import com.weidi.QApp;
 import com.weidi.R;
 import com.weidi.adapter.SearchAdapter;
+import com.weidi.chat.ChatGroupOrder;
 import com.weidi.common.base.LuoBaseActivity;
+import com.weidi.provider.GetAccountByPhoneIQ;
 import com.weidi.util.Const;
 import com.weidi.util.Logger;
 import com.weidi.util.ToastUtil;
@@ -94,7 +96,7 @@ public class SearchActivity extends LuoBaseActivity {
 
 				@Override
 				protected Object load() {
-					return XmppUtil.searchUser(QApp.xmppConnection, name);
+					return XmppUtil.searchUser(QApp.getXmppConnection(), name);
 				}
 			};
 		}
@@ -111,6 +113,7 @@ public class SearchActivity extends LuoBaseActivity {
 						FriendActivity.class);
 				intent.putExtra("username", adapter.getItem(position));
 				startActivity(intent);
+				finish();
 			}
 		});
 		leftBtn.setOnClickListener(new OnClickListener() {
@@ -130,28 +133,19 @@ public class SearchActivity extends LuoBaseActivity {
 	}
 
 	private void getWeidi(String phone) {
-		String url = "http://" + QApp.xmppConnection.getHost()
-				+ ":9090/plugins/jsmuser/getaccountbyphone?phone=" + phone
-				+ "&type=get";
-		HttpUtils http = new HttpUtils();
-		RequestParams params = new RequestParams();
-		http.send(HttpMethod.GET, url, params, new RequestCallBack<String>() {
-
-			@Override
-			public void onFailure(HttpException arg0, String arg1) {
-				Logger.e(TAG, "获取微迪号失败：" + arg1);
-
-			}
-
-			@Override
-			public void onSuccess(ResponseInfo<String> arg0) {
-				Logger.e(TAG, "获取微迪号成功：" + arg0.result);
-				android.os.Message msg = new android.os.Message();
-				msg.what = Const.HANDLER_PHONE_TO_WEIDI;
-				msg.obj = arg0.result;
-				mHandler.sendMessage(msg);
-			}
-		});
+		GetAccountByPhoneIQ iq = ChatGroupOrder.getInstance().getAccountByPhone(phone);
+		if(iq.getAccount() != null){
+			Logger.i(TAG, phone + "手机转微迪："+iq.getAccount());
+			android.os.Message msg = new android.os.Message();
+			msg.what = Const.HANDLER_PHONE_TO_WEIDI;
+			msg.obj = iq.getAccount();
+			mHandler.sendMessage(msg);
+		}
+		if(iq.getErrorCode() != null){
+			if(iq.getErrorCode().equals(LoginActivity.USER_NOT_EXIST));
+			ToastUtil.showShortToast(mApp, LoginActivity.USER_NOT_EXIST_STRING);
+		}
+		
 	}
 
 	@Override

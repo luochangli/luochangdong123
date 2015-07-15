@@ -5,20 +5,34 @@ import com.weidi.bean.User;
 
 public class Const {
 	
-//    public static final String XMPP_HOST = "120.25.157.196";
-	public static final String XMPP_HOST = "192.168.0.10";
+   public static final String XMPP_HOST = "120.25.157.196";
+//	public static final String XMPP_HOST = "192.168.0.10";
+//	public static final String XMPP_HOST = "192.168.0.21";
 	public static final String XMPP_DOMAIN = "jsmny"; 
 	public static final String RESOUCE_ID = "jsm"; //资源名
 	public static final int XMPP_PORT = 5222;
-	public static String USER_NAME = PreferencesUtils.getSharePreStr("weidi");
+	public static String USER_NAME;
 	public static User loginUser;
-	
+	public static final String YOU = "username";
 	/**
 	 * IQProvider 常量
 	 */
 	public static final String XMLNS = "com:jsm:group";
 	public static final String QUERY = "query";
+    public static final String Lord = "10";//群主
+    
+    
+    /**
+	 * IQProvider 备注常量
+	 */
+	public static final String XMLNS_REMARK = "com:jsm:remark";
+	public static final String QUERY_REMARK = "query";
 	
+	 /**
+	 * IQProvider User常量
+	 */
+	public static final String XMLNS_User = "com:jsm:user";
+	public static final String QUERY_User= "query";
 	
 	public static final int HANDLER_PHONE_TO_WEIDI = 10001;
 	/**
@@ -40,12 +54,7 @@ public class Const {
 	/**
 	 * 新消息广播
 	 */
-	public static final String ACTION_NEW_MSG= "com.android.weidi.newmsg";
-	/**
-	 *好友在线状态更新广播
-	 */
-	public static final String ACTION_FRIENDS_ONLINE_STATUS_CHANGE= "com.android.weidi.friends_online_status_change";
-	
+	public static final String ACTION_NEW_MSG= "com.android.weidi.newmsg";	
 	public static final String ACTION_NEW_FRIEND_MSG = "com.android.weidi.new_friend_msg";
 	
 	public static final String MSG_READED = "1";

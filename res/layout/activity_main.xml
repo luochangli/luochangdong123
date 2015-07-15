@@ -13,7 +13,7 @@
     <LinearLayout
         android:id="@+id/llbuttom"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:layout_alignParentBottom="true"
         android:background="@drawable/bg_2x"
         android:orientation="horizontal" >
@@ -35,18 +35,18 @@
                     android:id="@+id/ivTabMsg"
                     style="@style/ButtomBarImgBtn"
                     android:layout_gravity="center"
-                    android:background="@drawable/tab_icon_news_normal" />
+                    android:background="@drawable/icon_msg_nomal" />
 
                 <TextView
                     android:id="@+id/tv_newmsg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|right"
-                    android:background="@drawable/skin_tips_newmessage"
+                    android:background="@drawable/tip_pop_red"
                     android:gravity="center"
                     android:text="99+"
                     android:textColor="#FFFFFF"
-                    android:textSize="12sp" />
+                    android:textSize="9sp" />
             </FrameLayout>
 
             <TextView
@@ -76,18 +76,18 @@
                     android:id="@+id/ivTabConstant"
                     style="@style/ButtomBarImgBtn"
                     android:layout_gravity="center"
-                    android:background="@drawable/tab_icon_contact_normal" />
+                    android:background="@drawable/icon_contast_nomal" />
 
                 <TextView
                     android:id="@+id/notiConstact"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|right"
-                    android:background="@drawable/skin_tips_newmessage"
+                    android:background="@drawable/tip_pop_red"
                     android:gravity="center"
                     android:text="99+"
                     android:textColor="#FFFFFF"
-                    android:textSize="12sp" />
+                    android:textSize="9sp" />
             </FrameLayout>
 
             <TextView
@@ -112,7 +112,7 @@
                 android:id="@+id/ivTabMe"
                 style="@style/ButtomBarImgBtn"
                 android:layout_gravity="center"
-                android:background="@drawable/tab_icon_me_normal" />
+                android:background="@drawable/icon_me_nomal" />
 
             <TextView
                 android:id="@+id/tvTabMe"
@@ -121,6 +121,7 @@
                 android:text="我"
                 android:textColor="@color/text_tab_buttom"
                 android:textSize="@dimen/text_size_12" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -135,7 +136,7 @@
             <ImageView
                 style="@style/ButtomBarImgBtn"
                 android:layout_gravity="center"
-                android:background="@drawable/tab_icon_me_normal" />
+                android:background="@drawable/icon_me_nomal" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -187,8 +188,8 @@
 
     <ImageView
         android:id="@+id/image_window_more"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
+        android:layout_width="77dp"
+        android:layout_height="77dp"
         android:layout_alignBottom="@id/llbuttom"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/margin_10"

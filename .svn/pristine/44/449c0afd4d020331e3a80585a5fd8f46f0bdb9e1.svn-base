@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dip" >
+
+    <TextView
+        android:id="@+id/chat_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="09-25 12:00"
+        android:textColor="@color/gray"
+        android:textSize="12sp" />
+
+    <RelativeLayout
+        android:id="@+id/rl_chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chat_time"
+        android:layout_marginTop="5dp" >
+
+        <LinearLayout
+            android:id="@+id/chart_from_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:background="@color/transparent"
+            android:orientation="horizontal"
+            android:visibility="visible" >
+
+            <com.weidi.view.CircleImageView
+                android:id="@+id/chatfrom_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_launcher"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/chatfrom_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/chatfrom_bg"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/chatfrom_img"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:background="@drawable/chatfrom_bg"
+                android:gravity="center"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="5dp"
+                android:paddingTop="5dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/skin_about_brand"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/chatfrom_location"
+                android:layout_width="200dp"
+                android:layout_height="120dp"
+                android:background="@drawable/chatfrom_bg"
+                android:gravity="center"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="5dp"
+                android:paddingTop="5dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/location_default"
+                android:text="河南省郑州市金水区南阳路"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/from_iv_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/chatfrom_bg"
+                android:clickable="true"
+                android:gravity="center"
+                android:src="@drawable/chatfrom_voice_playing"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_fromlength"
+                style="@style/chat_text_name_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/from_iv_voice"
+                android:text="3&apos;&apos;"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/iv_unread_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/tv_fromlength"
+                android:src="@drawable/voice_unread"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/from_ll_video"
+                android:layout_width="130dp"
+                android:layout_height="145dp"
+                android:layout_marginLeft="@dimen/margin_chat_activity"
+                android:visibility="gone" >
+
+                <FrameLayout
+                    android:id="@+id/from_chatting_click_area"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" >
+
+                    <ImageView
+                        android:id="@+id/from_chatting_content_iv"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:scaleType="fitXY" />
+
+                    <LinearLayout
+                        android:id="@+id/from_chatting_video_data_area"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:background="@drawable/chat_video_mask_to"
+                        android:gravity="bottom"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:id="@+id/from_chatting_size_iv"
+                            android:layout_width="0.0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.0"
+                            android:textColor="@android:color/white"
+                            android:textSize="12sp"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/from_chatting_length_iv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:textColor="@android:color/white"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/from_container_status_btn"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:gravity="center" >
+
+                        <ImageView
+                            android:id="@+id/from_chatting_status_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:src="@drawable/video_play_btn_small_nor" />
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/progress_load"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/chart_to_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@color/transparent" >
+
+            <com.weidi.view.CircleImageView
+                android:id="@+id/chatto_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_launcher"
+                android:visibility="gone" />
+
+            <com.weidi.common.function.progress.SinkingView
+                android:id="@+id/toSinking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@+id/chatto_icon" >
+
+                <ImageView
+                    android:id="@+id/chatto_img"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_toLeftOf="@+id/chatto_icon"
+                    android:background="@drawable/chatto_bg"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="5dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_launcher"
+                    android:visibility="gone" />
+            </com.weidi.common.function.progress.SinkingView>
+
+            <ImageView
+                android:id="@+id/chatto_location"
+                android:layout_width="200dp"
+                android:layout_height="120dp"
+                android:layout_toLeftOf="@+id/chatto_icon"
+                android:background="@drawable/chatto_bg"
+                android:gravity="center"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="15dp"
+                android:paddingTop="5dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/location_default"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/iv_tovoice"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/chatto_icon"
+                android:background="@drawable/chatto_bg"
+                android:src="@drawable/chatto_voice_playing"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_tolength"
+                style="@style/chat_text_name_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/iv_tovoice"
+                android:text="3&apos;&apos;"
+                android:visibility="gone" />
+
+            <com.weidi.common.function.progress.SinkingView
+                android:id="@+id/toVideoSinking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@+id/chatto_icon" >
+
+                <LinearLayout
+                    android:id="@+id/to_ll_video"
+                    android:layout_width="130dp"
+                    android:layout_height="145dp"
+                    android:layout_marginRight="@dimen/margin_chat_activity"
+                    android:layout_toLeftOf="@id/chatto_icon"
+                    android:visibility="gone" >
+
+                    <FrameLayout
+                        android:id="@+id/to_chatting_click_area"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:background="@drawable/chatto_bg" >
+
+                        <ImageView
+                            android:id="@+id/to_chatting_content_iv"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:clickable="false"
+                            android:scaleType="fitXY" />
+
+                        <LinearLayout
+                            android:id="@+id/to_chatting_video_data_area"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:background="@drawable/chat_video_mask_to"
+                            android:gravity="bottom"
+                            android:orientation="horizontal" >
+
+                            <TextView
+                                android:id="@+id/to_chatting_size_iv"
+                                android:layout_width="0.0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.0"
+                                android:textColor="@android:color/white"
+                                android:textSize="12.0sp"
+                                android:visibility="visible" />
+
+                            <TextView
+                                android:id="@+id/to_chatting_length_iv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="right"
+                                android:textColor="@android:color/white"
+                                android:textSize="12.0sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/to_container_status_btn"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:gravity="center" >
+
+                            <ImageView
+                                android:id="@+id/to_chatting_status_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@null"
+                                android:src="@drawable/video_play_btn_small_nor" />
+                        </LinearLayout>
+                    </FrameLayout>
+                </LinearLayout>
+            </com.weidi.common.function.progress.SinkingView>
+
+            <TextView
+                android:id="@+id/chatto_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/chatto_icon"
+                android:background="@drawable/chatto_bg"
+                android:gravity="center_vertical"
+                android:textColor="@color/whites"
+                android:textSize="14sp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

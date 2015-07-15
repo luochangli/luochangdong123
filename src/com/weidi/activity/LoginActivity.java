@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.weidi.MainActivity;
 import com.weidi.QApp;
 import com.weidi.R;
+import com.weidi.chat.ChatGroupOrder;
 import com.weidi.service.MsfService;
 import com.weidi.util.Const;
 import com.weidi.util.PreferencesUtils;
@@ -36,6 +37,8 @@ import com.weidi.view.TitleBarView;
 
 public class LoginActivity extends Activity{
 
+	public static final String USER_NOT_EXIST = "00007";
+	public static final String USER_NOT_EXIST_STRING = "用户不存在";
 	private Context mContext;
 	private RelativeLayout rl_user;
 	private Button mLogin;
@@ -66,7 +69,7 @@ public class LoginActivity extends Activity{
 		init();
 		initReceiver();
 		initTitleView();
-
+//		testLogin();
 		locationListener = new LocationListener() {  
 
 			// Provider的状态在可用、暂时不可用和无服务三个状态直接切换时触发此函数  
@@ -103,8 +106,12 @@ public class LoginActivity extends Activity{
 				}  
 			}  
 		};
-		
 		QApp.getInstance().addActivity(LoginActivity.this);
+	}
+
+	private void testLogin() {
+	  ChatGroupOrder.getInstance().getPwdHint("14708641234");
+	  ChatGroupOrder.getInstance().getAccountByPhone("14708641234");
 	}
 
 	private void initReceiver() {
@@ -121,6 +128,7 @@ public class LoginActivity extends Activity{
 						PreferencesUtils.putSharePre( Const.MSG_IS_VOICE, true);
 						PreferencesUtils.putSharePre(Const.MSG_IS_VIBRATE, true);
 
+						
 						//boolean gpsEnabled = Settings.Secure.isLocationProviderEnabled(getContentResolver(), locationManager.GPS_PROVIDER );
 						//if (!gpsEnabled) {
 						//Settings.Secure.setLocationProviderEnabled(getContentResolver(),locationManager.GPS_PROVIDER, true);
@@ -147,6 +155,7 @@ public class LoginActivity extends Activity{
 						finish();*/
 					}else{
 						ToastUtil.showShortToast(mContext, "登录失败，请检您的网络是否正常以及用户名和密码是否正确");
+						
 					}
 				}
 			}

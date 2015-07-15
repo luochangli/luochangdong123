@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -18,27 +19,29 @@ import com.weidi.QApp;
 import com.weidi.R;
 import com.weidi.bean.Friend;
 import com.weidi.bean.User;
-import com.weidi.common.CircularImage;
-import com.weidi.common.base.LuoBaseActivity;
-import com.weidi.db.NewMsgCountDao;
+import com.weidi.common.base.BaseActivity;
+import com.weidi.db.SessionDao;
+import com.weidi.fragment.NewConstactFragment;
 import com.weidi.util.Const;
+import com.weidi.util.Logger;
 import com.weidi.util.ToastUtil;
 import com.weidi.util.XmppLoadThread;
 import com.weidi.util.XmppUtil;
+import com.weidi.view.CircleImageView;
 
 /**
  * @author luochangdong E-mail: 2270333671@qq.com
  * @date 创建时间：2015-6-25 下午4:50:41
  * @Description 1.0
  */
-public class FriendActivity extends LuoBaseActivity implements OnClickListener {
+public class FriendActivity extends BaseActivity implements OnClickListener {
+   public static final String SHOW_IS_FRIEND = "show_is_friend";
 	Button operBtn;
 	TextView nameView, sexView, signView, nickNameView, phoneView, emailView;
-	CircularImage headView;
+	CircleImageView headView;
 	ImageView leftBtn;
 	private String username;
 	private User friend;
-	private FriendReceiver reciver;
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
@@ -49,17 +52,27 @@ public class FriendActivity extends LuoBaseActivity implements OnClickListener {
 		username = getIntent().getStringExtra("username");
 		operBtn.setOnClickListener(this);
 		nameView.setText(username);
-		// 接收到新消息的事件监听
-		reciver = new FriendReceiver();
-		registerReceiver(reciver, new IntentFilter(Const.ACTION_FRIENDS_ONLINE_STATUS_CHANGE));
+		
 
-		if (username.equals(Const.USER_NAME)) {
+		if (username.equals(Const.loginUser.getUsername())) {
 			operBtn.setVisibility(View.GONE);
 		}
 		isFriend();
 		initData();
-		QApp.getInstance().addActivity(FriendActivity.this);
+       initBraodcast();
+	}
 
+	private void initBraodcast() {
+		mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
+		   mReceiver = new BroadcastReceiver() {
+			
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				isFriend();
+				Logger.e("Friend", "asdfasdf");
+			}
+		};
+		mLocalBroadcastManager.registerReceiver(mReceiver, new IntentFilter(SHOW_IS_FRIEND));
 	}
 
 	private void initView() {
@@ -70,7 +83,7 @@ public class FriendActivity extends LuoBaseActivity implements OnClickListener {
 		nickNameView = (TextView) findViewById(R.id.nickNameView);
 		phoneView = (TextView) findViewById(R.id.phoneView);
 		emailView = (TextView) findViewById(R.id.emailView);
-		headView = (CircularImage) findViewById(R.id.headView);
+		headView = (CircleImageView) findViewById(R.id.headView);
 		leftBtn = (ImageView) findViewById(R.id.leftBtn);
 	}
 
@@ -109,8 +122,8 @@ public class FriendActivity extends LuoBaseActivity implements OnClickListener {
 	}
 
 	public void isFriend() {
-		if (XmppUtil.getInstance().getFriendBothList()
-				.contains(new Friend(username))) {
+		if (XmppUtil.getRosterBoth(QApp.getXmppConnection().getRoster())
+				.contains(XmppUtil.getFullUsername(username))) {
 			operBtn.setText("移出通讯录");
 		} else {
 			operBtn.setText("添加到通讯录");
@@ -135,12 +148,6 @@ public class FriendActivity extends LuoBaseActivity implements OnClickListener {
 
 	}
 
-	private class FriendReceiver extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			isFriend();
-		}
-	}
 
 	@Override
 	public void onClick(View v) {
@@ -148,19 +155,18 @@ public class FriendActivity extends LuoBaseActivity implements OnClickListener {
 		case R.id.operBtn:
 			if (operBtn.getText().equals("添加到通讯录")) {
 				isFriend();
-				XmppUtil.addUser(QApp.xmppConnection, username);
+				XmppUtil.addUsers(QApp.getXmppConnection().getRoster(),XmppUtil.getFullUsername(username),username,"friend");
 				ToastUtil
 						.showShortToast(getApplicationContext(), "添加成功，等待通过验证");
-				QApp.getInstance().sendBroadcast(new Intent(Const.ACTION_FRIENDS_ONLINE_STATUS_CHANGE));
-			
+			    QApp.mLocalBroadcastManager.sendBroadcast(new Intent(NewConstactFragment.REFRESH_CONSTACT));
+			    finish();
 			} else if (operBtn.getText().equals("移出通讯录")) {
-				XmppUtil.getInstance().removeUser(username);
-				ToastUtil.showShortToast(getApplicationContext(), "移除成功");
-				QApp.getInstance().sendBroadcast(new Intent(Const.ACTION_FRIENDS_ONLINE_STATUS_CHANGE));
+				XmppUtil.removeUser(QApp.getXmppConnection().getRoster(), XmppUtil.getFullUsername(username));
+				ToastUtil.showShortToast(getApplicationContext(), "移除成功"+username);
 				operBtn.setText("添加到通讯录");
+				QApp.mLocalBroadcastManager.sendBroadcast(new Intent(NewConstactFragment.REFRESH_CONSTACT));
                 //删除聊天数据和其他与该好友的数据
-				QApp.getInstance().sendBroadcast(new Intent(Const.ACTION_NEW_FRIEND_MSG));
-
+				SessionDao.getInstance().deleteYou(username);
 			}
 			break;
 		case R.id.leftBtn:
@@ -175,7 +181,7 @@ public class FriendActivity extends LuoBaseActivity implements OnClickListener {
 	
 	@Override
 	protected void onDestroy() {
-		unregisterReceiver(reciver);
+		mLocalBroadcastManager.unregisterReceiver(mReceiver);
 		super.onDestroy();
 	}
 }

@@ -6,7 +6,6 @@ import java.net.SocketException;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.ChatManagerListener;
-import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.filter.AndFilter;
@@ -14,7 +13,6 @@ import org.jivesoftware.smack.filter.PacketFilter;
 import org.jivesoftware.smack.filter.PacketIDFilter;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.IQ;
-import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Registration;
 import org.jivesoftware.smack.provider.ProviderManager;
 
@@ -26,35 +24,25 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.weidi.QApp;
+import com.weidi.activity.LoginActivity;
+import com.weidi.chat.ChatGroupOrder;
 import com.weidi.listener.CheckConnectionListener;
 import com.weidi.listener.FriendsPacketListener;
 import com.weidi.listener.IQPacketListener;
 import com.weidi.listener.MsgListener;
-import com.weidi.listener.XmppIQInterceptor;
-import com.weidi.listener.XmppIQListener;
-import com.weidi.listener.XmppPresenceInterceptor;
-import com.weidi.listener.XmppRosterListener;
 import com.weidi.provider.BindPhone;
 import com.weidi.provider.BindPhoneProvider;
-import com.weidi.provider.CreateMUCIQ;
-import com.weidi.provider.CreateMUCProvider;
-import com.weidi.provider.Friend_get;
-import com.weidi.provider.FrinedProvider;
-import com.weidi.provider.GetPhone;
-import com.weidi.provider.GetPhoneProvider;
+import com.weidi.provider.GetAccountByPhoneIQ;
 import com.weidi.provider.Near;
 import com.weidi.provider.NearProvider;
 import com.weidi.provider.NearTime;
 import com.weidi.provider.NearTimeProvider;
-import com.weidi.provider.ObtainMUCInfoProvider;
-import com.weidi.provider.ObtainMUCListIQ;
-import com.weidi.provider.ObtainMUCListProvider;
 import com.weidi.util.Const;
 import com.weidi.util.DebugOut;
+import com.weidi.util.Logger;
 import com.weidi.util.PreferencesUtils;
 import com.weidi.util.ToastUtil;
 import com.weidi.util.XmppConnectionManager;
-import com.weidi.util.XmppUtil;
 
 public class MsfService extends Service {
 
@@ -65,11 +53,7 @@ public class MsfService extends Service {
 	private NotificationManager mNotificationManager;
 
 	private String mUserName, mPassword;
-	private XmppConnectionManager mXmppConnectionManager;
 	private XMPPConnection mXMPPConnection;
-
-	private CheckConnectionListener checkConnectionListener;
-	private FriendsPacketListener friendsPacketListener;
 	private IQPacketListener iqPacketListener;
 
 	private final IBinder binder = new MyBinder();
@@ -99,9 +83,7 @@ public class MsfService extends Service {
 			e.printStackTrace();
 		}
 		mNotificationManager = (NotificationManager) getSystemService(android.content.Context.NOTIFICATION_SERVICE); // 通知
-
-		mXmppConnectionManager = XmppConnectionManager.getInstance();
-
+		mXMPPConnection = QApp.getXmppConnection();
 		initXMPPTask();
 
 	}
@@ -131,8 +113,6 @@ public class MsfService extends Service {
 	 */
 	void initXMPP() {
 		DebugOut.PrintlnOut(TAG + "-initXMPP");
-		mXMPPConnection = mXmppConnectionManager.init();// 初始化XMPPConnection
-
 		ProviderManager pm = ProviderManager.getInstance();
 		setProviderRegister(pm);
 		// 登录判断
@@ -140,9 +120,6 @@ public class MsfService extends Service {
 	}
 
 	private void setProviderRegister(ProviderManager pm) {
-		// 用于手机登录手机绑定等发IQ包的功能
-		pm.addIQProvider(GetPhone.ELEMENT_NAME, GetPhone.NAMESPACE,
-				new GetPhoneProvider());
 
 		pm.addIQProvider(BindPhone.ELEMENT_NAME, BindPhone.NAMESPACE,
 				new BindPhoneProvider());
@@ -152,8 +129,10 @@ public class MsfService extends Service {
 
 		pm.addIQProvider(Near.ELEMENT_NAME, Near.NAMESPACE, new NearProvider());
 
-		pm.addIQProvider(Friend_get.ELEMENT_NAME, Friend_get.NAMESPACE,
-				new FrinedProvider());
+		/*
+		 * pm.addIQProvider(Friend_get.ELEMENT_NAME, Friend_get.NAMESPACE, new
+		 * FrinedProvider());
+		 */
 
 	}
 
@@ -162,16 +141,6 @@ public class MsfService extends Service {
 	void initXMPPIm() {
 		try {
 			mPassword = PreferencesUtils.getSharePreStr("pwd");
-			mXMPPConnection.connect();
-			QApp.xmppConnection = mXMPPConnection;
-			try {
-				if (checkConnectionListener != null) {
-					mXMPPConnection
-							.removeConnectionListener(checkConnectionListener);
-					checkConnectionListener = null;
-				}
-			} catch (Exception e) {
-			}
 			if (mUserName.length() == 7) {
 				loginForWeidi();
 			} else if (mUserName.length() == 11) {
@@ -180,9 +149,8 @@ public class MsfService extends Service {
 			// 登录成功
 			if (mXMPPConnection.isAuthenticated()) {
 				Log.i("TAG", mXMPPConnection.isAuthenticated() + "");
-
+				Const.USER_NAME = PreferencesUtils.getSharePreStr("weidi");
 				sendLoginBroadcast(true);
-
 				// packet监听
 				iqPacketListener = new IQPacketListener();
 				PacketFilter iqPacketFilter = new AndFilter(new PacketIDFilter(
@@ -191,34 +159,10 @@ public class MsfService extends Service {
 				mXMPPConnection.addPacketListener(iqPacketListener,
 						iqPacketFilter);
 
-				mXMPPConnection.addPacketListener(new XmppIQListener(),
-						new PacketTypeFilter(IQ.class));
-
-				// 添加xmpp连接监听
-				checkConnectionListener = new CheckConnectionListener(this);
-				mXMPPConnection.addConnectionListener(checkConnectionListener);
-				// 注册好友状态更新监听
-				friendsPacketListener = new FriendsPacketListener(this);
-				PacketFilter filter = new AndFilter(new PacketTypeFilter(
-						Presence.class));
-				mXMPPConnection
-						.addPacketListener(friendsPacketListener, filter);
-				// 注册好友拦截器
-				mXMPPConnection.addPacketInterceptor(
-						new XmppPresenceInterceptor(), new PacketTypeFilter(
-								Presence.class));
-				// IQ包拦截器
-				mXMPPConnection.addPacketInterceptor(new XmppIQInterceptor(),
-						new PacketTypeFilter(IQ.class));
-				XmppUtil.setPresence(this, mXMPPConnection,
-						PreferencesUtils.getSharePreInt("online_status"));// 设置在线状态
-				// 注册通许录监听器
-				final Roster roster = QApp.xmppConnection.getRoster();
-				roster.addRosterListener(new XmppRosterListener());
-
 			} else {
+				 // 如果登录失败，自动销毁Service
 				sendLoginBroadcast(false);
-				stopSelf(); // 如果登录失败，自动销毁Service
+				stopSelf();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -256,12 +200,24 @@ public class MsfService extends Service {
 	void loginForPhone() {
 		String result = null;
 		try {
+
 			String phone = PreferencesUtils.getSharePreStr("username");
 			Log.i("TAG", phone);
-			result = QApp.initPhoneToWei(phone);// 手机号转成微迪号
+			GetAccountByPhoneIQ iq = ChatGroupOrder.getInstance()
+					.getAccountByPhone(phone);
+			if (iq.getAccount() != null) {
+				result = iq.getAccount();
+				Logger.e(TAG, phone + "手机转微迪号：" + result);
+			}
+			if (iq.getErrorCode() != null) {
+				if (iq.getErrorCode().equals(LoginActivity.USER_NOT_EXIST)) {
+					ToastUtil.showShortToast(QApp.getInstance(), "用户不存在");
+				}
+
+			}
+			// result = QApp.initPhoneToWei(phone);// 手机号转成微迪号
 			PreferencesUtils.putSharePre("weidi", result);
-			Log.i("TAG", mXMPPConnection.getHost());
-			Log.i("TAG", result);
+
 			if (result.length() <= 5) {
 				ToastUtil.showLongToast(mInstance, "连接失败");
 			} else {
@@ -285,17 +241,9 @@ public class MsfService extends Service {
 
 	@Override
 	public void onDestroy() {
-		if (mNotificationManager != null) {
 
-		}
 		try {
-			if (mXMPPConnection != null) {
-				mXMPPConnection.disconnect();
-				mXMPPConnection = null;
-			}
-			if (mXmppConnectionManager != null) {
-				mXmppConnectionManager = null;
-			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

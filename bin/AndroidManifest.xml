@@ -149,6 +149,25 @@
             android:name="com.weidi.chat.GroupChatSettingActi"
             android:screenOrientation="portrait" >
         </activity>
+         <activity
+            android:name="com.weidi.activity.TestGroupChatActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        
+         <activity
+            android:name="com.weidi.chat.groupchat.GroupListActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        
+          <activity
+            android:name="com.weidi.activity.DdmActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        
+           <activity
+            android:name="com.weidi.activity.ClearHistroyChat"
+            android:screenOrientation="portrait" >
+        </activity>
 
         <service android:name="com.weidi.service.MsfService" />
     </application>

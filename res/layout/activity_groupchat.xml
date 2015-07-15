@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button1"
+        android:layout_alignBottom="@+id/button1"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="42dp"
+        android:onClick="done"
+        android:text="修改群信息" />
+
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button5"
+        android:layout_alignBottom="@+id/button5"
+        android:layout_alignRight="@+id/button2"
+        android:onClick="done"
+        android:text="退出群" />
+
+    <Button
+        android:id="@+id/button7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/button5"
+        android:layout_below="@+id/button5"
+        android:layout_marginTop="30dp"
+         android:onClick="done"
+        android:text="添加好友" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/button2"
+        android:layout_below="@+id/button2"
+        android:layout_marginRight="17dp"
+        android:layout_marginTop="33dp"
+        android:onClick="done"
+        android:text="创建群" />
+
+    <Button
+        android:id="@+id/button9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button4"
+        android:layout_alignParentLeft="true"
+        android:onClick="done"
+        android:text="发presence包" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="16dp"
+        android:layout_toLeftOf="@+id/button2"
+        android:onClick="done"
+        android:text="修改呢称" />
+
+    <Button
+        android:id="@+id/button10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/button9"
+        android:layout_below="@+id/button7"
+        android:layout_marginTop="33dp"
+        android:onClick="done"
+        android:text="获得指定的好友备注" />
+
+    <Button
+        android:id="@+id/button11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/button10"
+        android:layout_alignLeft="@+id/button8"
+        android:onClick="done"
+        android:text="保存好友的备注" />
+
+    <Button
+        android:id="@+id/button12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button10"
+        android:layout_below="@+id/button10"
+        android:layout_marginLeft="17dp"
+        android:onClick="done"
+        android:text="删除好友的备注" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button1"
+        android:layout_below="@+id/button9"
+        android:onClick="done"
+        android:text="踢人" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button8"
+        android:layout_below="@+id/button3"
+        android:layout_marginTop="56dp"
+        android:onClick="done"
+        android:text="销毁群" />
+
+    <Button
+        android:id="@+id/button8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/button6"
+        android:layout_below="@+id/button7"
+        android:onClick="done"
+        android:text="获取成员列表" />
+
+    <Button
+        android:id="@+id/button13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button7"
+        android:layout_below="@+id/button12"
+        android:layout_marginTop="17dp"
+        android:onClick="done"
+        android:text="获得数据库User" />
+
+    <Button
+        android:id="@+id/button14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button13"
+        android:layout_alignBottom="@+id/button13"
+        android:layout_alignRight="@+id/button11"
+        android:onClick="done"
+        android:text="获得VCard的user" />
+
+</RelativeLayout>

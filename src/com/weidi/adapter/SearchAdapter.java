@@ -1,6 +1,7 @@
 package com.weidi.adapter;
 
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.util.StringUtils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -49,7 +50,7 @@ public class SearchAdapter extends ArrayAdapter<String> {
 
 		nameView.setText(item);
 		ImgConfig.showHeadImg(item, imgView);
-		if (NewFriendDao.getInstance(context).isDeal(item)) {
+		if (NewFriendDao.getInstance().isDeal(item)) {
 			addBtn.setVisibility(View.GONE);
 		} else {
 			addBtn.setVisibility(View.VISIBLE);
@@ -57,26 +58,19 @@ public class SearchAdapter extends ArrayAdapter<String> {
 
 				@Override
 				public void onClick(View v) {
-					new XmppLoadThread(context) {
-
-						@Override
-						protected void result(Object o) {
-							if ((Boolean) o) {
-								ToastUtil.showShortToast(context, "发送成功");
-								addBtn.setVisibility(View.GONE);
-								NewFriendDao.getInstance(QApp.getInstance())
-										.delFriend(item);
-								context.sendBroadcast(new Intent(Const.ACTION_NEW_FRIEND_MSG));
-							}
-						}
-
-						@Override
-						protected Object load() {
-
-							return XmppUtil.addUser(QApp.xmppConnection, item);
-
-						}
-					};
+					 XmppUtil.addUsers(
+								QApp.getXmppConnection().getRoster(),
+								XmppUtil.getFullUsername(item), item,
+								"friend");
+					 XmppUtil.sendAgreeAddFriend(
+								QApp.getXmppConnection(),
+								XmppUtil.getFullUsername(item));
+						ToastUtil.showShortToast(context, "发送成功");
+						addBtn.setVisibility(View.GONE);
+						NewFriendDao.getInstance()
+								.delFriend(item);
+						context.sendBroadcast(new Intent(Const.ACTION_NEW_FRIEND_MSG));
+					     
 				}
 			});
 		}
