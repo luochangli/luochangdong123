@@ -12,6 +12,8 @@
 	<classpathentry exported="true" kind="lib" path="libs/dom4j-1.6.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/gson-2.2.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/nineoldandroids-2.4.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/android-core-3.1.1-SNAPSHOT.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/core-3.1.1-SNAPSHOT.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="output" path="bin/classes"/>

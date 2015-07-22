@@ -14,11 +14,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
 import com.weidi.QApp;
 import com.weidi.R;
-import com.weidi.bean.User;
 import com.weidi.common.base.BaseActivity;
 import com.weidi.common.image.ImgConfig;
+import com.weidi.common.scanner.BarcodeActivity;
 import com.weidi.fragment.PersonalFrag;
 import com.weidi.util.Const;
 import com.weidi.util.ImageCache;
@@ -55,12 +57,14 @@ public class MyInfoActi extends BaseActivity implements OnClickListener {
 	private LinearLayout changeAdrLayout;
 	private Button sureBtn, btnCancle;
 	private AeraWheel area;
-
+    @ViewInject(R.id.rlBarcode)
+    RelativeLayout rlBarcode;
+	
 	@Override
 	protected void initView(Bundle savedInstanceState) {
 		setContentView(R.layout.acti_me_info);
+		ViewUtils.inject(this);
 		initView();
-
 		initData();
 		area = new AeraWheel(mViewProvince, mViewCity, mViewDistrict, mContext);
 	}
@@ -120,7 +124,14 @@ public class MyInfoActi extends BaseActivity implements OnClickListener {
 
 		sureBtn.setOnClickListener(this);
 		btnCancle.setOnClickListener(this);
-
+          
+		rlBarcode.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+		           startActivity(new Intent(new Intent(mContext, BarcodeActivity.class)));
+			}
+		});
 	}
 
 	@Override

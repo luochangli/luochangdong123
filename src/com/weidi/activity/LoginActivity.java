@@ -125,6 +125,13 @@ public class LoginActivity extends Activity {
 					boolean isLoginSuccess = intent.getBooleanExtra(
 							"isLoginSuccess", false);
 					if (isLoginSuccess) {// 登录成功
+<<<<<<< .mine
+
+=======
+						
+						
+						
+>>>>>>> .r46
 						
 						// 默认开启声音和震动提醒
 						PreferencesUtils.putSharePre(Const.MSG_IS_VOICE, true);
@@ -191,10 +198,11 @@ public class LoginActivity extends Activity {
 		rl_user = (RelativeLayout) findViewById(R.id.rl_user);
 		mLogin = (Button) findViewById(R.id.login);
 		btnLeft = (TextView) findViewById(R.id.tvTopLeft);
+
 		btnRight = (TextView) findViewById(R.id.tvTopRight);
 		mTextViewURL = (TextView) findViewById(R.id.tv_forget_password);
-        btnRight.setOnClickListener(new OnClickListener() {
-			
+		btnRight.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(mContext, RegisterActi.class);
@@ -224,8 +232,6 @@ public class LoginActivity extends Activity {
 
 	}
 
-
-
 	private void initTvUrl() {
 		mTextViewURL.setText(R.string.forget_password);
 		mTextViewURL.setOnClickListener(new OnClickListener() {
@@ -246,8 +252,6 @@ public class LoginActivity extends Activity {
 			doLogin();
 		}
 	};
-
-	
 
 	protected void onStart() {
 		super.onStart();

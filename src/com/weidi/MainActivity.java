@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -260,6 +261,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.buttom_news:// 消息
 			setTabNomal();
+			mTitleBarView.setVisibility(View.VISIBLE);
 			tvTabMsg.setTextColor(this.getResources().getColor(R.color.green));
 			ivTabMsg.setImageResource(R.drawable.icon_msg_press);
 			getSupportFragmentManager().beginTransaction()
@@ -270,6 +272,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.buttom_constact:// 联系人
 			setTabNomal();
+			mTitleBarView.setVisibility(View.VISIBLE);
 			ivTabConstant.setImageResource(R.drawable.icon_contast_press);
 			tvTabConstant.setTextColor(this.getResources().getColor(
 					R.color.green));
@@ -288,6 +291,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		case R.id.buttom_setting:// 设置
 			setTabNomal();
 			ivTabMe.setImageResource(R.drawable.icon_me_press);
+			mTitleBarView.setVisibility(View.GONE);
 			tvTabMe.setTextColor(this.getResources().getColor(R.color.green));
 			getSupportFragmentManager().beginTransaction()
 					.hide(constactFatherFragment).hide(newsFatherFragment)
@@ -296,7 +300,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			setButton(v);
 			break;
 		case R.id.image_window_more:
-
+			mTitleBarView.setVisibility(View.VISIBLE);
 			showMoreWindow(tabMore);
 			break;
 		}
@@ -472,6 +476,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 		setContentView(R.layout.activity_main);
 		mContext = this;
+		
+	
 
 		chatMsgDao = new ChatMsgDao(mContext);
 		newMsgReciver = new NewMsgReciver();
@@ -492,10 +498,18 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		findView();
 		init();
 		initMsgCount();
+<<<<<<< .mine
 		// 获取群列表
 		XmppUtil.getMUCList();
 
 		IQOrder.getInstance().getNews();
+=======
+		//获取群列表
+		XmppUtil.getMUCList();
+		//获得新闻公告信息
+		IQOrder.getInstance().getNews();
+		Log.i("TTTTTTT", "发新闻了");
+>>>>>>> .r46
 		QApp.getInstance().addActivity(MainActivity.this);
 
 	}

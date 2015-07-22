@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginLeft="@dimen/margin_15"
                 android:text="头像"
                 android:textColor="@color/text_color_deep"
                 android:textSize="@dimen/text_size_16" />
@@ -33,7 +33,7 @@
                 android:layout_height="55dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_15"
                 android:src="@drawable/circle_head_img" />
         </RelativeLayout>
 
@@ -56,8 +56,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/margin_20"
-                    android:text="        昵称："
+                    android:layout_marginLeft="@dimen/margin_15"
+                    android:text="昵称："
                     android:textColor="@color/text_color_deep"
                     android:textSize="@dimen/text_size_16" />
 
@@ -78,7 +78,8 @@
                     android:layout_alignParentRight="true"
                     android:paddingLeft="@dimen/padding_20"
                     android:paddingRight="@dimen/padding_20"
-                    android:src="@drawable/info_entry" />
+                    android:src="@drawable/info_entry"
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <View
@@ -99,8 +100,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/margin_20"
-                    android:text="        性别："
+                    android:layout_marginLeft="@dimen/margin_15"
+                    android:text="性别："
                     android:textColor="@color/text_color_deep"
                     android:textSize="@dimen/text_size_16" />
 
@@ -121,7 +122,8 @@
                     android:layout_alignParentRight="true"
                     android:paddingLeft="@dimen/padding_20"
                     android:paddingRight="@dimen/padding_20"
-                    android:src="@drawable/info_entry" />
+                    android:src="@drawable/info_entry"
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <View
@@ -142,8 +144,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/margin_20"
-                    android:text="        地区："
+                    android:layout_marginLeft="@dimen/margin_15"
+                    android:text="地区："
                     android:textColor="@color/text_color_deep"
                     android:textSize="@dimen/text_size_16" />
 
@@ -164,7 +166,8 @@
                     android:layout_alignParentRight="true"
                     android:paddingLeft="@dimen/padding_20"
                     android:paddingRight="@dimen/padding_20"
-                    android:src="@drawable/info_entry" />
+                    android:src="@drawable/info_entry"
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <View
@@ -185,8 +188,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/margin_20"
-                    android:text="个性签名："
+                    android:layout_marginLeft="@dimen/margin_15"
+                    android:text="签名："
                     android:textColor="@color/text_color_deep"
                     android:textSize="@dimen/text_size_16" />
 
@@ -200,7 +203,7 @@
                     android:layout_toRightOf="@id/tvLable4"
                     android:gravity="center"
                     android:maxLines="2"
-                    android:maxWidth="170dp"
+                    android:layout_marginRight="@dimen/margin_15"
                     android:text="今天天阴阿莱克斯大家分厘卡就算了戴假发两款手机登陆开房间阿斯利康戴假发绿卡时间的分"
                     android:textColor="@color/text_color_light"
                     android:textSize="@dimen/text_size_12" />
@@ -211,12 +214,13 @@
                     android:layout_alignParentRight="true"
                     android:paddingLeft="@dimen/padding_20"
                     android:paddingRight="@dimen/padding_20"
-                    android:src="@drawable/info_entry" />
+                    android:src="@drawable/info_entry"
+                    android:visibility="gone" />
             </RelativeLayout>
         </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/rlSettings"
+            android:id="@+id/rlBarcode"
             android:layout_width="match_parent"
             android:layout_height="@dimen/item"
             android:layout_marginTop="@dimen/margin_20"
@@ -228,8 +232,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/margin_20"
-                android:text="设置"
+                android:layout_marginLeft="@dimen/margin_15"
+                android:text="二维码"
                 android:textColor="@color/text_color_deep"
                 android:textSize="@dimen/text_size_16" />
 
@@ -240,7 +244,8 @@
                 android:layout_alignParentRight="true"
                 android:paddingLeft="@dimen/padding_20"
                 android:paddingRight="@dimen/padding_20"
-                android:src="@drawable/info_entry" />
+                android:src="@drawable/info_entry"
+                android:visibility="gone" />
         </RelativeLayout>
     </LinearLayout>
 

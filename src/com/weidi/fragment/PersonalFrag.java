@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -40,6 +41,8 @@ public class PersonalFrag extends BaseFragment implements OnClickListener {
     RelativeLayout rlMeCollotions;
 	@ViewInject(R.id.rlMeWallet)
 	RelativeLayout rlMeWallet;
+	@ViewInject(R.id.llTopRight)
+	LinearLayout llTopRight;
 	
 	CircleImageView civHead;
 	TextView tvNickName, tvWeidi;
@@ -93,11 +96,13 @@ public class PersonalFrag extends BaseFragment implements OnClickListener {
 	@Override
 	protected void setListener() {
 		civHead.setOnClickListener(this);
+		
+		llTopRight.setOnClickListener(this);
 	}
 
 	@OnClick(R.id.rlMe2Code)
 	public void saoyisao(View v){
-		ToastUtil.showShortLuo("扫一扫");
+		ToastUtil.showShortLuo("设置");
 	}
 	@Override
 	protected void afterViews(Bundle savedInstanceState) {
@@ -113,7 +118,9 @@ public class PersonalFrag extends BaseFragment implements OnClickListener {
 			Intent intent = new Intent(mContext, MyInfoActi.class);
 			mContext.startActivity(intent);
 			break;
-
+		case R.id.llTopRight:
+			
+			break;
 		default:
 			break;
 		}
