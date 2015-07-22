@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/luo_win_base"
+    android:orientation="vertical" >
+
+    <include layout="@layout/top_luo" />
+
+    <LinearLayout
+        android:id="@+id/reg3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="@dimen/margin_15"
+            android:layout_marginRight="@dimen/margin_15"
+            android:layout_marginTop="@dimen/margin_20"
+            android:background="@drawable/reg_input_bg" >
+
+            <ImageView
+                android:id="@+id/label2"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/padding_10"
+                android:src="@drawable/reg_mobile" />
+
+            <EditText
+                android:id="@+id/etFpPhone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/label2"
+                android:background="@null"
+                android:hint="请输入11位手机号"
+                android:inputType="phone"
+                android:textColor="@color/text_color_deep"
+                android:textColorHint="@color/text_color_light"
+                android:textSize="@dimen/text_size_14" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="@dimen/margin_15"
+            android:layout_marginRight="@dimen/margin_15"
+            android:layout_marginTop="@dimen/margin_20" >
+
+            <LinearLayout
+                android:id="@+id/ll2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:background="@drawable/reg_input_bg" >
+
+                <EditText
+                    android:id="@+id/etFpAuth"
+                    android:layout_width="140dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="13dp"
+                    android:background="@null"
+                    android:hint="请输入验证码"
+                    android:textColor="@color/text_color_deep"
+                    android:textColorHint="@color/text_color_light"
+                    android:textSize="@dimen/text_size_14" />
+            </LinearLayout>
+
+            <com.weidi.common.TimeButton
+                android:id="@+id/tvFpGetAuth"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_toRightOf="@id/ll2"
+                android:background="@drawable/btn_reg_next_selector"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_18" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="@dimen/margin_15"
+            android:layout_marginRight="@dimen/margin_15"
+            android:layout_marginTop="@dimen/margin_20"
+            android:background="@drawable/reg_input_bg" >
+
+            <ImageView
+                android:id="@+id/ivFpPwd1"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/padding_10"
+                android:src="@drawable/reg_pwd" />
+
+            <EditText
+                android:id="@+id/etFpPwd1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_toRightOf="@id/ivFpPwd1"
+                android:background="@null"
+                android:hint="请输入密码"
+                android:inputType="textPassword"
+                android:textColor="@color/text_color_deep"
+                android:textColorHint="@color/text_color_light"
+                android:textSize="@dimen/text_size_16" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="@dimen/margin_15"
+            android:layout_marginRight="@dimen/margin_15"
+            android:layout_marginTop="@dimen/margin_20"
+            android:background="@drawable/reg_input_bg"
+            android:visibility="gone" >
+
+            <ImageView
+                android:id="@+id/ivFpPwd2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/padding_10"
+                android:src="@drawable/reg_pwd" />
+
+            <EditText
+                android:id="@+id/etFpPwd2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_toRightOf="@id/ivFpPwd2"
+                android:background="@null"
+                android:hint="请再次输入密码"
+                android:inputType="textPassword"
+                android:textColor="@color/text_color_deep"
+                android:textColorHint="@color/text_color_light"
+                android:textSize="@dimen/text_size_16" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvFpSubmin"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="@dimen/margin_15"
+        android:layout_marginRight="@dimen/margin_15"
+        android:layout_marginTop="@dimen/margin_20"
+        android:background="@drawable/btn_reg_next_selector"
+        android:gravity="center"
+        android:text="确定"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_18" />
+
+</LinearLayout>

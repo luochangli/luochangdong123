@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+   
+    
+<RelativeLayout 
+    android:id="@+id/re_img"
+    android:layout_below="@+id/title_bar"
+    android:layout_width="20dp"
+    android:layout_height="150dp"
+    android:layout_marginTop="2dp"
+    android:layout_marginLeft="3dp">
+    
+    <com.weidi.view.CircleImageView 
+    android:layout_width="10dp"
+    android:layout_height="10dp"
+    android:layout_centerHorizontal="true"
+    android:id="@+id/img"
+    android:src="@drawable/green"/>
+
+    <TextView
+        android:id="@+id/tv_shu"
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/img"
+        android:layout_marginTop="2dp"
+        android:gravity="center"
+        android:background="#b3b3b3"
+        android:layout_centerHorizontal="true"
+        />
+
+</RelativeLayout>
+<RelativeLayout 
+    android:layout_width="310dp"
+    android:layout_height="145dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="1dp"
+    android:id="@+id/re_notice"
+    android:background="@drawable/notice_selector"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="130dp" 
+        android:background="@drawable/bg"
+        android:id="@+id/re_content">
+        <TextView  
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="测试版的微迪正式发布"
+            android:gravity="center_vertical"
+            android:id="@+id/title"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingLeft="5dp"
+            android:background="#00bf3a"/>
+        <View 
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@null"
+            android:layout_below="@+id/title"
+            android:id="@+id/view"/>
+        
+        <TextView  
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="详情请留意官网"
+            android:gravity="center_vertical"
+            android:layout_below="@+id/view"
+            android:id="@+id/content"
+            android:textColor="#b3b3b3"
+            android:paddingLeft="10dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            />
+        
+         <TextView  
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="3dp"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/content"
+            android:text="这里是时间"
+            android:gravity="right|bottom"
+            android:textColor="#b3b3b3"
+            android:paddingRight="5dp"
+            android:paddingBottom="3dp"
+            android:id="@+id/time"
+            android:ellipsize="end"
+            android:maxLines="2"/>
+        
+    </RelativeLayout>
+</RelativeLayout>
+
+</LinearLayout>

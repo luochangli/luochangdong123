@@ -7,10 +7,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
@@ -28,6 +28,7 @@ import org.jivesoftware.smack.filter.PacketIDFilter;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.Message.Type;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Registration;
@@ -43,29 +44,24 @@ import org.jivesoftware.smackx.provider.VCardProvider;
 import org.jivesoftware.smackx.search.UserSearchManager;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.lidroid.xutils.HttpUtils;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 import com.weidi.QApp;
-import com.weidi.bean.Friend;
 import com.weidi.bean.Session;
 import com.weidi.bean.WjsmMessage;
-import com.weidi.db.ChatMsgDao;
-import com.weidi.db.SessionDao;
+import com.weidi.chat.IQOrder;
+import com.weidi.chat.GroupRoom;
+import com.weidi.provider.ObtainMUCListIQ;
 
 public class XmppUtil {
 	private static String TAG = "XmppUtil";
 	private static XmppUtil xmpp;
+	public static List<GroupRoom> myRooms = new ArrayList<GroupRoom>();
+	public static List<GroupRoom> leaveRooms = new ArrayList<GroupRoom>();
 
 	/**
 	 * 单例模式
@@ -81,6 +77,35 @@ public class XmppUtil {
 
 	public void setNull() {
 		xmpp = null;
+	}
+
+	public static void joinMuc(String muc, String name) {
+		GroupRoom room = new GroupRoom(muc, name);
+		myRooms.add(room);
+	}
+
+	public static void getMUCList() {
+		ObtainMUCListIQ iq = IQOrder.getInstance().obtainMUCList();
+		GroupRoom room;
+		for (ObtainMUCListIQ.Item item : iq.getItems()) {
+			Logger.i(TAG, "已登录到群：" + item.getMuc());
+			room = new GroupRoom(item.getMuc(), item.getName());
+			myRooms.add(room);
+		}
+	}
+
+	public static List<GroupRoom> getRoomList() {
+		return myRooms;
+	}
+
+	public static GroupRoom getRoomByMuc(String muc) {
+
+		for (GroupRoom item : myRooms) {
+			if (muc.equals(item.getMuc())) {
+				return item;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -125,7 +150,6 @@ public class XmppUtil {
 		}
 	}
 
-
 	/**
 	 * 修改用户信息
 	 * 
@@ -145,9 +169,6 @@ public class XmppUtil {
 		}
 		return true;
 	}
-
-	
-
 
 	/**
 	 * 查询用户
@@ -183,8 +204,6 @@ public class XmppUtil {
 		return listUser;
 	}
 
-	
-
 	/**
 	 * 搜索好友
 	 * 
@@ -216,7 +235,6 @@ public class XmppUtil {
 		return userList;
 	}
 
-	
 	/**
 	 * 文件转字节
 	 * 
@@ -379,38 +397,40 @@ public class XmppUtil {
 		return EntriesList;
 	}
 
-	public static List<String> getRosterAll(Roster roster){
+	public static List<String> getRosterAll(Roster roster) {
 		Collection<RosterEntry> entries = roster.getEntries();
 		List<String> data = new ArrayList<String>();
-		for(RosterEntry item:entries){
-				data.add(item.getUser());
+		for (RosterEntry item : entries) {
+			data.add(item.getUser());
 
 		}
 		return data;
 	}
-	public static List<String> getRosterTo(Roster roster){
+
+	public static List<String> getRosterTo(Roster roster) {
 		Collection<RosterEntry> entries = roster.getEntries();
 		List<String> data = new ArrayList<String>();
-		for(RosterEntry item:entries){
-			if(item.getType().equals(ItemType.to)){
-				data.add(item.getUser());
-			}
-		}
-		return data;
-	}
-	public static List<String> getRosterBoth(Roster roster){
-		Collection<RosterEntry> entries = roster.getEntries();
-		List<String> data = new ArrayList<String>();
-		for(RosterEntry item:entries){
-			Logger.i(TAG, "MI"+item.getName()+":"+item.getType()+":"+item.getUser());
-			if(item.getType().equals(ItemType.both)){
+		for (RosterEntry item : entries) {
+			if (item.getType().equals(ItemType.to)) {
 				data.add(item.getUser());
 			}
 		}
 		return data;
 	}
 
-	
+	public static List<String> getRosterBoth(Roster roster) {
+		Collection<RosterEntry> entries = roster.getEntries();
+		List<String> data = new ArrayList<String>();
+		for (RosterEntry item : entries) {
+			Logger.i(TAG, "MI" + item.getName() + ":" + item.getType() + ":"
+					+ item.getUser());
+			if (item.getType().equals(ItemType.both)) {
+				data.add(item.getUser());
+			}
+		}
+		return data;
+	}
+
 	/**
 	 * 创建一个组
 	 */
@@ -462,6 +482,10 @@ public class XmppUtil {
 	 */
 	public static String getUsername(String fullUsername) {
 		return fullUsername.split("@")[0];
+	}
+
+	public static String getMucFrom(String muc) {
+		return muc.split("/")[1];
 	}
 
 	/**
@@ -533,8 +557,6 @@ public class XmppUtil {
 			return false;
 		}
 	}
-
-	
 
 	/**
 	 * 把一个好友添加到一个组中
@@ -643,9 +665,9 @@ public class XmppUtil {
 	 * @param messageListener
 	 * @throws XMPPException
 	 */
-	public static void sendFileMsg(XMPPConnection mXMPPConnection,
-			String fileName, String fileType, String touser,
-			MessageListener messageListener) throws XMPPException {
+	public static void sendFileMsg(String fileName, String fileType,
+			String touser) throws XMPPException {
+		XMPPConnection mXMPPConnection = QApp.getXmppConnection();
 		if (mXMPPConnection == null || !mXMPPConnection.isConnected()) {
 			throw new XMPPException();
 		}
@@ -663,13 +685,25 @@ public class XmppUtil {
 		sb.append("></jsm>");
 		jsm.setPacketContent(sb);
 		msg.addExtension(jsm);
-		ChatManager chatmanager = mXMPPConnection.getChatManager();
-		Chat chat = chatmanager.createChat(
-				touser + "@" + mXMPPConnection.getServiceName(),
-				messageListener);
-		if (chat != null) {
-			chat.sendMessage(msg);
-			Logger.i(TAG, "sendMessge" + msg.toXML());
+		if (touser.contains("g")) {
+			GroupRoom room = getRoomByMuc(getFullMUC(touser));
+			msg.setBody("");
+			msg.setType(Type.groupchat);
+			msg.setTo(getFullMUC(touser));
+			msg.setThread(UUID.randomUUID().toString());
+			room.getMultiUserChat().sendMessage(msg);
+
+		} else {
+
+			ChatManager chatmanager = mXMPPConnection.getChatManager();
+			Chat chat;
+			chat = chatmanager.createChat(
+					touser + "@" + mXMPPConnection.getServiceName(), null);
+
+			if (chat != null) {
+				chat.sendMessage(msg);
+				Logger.i(TAG, "sendMessge" + msg.toXML());
+			}
 		}
 	}
 
@@ -683,15 +717,20 @@ public class XmppUtil {
 		try {
 			VCard vcard = new VCard();
 			// 加入这句代码，解决No VCard for
-			ProviderManager.getInstance().addIQProvider("vCard", "vcard-temp",
-					new VCardProvider());
-			if (user == null) {
-				vcard.load(QApp.getXmppConnection());
-			} else {
-				vcard.load(QApp.getXmppConnection(), user + "@" + Const.XMPP_DOMAIN);
+			if (vcard != null) {
+
+				ProviderManager.getInstance().addIQProvider("vCard",
+						"vcard-temp", new VCardProvider());
+				if (user == null) {
+					vcard.load(QApp.getXmppConnection());
+				} else {
+					vcard.load(QApp.getXmppConnection(), user + "@"
+							+ Const.XMPP_DOMAIN);
+				}
+				if (vcard != null)
+					return vcard;
 			}
-			if (vcard != null)
-				return vcard;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -707,27 +746,28 @@ public class XmppUtil {
 	 * @param messageListener
 	 * @throws XMPPException
 	 */
-	public static void sendTextMsg(XMPPConnection mXMPPConnection,
-			String content, String touser, MessageListener messageListener)
+	public static void sendTextMsg(String content, String touser)
 			throws XMPPException {
+		XMPPConnection mXMPPConnection = QApp.getXmppConnection();
 		if (mXMPPConnection == null || !mXMPPConnection.isConnected()) {
 			throw new XMPPException();
 		}
 		if (touser.contains("g")) {
-			MultiUserChat muc = new MultiUserChat(mXMPPConnection, touser
-					+ "@conference.jsmny");
-			muc.join(Const.USER_NAME);
-			muc.sendConfigurationForm(new Form(Form.TYPE_SUBMIT));
-			muc.sendMessage(content);
+			GroupRoom room = getRoomByMuc(getFullMUC(touser));
+			org.jivesoftware.smack.packet.Message msg = new Message();
+			msg.setBody(content);
+			msg.setType(Type.groupchat);
+			msg.setTo(getFullMUC(touser));
+			msg.setThread(UUID.randomUUID().toString());
+			room.getMultiUserChat().sendMessage(msg);
 
 		} else {
-			Message msg = new Message();
+			org.jivesoftware.smack.packet.Message msg = new Message();
 			msg.setBody(content);
 			ChatManager chatmanager = mXMPPConnection.getChatManager();
 			Chat chat;
 			chat = chatmanager.createChat(
-					touser + "@" + mXMPPConnection.getServiceName(),
-					messageListener);
+					touser + "@" + mXMPPConnection.getServiceName(), null);
 
 			if (chat != null) {
 				chat.sendMessage(msg);

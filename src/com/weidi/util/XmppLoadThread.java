@@ -20,6 +20,22 @@ public abstract class XmppLoadThread {
 	private Context context;
 //	private ExecutorService FULL_TASK_EXECUTOR;
 
+	public XmppLoadThread(){
+		new AsyncTask<Void, Integer, Object>(){
+
+			@Override
+			protected Object doInBackground(Void... params) {
+				load();
+				return null;
+			}
+			
+			@Override
+			protected void onPostExecute(Object result) {
+			    result(result);
+				super.onPostExecute(result);
+			}
+		};
+	}
 	@SuppressLint("NewApi")
 	public XmppLoadThread(Context _mcontext) {
 		isHint = true;

@@ -6,8 +6,13 @@
 
     <uses-sdk
         android:minSdkVersion="13"
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="17" />
 
+    <!-- 阅读消息 -->
+    <uses-permission android:name="android.permission.READ_SMS" />
+
+    <!-- 接收消息 -->
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -62,9 +67,6 @@
         <activity
             android:name="com.weidi.MainActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name="com.weidi.activity.RegisterActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name="com.weidi.activity.AddFriendActivity"
             android:screenOrientation="portrait" />
@@ -149,23 +151,50 @@
             android:name="com.weidi.chat.GroupChatSettingActi"
             android:screenOrientation="portrait" >
         </activity>
-         <activity
+        <activity
             android:name="com.weidi.activity.TestGroupChatActivity"
             android:screenOrientation="portrait" >
         </activity>
-        
-         <activity
+        <activity
             android:name="com.weidi.chat.groupchat.GroupListActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weidi.activity.DdmActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weidi.activity.ClearHistroyChat"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weidi.activity.SuggestForMe"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weidi.activity.MyInfoActi"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weidi.activity.EditInfoActi"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weidi.activity.RegisterActi"
+            android:screenOrientation="portrait" >
+        </activity>
+         <activity
+            android:name="com.weidi.activity.ForgetPwdActi"
             android:screenOrientation="portrait" >
         </activity>
         
           <activity
-            android:name="com.weidi.activity.DdmActivity"
+            android:name="com.weidi.activity.NoticeActivity"
             android:screenOrientation="portrait" >
         </activity>
         
-           <activity
-            android:name="com.weidi.activity.ClearHistroyChat"
+            <activity
+            android:name="com.weidi.activity.WebViewActivity"
             android:screenOrientation="portrait" >
         </activity>
 

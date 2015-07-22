@@ -7,9 +7,11 @@ import com.weidi.view.LoadingView;
 
 public class AsyncTaskBase extends AsyncTask<Integer, Integer, Integer> {
 	private LoadingView mLoadingView;
-	public AsyncTaskBase(LoadingView loadingView){
-		this.mLoadingView=loadingView;
+
+	public AsyncTaskBase(LoadingView loadingView) {
+		this.mLoadingView = loadingView;
 	}
+
 	@Override
 	protected Integer doInBackground(Integer... params) {
 
@@ -19,9 +21,9 @@ public class AsyncTaskBase extends AsyncTask<Integer, Integer, Integer> {
 	@Override
 	protected void onPostExecute(Integer result) {
 		super.onPostExecute(result);
-		if(result==1){
+		if (result == 1) {
 			mLoadingView.setVisibility(View.GONE);
-		}else{
+		} else {
 			mLoadingView.setText(R.string.no_data);
 		}
 	}
@@ -29,7 +31,10 @@ public class AsyncTaskBase extends AsyncTask<Integer, Integer, Integer> {
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		mLoadingView.setVisibility(View.VISIBLE);
+		if (mLoadingView != null) {
+			mLoadingView.setVisibility(View.VISIBLE);
+		}
+
 	}
 
 }

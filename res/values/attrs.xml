@@ -37,6 +37,5 @@
             <enum name="pull_out" value="1" />
         </attr>
     </declare-styleable>
-    
 
 </resources>

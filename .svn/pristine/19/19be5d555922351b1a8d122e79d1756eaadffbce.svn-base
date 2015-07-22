@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.weidi"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="13"
+        android:targetSdkVersion="18" />
+
+    <!-- 阅读消息 -->
+    <uses-permission android:name="android.permission.READ_SMS" />
+
+    <!-- 接收消息 -->
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FIND_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
+    <application
+        android:name="com.weidi.QApp"
+        android:allowBackup="true"
+        android:icon="@drawable/logo_weidi"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+        <meta-data
+            android:name="JUHE_KEY"
+            android:value="713ecb4b7b83cf55ffafbf33298ca12d" />
+
+        <activity
+            android:name="com.weidi.activity.WelcomeActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.weidi.activity.LoginActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name="com.weidi.MainActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.weidi.activity.RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.AddFriendActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.ImgPageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.ChatActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.SignActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.MsgAlertActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.MsgHistroyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.CaptchaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.BaseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.GuideViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.NickActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.VcardActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.BindPhoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.ImageGridActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.TradeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.FujinActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.weidi.common.function.video.RecorderVideoActivity" />
+        <activity
+            android:name="com.weidi.activity.SearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.FriendActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.NewFriendActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.MeEditActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.CropImageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.PicSrcPickerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.ChangePwdActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.image.ImagePagerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.chat.groupchat.CreatChatRoomActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidi.activity.DevelopmentActi"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weidi.chat.GroupChatSettingActi"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weidi.activity.TestGroupChatActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weidi.chat.groupchat.GroupListActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weidi.activity.DdmActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weidi.activity.ClearHistroyChat"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weidi.activity.SuggestForMe"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weidi.activity.MyInfoActi"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weidi.activity.EditInfoActi"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weidi.activity.RegisterActi"
+            android:screenOrientation="portrait" >
+        </activity>
+         <activity
+            android:name="com.weidi.activity.ForgetPwdActi"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <service android:name="com.weidi.service.MsfService" />
+    </application>
+
+</manifest>

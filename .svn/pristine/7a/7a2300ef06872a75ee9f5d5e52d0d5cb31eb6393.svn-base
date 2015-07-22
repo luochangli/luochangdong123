@@ -1,0 +1,184 @@
+package com.weidi.activity;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Message;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.weidi.R;
+import com.weidi.chat.ErrorHandle;
+import com.weidi.chat.IQOrder;
+import com.weidi.common.SmsContent;
+import com.weidi.common.TimeButton;
+import com.weidi.common.base.BaseActivity;
+import com.weidi.provider.ForgetPasswordIQ;
+import com.weidi.provider.RegAuthcodeIQ;
+import com.weidi.service.MsfService;
+import com.weidi.util.Logger;
+import com.weidi.util.PreferencesUtils;
+import com.weidi.util.ToastUtil;
+import com.weidi.util.Util;
+
+/**
+ * @author luochangdong E-mail: 2270333671@qq.com
+ * @date 创建时间：2015-7-19 下午7:47:53
+ * @Description 1.0
+ */
+public class ForgetPwdActi extends BaseActivity implements OnClickListener {
+	private static String TAG = "ForgetPwdActi";
+	private ImageView topLeft;
+	private TextView topTitle, topRight;
+	private EditText etPhone, etAuthCode, etPwd1, etPwd2;
+	private TimeButton tbAuth;
+	private TextView tvSubmit;
+	private String pwd1;
+	private String phone;
+	private String auth;
+	SmsContent content;
+
+	@Override
+	protected void initView(Bundle savedInstanceState) {
+		setContentView(R.layout.acti_forget_pwd);
+		initView();
+		smsHandle();
+	}
+
+	private void smsHandle() {
+		tbAuth.onCreate();
+		tbAuth.setTextAfter("秒后重新获取").setTextBefore("获取验证码");
+		content = new SmsContent(ForgetPwdActi.this, mHandler, etAuthCode);
+		// 注册短信变化监听
+		this.getContentResolver().registerContentObserver(
+				Uri.parse("content://sms/"), true, content);
+	}
+
+	private void initView() {
+		topLeft = (ImageView) findViewById(R.id.topLeft);
+		topTitle = (TextView) findViewById(R.id.topTitle);
+		topRight = (TextView) findViewById(R.id.topRight);
+		topTitle.setText("找回密码");
+		topRight.setText("确定");
+
+		etAuthCode = (EditText) findViewById(R.id.etFpAuth);
+		etPhone = (EditText) findViewById(R.id.etFpPhone);
+		etPwd1 = (EditText) findViewById(R.id.etFpPwd1);
+		etPwd2 = (EditText) findViewById(R.id.etFpPwd2);
+
+		tbAuth = (TimeButton) findViewById(R.id.tvFpGetAuth);
+		tvSubmit = (TextView) findViewById(R.id.tvFpSubmin);
+
+	}
+
+	@Override
+	protected void setListener() {
+		topLeft.setOnClickListener(this);
+		topRight.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				changePwd();
+			}
+		});
+		tbAuth.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				phone = etPhone.getText().toString();
+				if (phone.isEmpty()) {
+
+					ToastUtil.showShortToast(mContext, "手机号不能为空！");
+					return;
+				}
+				if (!Util.getInstance().isMobileNumber(phone)
+						|| !(phone.length() == 11)) {
+
+					Logger.i(TAG, "" + Util.getInstance().isMobileNumber(phone));
+					ToastUtil.showShortToast(mContext, "手机号格式不正确！");
+					return;
+				}
+
+				RegAuthcodeIQ iq = IQOrder.getInstance().getRegAuthCode(phone);
+				if (iq == null) {
+					ToastUtil.showShortToast(mContext, "服务器异常，请稍后再试！");
+					return;
+				}
+				if (iq.getErrorCode() != null) {
+					ErrorHandle.errorCodeHint(iq.getErrorCode());
+					return;
+				}
+				tbAuth.startTimer(v);
+				tbAuth.setBackgroundResource(R.drawable.btn_reg_wait_auth);
+				ToastUtil.showShortLuo("您好，短信已发出，请注意查收。");
+			}
+		});
+
+		tvSubmit.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				changePwd();
+			}
+		});
+	}
+
+	private void changePwd() {
+		pwd1 = etPwd1.getText().toString();
+		auth = etAuthCode.getText().toString();
+
+		if (auth.isEmpty() || pwd1.isEmpty()) {
+			ToastUtil.showShortToast(mContext, "内容不能有空！");
+			return;
+		}
+		if (pwd1.length() < 6) {
+			ToastUtil.showShortToast(mContext, "密码设置不能小于6位数！");
+			return;
+		}
+		ForgetPasswordIQ iq = IQOrder.getInstance().forgetPassword(phone, pwd1,
+				auth);
+		if (iq == null) {
+			ToastUtil.showShortToast(mContext, "服务器异常，请稍后再试！");
+			return;
+		}
+		if (iq.getErrorCode() != null) {
+			ErrorHandle.errorCodeHint(iq.getErrorCode());
+			return;
+		}
+		Logger.i(TAG, "修改成功：" + phone);
+		PreferencesUtils.putSharePre("username", phone);
+		PreferencesUtils.putSharePre("pwd", pwd1);
+		Intent intent = new Intent(this, MsfService.class);
+		startService(intent);
+		finish();
+	}
+
+	@Override
+	protected void afterViews(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void handleMsg(Message msg) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.topLeft:
+			finish();
+			break;
+
+		default:
+			break;
+		}
+	}
+
+}

@@ -2,42 +2,40 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/chat_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#EFEFEF" >
+    android:layout_height="match_parent" >
 
     <RelativeLayout
         android:id="@+id/rlTitle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_top_bar"
         android:layout_alignParentTop="true"
-        android:background="@color/green" >
+        android:background="@color/green_bg" >
 
         <ImageView
             android:id="@+id/tvChatLeft"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignParentLeft="true"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:src="@drawable/btn_back"
-            android:layout_marginLeft="@dimen/margin_10" />
+            android:background="@drawable/btn_back_selector" />
 
         <TextView
             android:id="@+id/tvChatTitle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:padding="3dp"
+            android:gravity="center"
             android:text="聊天"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="@dimen/text_size_20" />
 
         <com.weidi.view.CircleImageView
             android:id="@+id/tvChatRight"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/margin_10"
+            android:scaleType="centerInside"
             android:src="@drawable/circle_head_img" />
     </RelativeLayout>
 
@@ -66,7 +64,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:background="#F5F6F7" >
 
             <RelativeLayout

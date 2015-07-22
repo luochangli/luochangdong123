@@ -1,15 +1,17 @@
 package com.weidi.util;
 
-import com.weidi.QApp;
+import java.util.List;
+import java.util.Map;
+
 import com.weidi.bean.User;
 
 public class Const {
-	
-   public static final String XMPP_HOST = "120.25.157.196";
-//	public static final String XMPP_HOST = "192.168.0.10";
-//	public static final String XMPP_HOST = "192.168.0.21";
-	public static final String XMPP_DOMAIN = "jsmny"; 
-	public static final String RESOUCE_ID = "jsm"; //资源名
+
+//	 public static final String XMPP_HOST = "120.25.157.196";
+	public static final String XMPP_HOST = "192.168.0.10";
+	// public static final String XMPP_HOST = "192.168.0.21";
+	public static final String XMPP_DOMAIN = "jsmny";
+	public static final String RESOUCE_ID = "jsm"; // 资源名
 	public static final int XMPP_PORT = 5222;
 	public static String USER_NAME;
 	public static User loginUser;
@@ -19,21 +21,31 @@ public class Const {
 	 */
 	public static final String XMLNS = "com:jsm:group";
 	public static final String QUERY = "query";
-    public static final String Lord = "10";//群主
-    
-    
-    /**
+	public static final String Lord = "10";// 群主
+	public static final String NEW_GROUP = "com:jsm:group#newgroup";
+	public static final String Change_Nick = "com:jsm:group#changenick";
+	public static final String NEW_MENBER = "com:jsm:group#newmember";
+	public static final String GROUP_INFO = "com:jsm:group#groupinfo";
+
+	/**
 	 * IQProvider 备注常量
 	 */
 	public static final String XMLNS_REMARK = "com:jsm:remark";
 	public static final String QUERY_REMARK = "query";
 	
-	 /**
+	
+	/**
+	 * IQProvider News常量
+	 */
+	public static final String XMLNS_News = "com:jsm:news";
+	public static final String QUERY_News = "query";
+
+	/**
 	 * IQProvider User常量
 	 */
 	public static final String XMLNS_User = "com:jsm:user";
-	public static final String QUERY_User= "query";
-	
+	public static final String QUERY_User = "query";
+
 	public static final int HANDLER_PHONE_TO_WEIDI = 10001;
 	/**
 	 * 登录状态广播
@@ -42,21 +54,21 @@ public class Const {
 	/**
 	 * 消息记录操作广播
 	 */
-	public static final String ACTION_MSG_OPER= "com.android.weidi.msgoper";
+	public static final String ACTION_MSG_OPER = "com.android.weidi.msgoper";
 	/**
 	 * 添加好友请求广播
 	 */
-	public static final String ACTION_ADDFRIEND= "com.android.weidi.addfriend";
+	public static final String ACTION_ADDFRIEND = "com.android.weidi.addfriend";
 	/**
 	 * 添加好友请求广播
 	 */
-	public static final String ACTION_DELETE_MSG= "com.android.weidi.delete_msg";
+	public static final String ACTION_DELETE_MSG = "com.android.weidi.delete_msg";
 	/**
 	 * 新消息广播
 	 */
-	public static final String ACTION_NEW_MSG= "com.android.weidi.newmsg";	
+	public static final String ACTION_NEW_MSG = "com.android.weidi.newmsg";
 	public static final String ACTION_NEW_FRIEND_MSG = "com.android.weidi.new_friend_msg";
-	
+
 	public static final String MSG_READED = "1";
 	public static final String MSG_UNREAD = "0";
 
@@ -99,5 +111,26 @@ public class Const {
 	public static final int LOGIN_ERROR = 5;// 连接失败
 	public static final int UNDEFINE = 6;// 连接失败
 	public static final String LOGIN_PWD = "pwd";
+
+	public static final String CODE_1 = "00001";
+	public static final String CODE_2 = "00002";
+	public static final String CODE_3 = "00003";
+	public static final String CODE_4 = "00004";
+	public static final String CODE_5 = "00005";
+	public static final String CODE_6 = "00006";
+	public static final String CODE_7 = "00007";
+	public static final String CODE_8 = "00008";
+	public static final String CODE_9 = "00009";
+	public static final String CODE_10 = "00010";
+	public static final String CODE_11 = "10000";
 	
+	//用于存储通知数据
+		public static  String title = null;
+		public static  String content = null;
+		public static  String link = null;
+		public static  String imglink = null;
+		public static  String createdatetime = null;
+		public static Map<String, Object> map;
+		public static List<Map<String, Object>> notice_data;
+
 }

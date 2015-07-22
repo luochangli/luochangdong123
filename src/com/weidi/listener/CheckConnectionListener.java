@@ -7,6 +7,7 @@ import android.util.Log;
 import com.weidi.QApp;
 import com.weidi.service.MsfService;
 import com.weidi.util.ToastUtil;
+import com.weidi.util.XmppConnectionManager;
 
 
 /**
@@ -18,11 +19,12 @@ public class CheckConnectionListener implements ConnectionListener{
 	@Override
 	public void connectionClosed() {
 		Log.i("RRRRRRRRRRRRR", "手动关闭网络");
+		XmppConnectionManager.getInstance().setConnNull();
 	}
 
 	@Override
 	public void connectionClosedOnError(Exception e) {  
-		if (e.getMessage().equals("stream:error (conflict)")) {
+		if (e.getMessage().equals("conflict")) {
 			ToastUtil.showLongToast(QApp.getInstance(), "您的账号在异地登录");
 		}
 	}
