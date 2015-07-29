@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+   <com.weidi.view.TitleBarView
+     android:id="@+id/title_bar"
+     android:layout_width="match_parent"
+     android:layout_height="50dp" />
+
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="200dp"
+       android:background="@drawable/beijingtu" >
+
+       <com.weidi.view.CircleImageView
+           android:id="@+id/civHeadImg"
+           android:layout_width="50dp"
+           android:layout_height="50dp"
+           android:layout_centerHorizontal="true"
+           android:layout_marginTop="85dp"
+           android:scaleType="centerCrop"
+           android:src="@drawable/circle_head_img" />
+
+       <LinearLayout
+           android:id="@+id/linearLayout1"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignParentBottom="true"
+           android:layout_centerHorizontal="true"
+           android:layout_marginBottom="@dimen/margin_5"
+           android:orientation="vertical" >
+
+           <RelativeLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:layout_marginTop="@dimen/margin_20" >
+
+               <TextView
+                   android:id="@+id/tvNickName"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_centerHorizontal="true"
+                   android:text="我的昵称"
+                   android:textColor="@color/white"
+                   android:textSize="@dimen/text_size_18" />
+               <ImageView 
+                   android:layout_width="20dp"
+                   android:layout_height="20dp"
+                   android:id="@+id/seximg"
+                   android:layout_toRightOf="@+id/tvNickName"
+                   android:layout_marginLeft="35dp"
+                   android:src="@drawable/default_useravatar"/>
+           </RelativeLayout>
+
+           <LinearLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:layout_marginBottom="10dp"
+               android:layout_marginTop="@dimen/margin_8" >
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="微迪号："
+                   android:textColor="@color/white"
+                   android:textSize="@dimen/text_size_12" />
+
+               <TextView
+                   android:id="@+id/tvWeidi"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="1000221"
+                   android:textColor="@color/white"
+                   android:textSize="@dimen/text_size_12" />
+           </LinearLayout>
+       </LinearLayout>
+
+       <ImageView
+           android:id="@+id/imageView1"
+           android:layout_width="75dp"
+           android:layout_height="75dp"
+           android:layout_centerHorizontal="true"
+           android:layout_marginTop="67dp"
+           android:src="@drawable/huangguan" />
+   </RelativeLayout>
+            
+         <RelativeLayout 
+             android:id="@+id/re_region"
+             android:layout_width="match_parent"
+             android:layout_height="44dp">
+             
+              <TextView
+                  
+                           android:id="@+id/tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="地区 :"
+                            android:textColor="#323232"
+                            android:layout_marginLeft="15dp"
+                             android:layout_centerVertical="true"
+                            android:textSize="@dimen/text_size_16" />
+               <TextView
+                            android:id="@+id/tv_region"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="广东 深圳 罗湖"
+                            android:textColor="#646464"
+                            android:layout_toRightOf="@+id/tv"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="10dp"
+                            android:textSize="@dimen/text_size_13" />
+         </RelativeLayout>
+         <View 
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+             android:background="#e6e6e6"
+             android:layout_marginLeft="15dp"
+             android:layout_marginRight="15dp"/>
+
+         <RelativeLayout
+             android:id="@+id/re_sign"
+             android:layout_width="match_parent"
+             android:layout_height="44dp" >
+
+             <TextView
+                 android:id="@+id/tv"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_centerVertical="true"
+                 android:layout_marginLeft="15dp"
+                 android:text="签名 :"
+                 android:textColor="#323232"
+                 android:textSize="@dimen/text_size_16" />
+
+             <TextView
+                 android:id="@+id/tv_sign"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_centerVertical="true"
+                 android:layout_marginLeft="10dp"
+                 android:layout_toRightOf="@+id/tv"
+                 android:text="快点来签名咯"
+                 android:textColor="#646464"
+                 android:textSize="@dimen/text_size_13" />
+         </RelativeLayout>
+         
+          <View android:layout_width="match_parent"
+             android:layout_height="1dp"
+             android:background="#e6e6e6"
+             android:layout_marginLeft="15dp"
+             android:layout_marginRight="15dp"/>
+         
+       
+         
+          <RelativeLayout 
+             android:id="@+id/re_phone"
+             android:layout_width="match_parent"
+             android:layout_height="67dp">
+              <TextView
+                           android:id="@+id/tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="相册 :"
+                            android:textColor="#323232"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="10dp"
+                            android:textSize="@dimen/text_size_16" />
+              <ImageView 
+                  android:layout_width="38dp"
+                  android:layout_height="38dp"
+                  android:layout_toRightOf="@+id/tv"
+                  android:layout_marginTop="10dp"
+                  android:layout_marginLeft="10dp"
+                  android:background="#cccccc"
+                  />
+             
+         </RelativeLayout>
+         
+          <RelativeLayout 
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#e6e6e6"
+              >
+              
+              <View 
+                  android:layout_width="match_parent"
+                  android:layout_height="1dp"
+                  android:layout_above="@+id/re_bottom"
+                  android:background="#cccccc"
+                 
+                 />
+              <RelativeLayout 
+                  android:layout_width="match_parent"
+                  android:layout_height="60dp"
+                  android:layout_alignParentBottom="true"
+                  android:id="@+id/re_bottom"
+                  >
+                    <LinearLayout 
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        
+                         <TextView
+                            android:id="@+id/tv_sendmessage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="发信息"
+                            android:layout_weight="1"
+                            android:textColor="#ffffff"
+                            android:gravity="center"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="15dp"
+                            android:textSize="@dimen/text_size_13"
+                             android:background="@drawable/sendgg"/>
+                        <TextView
+                            android:id="@+id/tv_sendvideo"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="发视频"
+                            android:layout_weight="1"
+                            android:textColor="#009800"
+                            android:gravity="center"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="15dp"
+                            android:textSize="@dimen/text_size_13"
+                            android:layout_marginRight="15dp"
+                             android:background="@drawable/sendvideomm"/>
+                    </LinearLayout>
+                 
+              </RelativeLayout>
+             
+              
+          </RelativeLayout>
+</LinearLayout>

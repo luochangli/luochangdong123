@@ -1,0 +1,120 @@
+package com.weidi.activity;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.google.gson.stream.JsonReader;
+import com.weidi.R;
+import com.weidi.adapter.NoticeAdapter;
+import com.weidi.provider.NewsIQ;
+import com.weidi.util.Const;
+import com.weidi.view.TitleBarView;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+public class NoticeActivity extends Activity {
+	ListView list_notice;
+	List<Map<String, Object>> notice_data;
+	String tmpeStr=null;
+	Handler mHandler;
+	Map<String, Object> map;
+	TitleBarView mTitleBarView;
+	@SuppressLint("HandlerLeak")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		
+		setContentView(R.layout.activity_notice);
+		notice_data=new ArrayList<Map<String, Object>>();
+		initData();
+		initTitleView();
+		
+		initView();
+		
+		
+	}
+	private void initData() {	 
+		notice_data=Const.notice_data;
+		int GG=Const.notice_data.size();
+		Log.i("YYYY", ""+GG);
+		/*DataTaste data=new DataTaste();
+		data.execute();*/
+	}
+	
+	private void initTitleView() {
+		mTitleBarView = (TitleBarView) findViewById(R.id.title_bar);
+		mTitleBarView.setCommonTitle(View.VISIBLE, View.VISIBLE, View.GONE,
+				View.GONE, View.GONE);
+		mTitleBarView.setTitleText(R.string.notice);
+		mTitleBarView.setBtnLeftIcon(R.drawable.btn_back);
+		mTitleBarView.setBtnLeftOnclickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				finish();
+
+			}
+		});
+
+	}
+	private void initView() {
+		
+	    list_notice=(ListView)findViewById(R.id.list_notice);
+		NoticeAdapter adapter=new NoticeAdapter(NoticeActivity.this,notice_data);
+		list_notice.setAdapter(adapter);
+		list_notice.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View view, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+				Intent intent=new Intent(NoticeActivity.this,WebViewActivity.class);
+				String pathurl=(String)notice_data.get(arg2).get("link");
+				Bundle bundle=new Bundle();
+				bundle.putString("httpurl", pathurl);
+				intent.putExtras(bundle);
+				startActivity(intent);
+				Log.i("URL", pathurl);	 
+				TextView text=(TextView)view.findViewById(R.id.title);
+				ImageView img=(ImageView)view.findViewById(R.id.img);
+				img.setBackgroundResource(R.drawable.huise);
+				text.setBackgroundColor(Color.parseColor("#b3b3b3"));
+				RelativeLayout re_content=(RelativeLayout)view.findViewById(R.id.re_content);
+				re_content.setBackgroundResource(R.drawable.hui);
+			}
+		}); 
+	}
+
+}

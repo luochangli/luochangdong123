@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/re_notice"
+        android:layout_width="match_parent"
+        android:layout_height="65dp" >
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="13dp"
+            android:src="@drawable/notice3x" />
+
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/img"
+            android:text="微迪公告"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/re_notice" >
+
+        <com.weidi.view.CustomListView
+            android:id="@+id/lv_news"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/whites"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="#70CDCDCD"
+            android:dividerHeight="0.5dp"
+            android:fadingEdge="none"
+            android:fadingEdgeLength="0dp"
+            android:listSelector="@drawable/list_item_selector" />
+
+        <TextView
+            android:id="@+id/tvNoMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="暂时没有回话"
+            android:textColor="@color/text_color_light"
+            android:textSize="@dimen/text_size_25"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+</RelativeLayout>

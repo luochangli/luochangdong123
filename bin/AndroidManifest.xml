@@ -10,7 +10,6 @@
 
     <!-- 阅读消息 -->
     <uses-permission android:name="android.permission.READ_SMS" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
     </uses-permission>
 
@@ -132,7 +131,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.weidi.activity.PicSrcPickerActivity"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name="com.weidi.activity.ChangePwdActivity"
             android:screenOrientation="portrait" />
@@ -203,6 +204,17 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="stateAlwaysHidden" >
+        </activity>
+        <activity
+            android:name="com.weidi.common.scanner.ShowBarcode"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        
+         <activity
+            android:name="com.weidi.activity.FriendInfoActi"
+            android:screenOrientation="portrait" >
         </activity>
 
         <service android:name="com.weidi.service.MsfService" />

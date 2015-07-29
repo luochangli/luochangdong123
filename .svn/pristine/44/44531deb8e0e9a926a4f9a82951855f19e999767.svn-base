@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/chat_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/rlTitle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_top_bar"
+        android:layout_alignParentTop="true"
+        android:background="@color/green_bg" >
+
+        <ImageView
+            android:id="@+id/tvChatLeft"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:background="@drawable/btn_back_selector" />
+
+        <TextView
+            android:id="@+id/tvChatTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="聊天"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_20" />
+
+        <com.weidi.view.CircleImageView
+            android:id="@+id/tvChatRight"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/margin_10"
+            android:scaleType="centerInside"
+            android:src="@drawable/circle_head_img" />
+    </RelativeLayout>
+
+    <com.weidi.view.DropdownListView
+        android:id="@+id/message_chat_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom"
+        android:layout_below="@id/rlTitle"
+        android:background="@color/chat_bg"
+        android:cacheColorHint="@color/transparent"
+        android:divider="@null"
+        android:listSelector="@color/transparent"
+        android:transcriptMode="normal" />
+
+    <LinearLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/gray" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white" >
+
+            <RelativeLayout
+                android:id="@+id/rlBtnSend"
+                android:layout_width="50dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="8dp"
+                android:gravity="center" >
+
+                <LinearLayout
+                    android:id="@+id/tvVoice"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/btn_reg_next_selector"
+                    android:gravity="center" >
+
+                    <TextView
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:background="@drawable/iv_voice" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/send_sms"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/btn_reg_next_selector"
+                    android:gravity="center"
+                    android:visibility="gone" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="发 送"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnChatKeyboard"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/btn_reg_next_selector"
+                    android:gravity="center"
+                    android:visibility="gone" >
+
+                    <TextView
+                        android:layout_width="35dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_keyboard" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/llMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true" >
+
+                <ImageView
+                    android:id="@+id/image_face"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/btn_chat_emo_selector" />
+
+                <ImageView
+                    android:id="@+id/image_add"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:src="@drawable/btn_chat_add_selector" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:layout_marginLeft="@dimen/margin_14"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_toLeftOf="@id/rlBtnSend"
+                android:layout_toRightOf="@id/llMore" >
+
+                <EditText
+                    android:id="@+id/input_sms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/caht_input_bg"
+                    android:maxHeight="120dp"
+                    android:textSize="14sp" />
+
+                <com.weidi.common.function.recoding.RecordButton
+                    android:id="@+id/tvSpeek"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/caht_input_bg"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/gray" />
+
+        <include
+            android:id="@+id/chat_face_container"
+            layout="@layout/chat_face_container"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/chat_add_container"
+            layout="@layout/chat_add_container"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</RelativeLayout>

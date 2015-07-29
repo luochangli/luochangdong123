@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <RelativeLayout 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="160dp"
+        android:layout_marginLeft="100dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/acm_inputbox">
+        <TextView 
+            android:id="@+id/tv_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+           android:gravity="center"
+            android:layout_centerHorizontal="true"  
+                 
+            android:text="退出当前账号"/>
+        <View 
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/tv_exit"
+            android:background="@color/devide_line"/>
+        <TextView 
+            android:id="@+id/tv_allexit"
+            android:layout_below="@+id/tv_exit"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:layout_centerHorizontal="true"          
+            android:text="退出微迪"/>
+    </RelativeLayout>
+
+</RelativeLayout>
