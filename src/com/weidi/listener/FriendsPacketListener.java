@@ -19,7 +19,6 @@ import com.weidi.db.ChatMsgDao;
 import com.weidi.db.NewFriendDao;
 import com.weidi.db.SessionDao;
 import com.weidi.fragment.NewConstactFragment;
-import com.weidi.service.MsfService;
 import com.weidi.util.Const;
 import com.weidi.util.Logger;
 import com.weidi.util.XmppUtil;
@@ -56,12 +55,11 @@ public class FriendsPacketListener implements PacketListener {
 			if (presence.getType().equals(Presence.Type.subscribe)) {// 好友申请
 																		// 本地缓存好友信息
 
-				
 				if (!XmppUtil.getRosterAll(roster).contains(fromJid)) {
 					Logger.e(TAG, fromJid + ":from");
 					NewFriendDao.getInstance().saveNewFriend(from);// 把好友消息放到新朋友里
-					QApp.getInstance().sendBroadcast(
-							new Intent(Const.ACTION_NEW_FRIEND_MSG));
+					QApp.mLocalBroadcastManager.sendBroadcast(new Intent(
+							Const.ACTION_NEW_FRIEND_MSG));
 
 				}
 				updateConstant();
@@ -78,10 +76,10 @@ public class FriendsPacketListener implements PacketListener {
 			} else if (presence.getType().equals(Presence.Type.unsubscribe)) {// 拒绝添加好友和删除好友
 				XmppUtil.removeUser(roster, fromJid);
 				updateConstant();
-				Log.e(TAG, "拒绝添加好友"+ fromJid);
-				
+				Log.e(TAG, "拒绝添加好友" + fromJid);
+
 			} else if (presence.getType().equals(Presence.Type.unsubscribed)) {
-				
+
 				SessionDao.getInstance().deleteSessionByYou(fromJid);
 				ChatMsgDao.getInstance().deleteYouMsg(fromJid);
 				QApp.getInstance().sendBroadcast(

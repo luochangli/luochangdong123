@@ -211,9 +211,21 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
-        
-         <activity
+        <activity
             android:name="com.weidi.activity.FriendInfoActi"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weidi.chat.ChatInfoActi"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.weidi.activity.ConstactSearchActi"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="com.weidi.chat.NewChatActivity"
             android:screenOrientation="portrait" >
         </activity>
 

@@ -153,7 +153,6 @@ public class UploadUtil {
                  * 获取响应码 200=成功 当响应成功，获取响应的流
                  */
                 int res = conn.getResponseCode();
-                Logger.e(TAG, "response code:" + res);
                  if(res==200)
                  {
                 	  Logger.e(TAG, "上传成功！");

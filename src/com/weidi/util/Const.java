@@ -17,6 +17,7 @@ public class Const {
 	public static User loginUser;
 	public static final String YOU = "username";
 	public static final String Female = "女";
+	public static final String ExtraPath = "file:///";
 	/**
 	 * IQProvider 常量
 	 */
@@ -127,13 +128,6 @@ public class Const {
 	
 	//用于存储通知数据
 	    public static  int  newscount;
-		public static  String title = null;
-		public static  String content = null;
-		public static  String link = null;
-		public static  String imglink = null;
-		public static  String createdatetime = null;
-		public static Map<String, Object> map;
-		public static List<Map<String, Object>> notice_data;
 		public static String NEWSNOTICE="newsnotice";
 
 }

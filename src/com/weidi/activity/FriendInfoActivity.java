@@ -2,15 +2,6 @@ package com.weidi.activity;
 
 import org.jivesoftware.smackx.packet.VCard;
 
-import com.weidi.R;
-import com.weidi.bean.User;
-import com.weidi.common.image.ImgConfig;
-import com.weidi.db.VCardDao;
-import com.weidi.util.XmppLoadThread;
-import com.weidi.util.XmppUtil;
-import com.weidi.view.CircleImageView;
-import com.weidi.view.TitleBarView;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +11,15 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.weidi.R;
+import com.weidi.bean.User;
+import com.weidi.chat.NewChatActivity;
+import com.weidi.db.VCardDao;
+import com.weidi.util.XmppLoadThread;
+import com.weidi.util.XmppUtil;
+import com.weidi.view.CircleImageView;
+import com.weidi.view.TitleBarView;
 
 public class FriendInfoActivity extends Activity implements OnClickListener {
 
@@ -78,7 +78,7 @@ public class FriendInfoActivity extends Activity implements OnClickListener {
 		case R.id.tv_sendmessage:
 			Intent intent = new Intent();
 			intent.putExtra("from", from);
-			intent.setClass(FriendInfoActivity.this, ChatActivity.class);
+			intent.setClass(FriendInfoActivity.this, NewChatActivity.class);
 			startActivity(intent);
 			break;
 			
@@ -195,7 +195,7 @@ public class FriendInfoActivity extends Activity implements OnClickListener {
 			@Override
 			protected Object load() {
 
-				friend = VCardDao.getInstance().isContain(friendWeidi);
+				friend = VCardDao.getInstance().getUser(friendWeidi);
 				if (friend == null) {
 					return XmppUtil.getUserInfo(friendWeidi);
 				} else {

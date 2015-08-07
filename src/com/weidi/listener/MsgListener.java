@@ -1,7 +1,6 @@
 package com.weidi.listener;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,7 +13,6 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.util.StringUtils;
 import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.app.KeyguardManager;
@@ -24,7 +22,6 @@ import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -34,17 +31,17 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.weidi.QApp;
 import com.weidi.R;
 import com.weidi.activity.ChatActivity;
+import com.weidi.adapter.NewChatAdapter;
+import com.weidi.bean.ChatItem;
 import com.weidi.bean.Msg;
 import com.weidi.bean.Session;
 import com.weidi.chat.groupchat.CreatChatRoomActivity;
 import com.weidi.common.DateUtil;
 import com.weidi.common.UploadUtil;
+import com.weidi.db.ChatDao;
 import com.weidi.db.ChatMsgDao;
 import com.weidi.db.NewsNotice;
 import com.weidi.db.SessionDao;
-import com.weidi.provider.CreateMUCIQ;
-import com.weidi.provider.NewsIQ;
-import com.weidi.service.MsfService;
 import com.weidi.util.Const;
 import com.weidi.util.DebugOut;
 import com.weidi.util.FileUtil;
@@ -65,11 +62,11 @@ public class MsgListener implements MessageListener, PacketListener {
 	private KeyguardManager mKeyguardManager = null;
 
 	private boolean isShowNotice = false;
-	private ChatMsgDao msgDao;
+	private ChatDao chatDao;
 	private SessionDao sessionDao;
 
 	private String fileUrl;
-	boolean done=false;
+	boolean done = false;
 
 	public MsgListener() {
 		DebugOut.PrintlnOut(TAG + "-");
@@ -77,7 +74,7 @@ public class MsgListener implements MessageListener, PacketListener {
 		mKeyguardManager = (KeyguardManager) QApp.getInstance()
 				.getSystemService(QApp.getInstance().KEYGUARD_SERVICE);
 		sessionDao = SessionDao.getInstance();
-		msgDao = ChatMsgDao.getInstance();
+		chatDao = ChatDao.getInstance();
 	}
 
 	@Override
@@ -85,17 +82,15 @@ public class MsgListener implements MessageListener, PacketListener {
 		String xml = message.toXML();
 		Logger.i(TAG, "单聊" + xml);
 
-		msgProcess(message, false);
-		String isparser=getnew(xml);
-		if(isparser.equals("OK")){
+		String isparser = getnew(xml);
+		if (isparser.equals("OK")) {
 			Intent intent_news = new Intent(Const.NEWSNOTICE);
 			QApp.getInstance().sendBroadcast(intent_news);
+			done = false;
 		}
-
+		msgProcess(message, false);
 	}
 
-	String mucFrom;
-    String isRead;
 	private void msgProcess(Message message, Boolean mucChat) {
 		try {
 
@@ -105,22 +100,27 @@ public class MsgListener implements MessageListener, PacketListener {
 			final String to = StringUtils.parseName(message.getTo());// 接收者,当然是自己
 			final String from = StringUtils.parseName(message.getFrom());// 发送者，谁给你发的消息
 			final String msgtime = DateUtil.date2Str(new Date(), "MM-dd HH:mm");// 消息时间
-			
-           if(ChatActivity.YOU  != null && from.equals(ChatActivity.YOU)){
-        	   isRead = Const.MSG_READED;
-           }else{
-        	   isRead = Const.MSG_UNREAD;
-           }
-			
+			final ChatItem item = new ChatItem();
+			item.setTo(from);
+			item.setMe(to);
+			item.setDate(msgtime);
+			item.setIsRecv(ChatItem.STATUS_1);
+
+			int isRead;
+			if (ChatActivity.YOU != null && from.equals(ChatActivity.YOU)) {
+				isRead = ChatItem.STATUS_1;
+			} else {
+				isRead = ChatItem.STATUS_0;
+			}
+			item.setIsRead(isRead);
 			if (xml.contains("com:jsm:group#newgroup")) {
 				newGroup(message, xml);
 				return;
 			}
 
 			if (mucChat) {
-				mucFrom = XmppUtil.getMucFrom(message.getFrom());
-			} else {
-				mucFrom = null;
+				String mucFrom = XmppUtil.getMucFrom(message.getFrom());
+				item.setMucFrom(mucFrom);
 			}
 			// 文件信息处理
 			if (!xml.isEmpty() && xml != null) {
@@ -129,15 +129,16 @@ public class MsgListener implements MessageListener, PacketListener {
 					String imgName = xml.replace("</img>", "<img>").split(
 							"<img>", 3)[1];
 					if (!imgName.isEmpty() && imgName != null) {
-						String msgtype = Const.MSG_TYPE_IMG;// 消息类型
 						String fileName = imgName;// 消息内容
-
 						session = setSession(to, from, msgtime);
 
 						String downUrl = UploadUtil.downLoadUrl(QApp
 								.getXmppConnection().getHost(), from, fileName);
-						saveNoticeNoMsg(to, from, msgtype, downUrl, msgtime,
-								session, "[图片]", mucFrom,isRead);
+						item.setChatType(Const.MSG_TYPE_IMG);
+						item.setContent(downUrl);
+						item.setViewTyep(NewChatAdapter.MESSAGE_TYPE_RECV_IMAGE);
+
+						saveNoticeNoMsg(session, item);
 						showNotice(session.getFrom(), session.getContent());
 					}
 
@@ -149,12 +150,14 @@ public class MsgListener implements MessageListener, PacketListener {
 						String fileName = voiceName;// 消息内容
 
 						session = setSession(to, from, msgtime);
-
 						String downUrl = UploadUtil.downLoadUrl(QApp
 								.getXmppConnection().getHost(), from, fileName);
 						String voicePath = FileUtil.getRecentChatPath()
 								+ fileName;
-						Logger.i(TAG, voicePath);
+
+						item.setChatType(msgtype);
+						item.setViewTyep(NewChatAdapter.MESSAGE_TYPE_RECV_VOICE);
+
 						HttpUtils http = new HttpUtils();
 						HttpHandler handler = http.download(downUrl, voicePath,
 								false, false, new RequestCallBack<File>() {
@@ -166,9 +169,10 @@ public class MsgListener implements MessageListener, PacketListener {
 										if (fileUrl.isEmpty()
 												|| fileUrl == null)
 											return;
-										saveNoticeNoMsg(to, from, msgtype,
-												fileUrl, msgtime, session,
-												"[语音]", mucFrom,isRead);
+
+										item.setContent(fileUrl);
+										saveNoticeNoMsg(session, item);
+
 										showNotice(session.getFrom(),
 												session.getContent());
 										Logger.e(TAG, "下载成功:" + fileUrl);
@@ -188,7 +192,9 @@ public class MsgListener implements MessageListener, PacketListener {
 					String videoName = xml.replace("</video>", "<video>")
 							.split("<video>", 3)[1];
 					if (!videoName.isEmpty() && videoName != null) {
-						final String msgtype = Const.MSG_TYPE_VIDEO;// 视频类型
+
+						item.setChatType(Const.MSG_TYPE_VIDEO);// 视频类型
+						item.setViewTyep(NewChatAdapter.MESSAGE_TYPE_RECV_VIDEO);
 						String fileName = videoName;// 消息内容
 
 						session = setSession(to, from, msgtime);
@@ -209,9 +215,9 @@ public class MsgListener implements MessageListener, PacketListener {
 										if (fileUrl.isEmpty()
 												|| fileUrl == null)
 											return;
-										saveNoticeNoMsg(to, from, msgtype,
-												fileUrl, msgtime, session,
-												"[视频]", mucFrom,isRead);
+										item.setContent(fileUrl);
+										saveNoticeNoMsg(session, item);
+
 										showNotice(session.getFrom(),
 												session.getContent());
 										Logger.e(TAG, "下载成功:" + fileUrl);
@@ -232,16 +238,16 @@ public class MsgListener implements MessageListener, PacketListener {
 				} else {
 					if (msgBody == "" || msgBody == null)
 						return;
-					String msgtype = Const.MSG_TYPE_TEXT;// 消息类型
-					String msgcontent = msgBody;// 消息内容
+					item.setChatType(Const.MSG_TYPE_TEXT);
+					item.setContent(msgBody);
+					item.setViewTyep(NewChatAdapter.MESSAGE_TYPE_RECV_TXT);
+					
 					session = setSession(to, from, msgtime);
-					saveNoticeText(to, from, msgtype, msgcontent, msgtime,
-							session, mucFrom,isRead);
+					saveNoticeNoMsg(session, item);
 					showNotice(session.getFrom(), session.getContent());
 				}
 			}
-			Intent intent = new Intent(Const.ACTION_ADDFRIEND);// 发送广播，通知消息界面更新
-			QApp.getInstance().sendBroadcast(intent);
+		
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -259,18 +265,19 @@ public class MsgListener implements MessageListener, PacketListener {
 
 	private void saveNoticeText(final String to, final String from,
 			final String msgtype, String msgcontent, final String msgtime,
-			final Session session, String mucFrom,String isRead) {
-		Msg msg = new Msg();
-		msg.setToUser(to);
-		msg.setFromUser(from);
-		msg.setIsComing(0);
-		msg.setIsReaded(isRead);
-		msg.setContent(msgcontent);
-		msg.setDate(msgtime);
-		msg.setBak4(mucFrom);
-		msg.setType(msgtype);
-		msgDao.insert(msg);
-		sendNewMsg(msg);
+			final Session session, String mucFrom, String isRead) {
+		ChatItem item = new ChatItem();
+		item.setMe(from);
+		item.setTo(to);
+		item.setChatType(Const.MSG_TYPE_TEXT);
+		item.setViewTyep(NewChatAdapter.MESSAGE_TYPE_RECV_TXT);
+		item.setIsGroup(ChatItem.STATUS_1);
+		item.setIsRecv(ChatItem.STATUS_1);
+		item.setMucFrom(mucFrom);
+		item.setDate(msgtime);
+		int _id = (int) chatDao.insert(item);
+		item.set_id(_id);
+		sendChat(item);
 
 		session.setType(Const.MSG_TYPE_TEXT);
 		session.setContent(msgcontent);
@@ -281,29 +288,37 @@ public class MsgListener implements MessageListener, PacketListener {
 		}
 	}
 
-	private void saveNoticeNoMsg(String to, String from, String msgtype,
-			String msgcontent, String msgtime, Session session,
-			String sessionContent, String mucFrom,String read) {
+	private void saveNoticeNoMsg(Session session, ChatItem item) {
 
-		Msg msg = new Msg();
-		msg.setToUser(to);
-		msg.setFromUser(from);
-		msg.setIsComing(0);
-		msg.setIsReaded(read);
-		msg.setContent(msgcontent);
-		msg.setDate(msgtime);
-		msg.setType(msgtype);
-		msg.setBak4(mucFrom);
-		msgDao.insert(msg);
-		sendNewMsg(msg);
+		int _id = (int) chatDao.insert(item);
+		item.set_id(_id);
+		sendChat(item);
 
+		if (item.getChatType().equals(Const.MSG_TYPE_TEXT)) {
+			session.setContent(item.getContent());
+		}
+		if (item.getChatType().equals(Const.MSG_TYPE_VIDEO)) {
+			session.setContent("[视频]");
+		}
+		if (item.getChatType().equals(Const.MSG_TYPE_IMG)) {
+			session.setContent("[图片]");
+		}
+		if (item.getChatType().equals(Const.MSG_TYPE_VOICE)) {
+			session.setContent("[语音]");
+		}
 		session.setType(Const.MSG_TYPE_TEXT);
-		session.setContent(sessionContent);
-		if (sessionDao.isContain(from, to)) {
+		if (sessionDao.isContain(item.getTo(), item.getMe())) {
 			sessionDao.updateSession(session);
 		} else {
 			sessionDao.insertSession(session);
 		}
+	}
+
+	private void sendChat(ChatItem item) {
+		Intent intent = new Intent(Const.ACTION_NEW_MSG);// 发送广播到聊天界面
+
+		intent.putExtra(ChatItem.TABLE_NAME, item);
+		QApp.mLocalBroadcastManager.sendBroadcast(intent);
 	}
 
 	void sendNewMsg(Msg msg) {
@@ -374,7 +389,7 @@ public class MsgListener implements MessageListener, PacketListener {
 			String content = "您已加入了群：" + from;
 
 			saveNoticeText(to, from, Const.MSG_TYPE_TEXT, content, msgtime,
-					session, "",Const.MSG_UNREAD);
+					session, "", Const.MSG_UNREAD);
 			showNotice(session.getFrom(), session.getContent());
 
 			Logger.i(TAG, "新群：" + room[1] + ":" + room[3] + ":" + to + ":"
@@ -391,72 +406,67 @@ public class MsgListener implements MessageListener, PacketListener {
 			Logger.e(TAG, e.toString());
 		}
 	}
-	
-	
-	public String getnew(String msg){
+
+	public String getnew(String msg) {
 		parsernews(msg);
 		return "OK";
-		
+
 	}
-	
-	private void parsernews(String news_string){
+
+	private void parsernews(String news_string) {
 		try {
-			NewsNotice news=NewsNotice.getInstance();
+			NewsNotice news = NewsNotice.getInstance();
 			ContentValues values = new ContentValues();
-			Const.notice_data=new ArrayList<Map<String, Object>>();
-			XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
+			XmlPullParser parser = XmlPullParserFactory.newInstance()
+					.newPullParser();
 			parser.setInput(new StringReader(news_string));
-	        while (!done) {
-	            int eventType = parser.next();
-	            if (eventType == XmlPullParser.START_TAG) {
-	                if (parser.getName().equals("id")) {
-	                	String id = parser.nextText();
-	                	Logger.i("NewsIQ", id);
-	                   
-	                  //  values.put("id", id);
-	                }
-	                if (parser.getName().equals("title")) {
-	                	String title = parser.nextText();
-	                    Logger.i("NewsIQ", title);
-	                    Const.map.put("title", title);
-	                    values.put("title", title);
-	                }
-	                if (parser.getName().equals("link")) {
-	                	String link = parser.nextText();	                   
-	                    Logger.i("IQ", link);
-	                    Const.map.put("link", link);
-	                    values.put("link", link);
-	                }
-	                if (parser.getName().equals("imglink")) {
-	                	String imglink = parser.nextText();	                   
-	                    Logger.i("IQ", imglink);
-	                    Const.map.put("imglink", imglink);
-	                    values.put("imglink", imglink);
-	                }
-	                if (parser.getName().equals("createdatetime")) {
-	                	String createdatetime = parser.nextText();	                   
-	                    values.put("createdatetime", createdatetime);
-	                    /*createdatetime=createdatetime.substring(0,createdatetime.indexOf("."));
-	                    createdatetime=createdatetime.replace("T", " ");
-	                    Logger.i("IQ", createdatetime);*/
-	                    Const.map.put("createdatetime", createdatetime);
-	                    Const.notice_data.add(Const.map);
-	                    news.insert(values);
-	                    Const.newscount=Const.newscount+1;
-	
-	                }
-	               if (parser.getName().equals("content")) {
-	                	String content = parser.nextText();	                   
-	                    Const.map.put("content", content);		
-						values.put("content", content);					
-	                }
-	            }
-	            else if (eventType == XmlPullParser.END_TAG) {
-	                if (parser.getName().equals("message")) {
-	                    done = true;
-	                }
-	            }
-	        }
+			while (!done) {
+				int eventType = parser.next();
+				if (eventType == XmlPullParser.START_TAG) {
+					if (parser.getName().equals("id")) {
+						String id = parser.nextText();
+						Logger.i("NewsIQ", id);
+
+						// values.put("id", id);
+					}
+					if (parser.getName().equals("title")) {
+						String title = parser.nextText();
+						Logger.i("NewsIQ", title);
+						values.put("title", title);
+					}
+					if (parser.getName().equals("link")) {
+						String link = parser.nextText();
+						Logger.i("IQ", link);
+						values.put("link", link);
+					}
+					if (parser.getName().equals("imglink")) {
+						String imglink = parser.nextText();
+						Logger.i("IQ", imglink);
+						values.put("imglink", imglink);
+					}
+					if (parser.getName().equals("createdatetime")) {
+						String createdatetime = parser.nextText();
+						values.put("createdatetime", createdatetime);
+						/*
+						 * createdatetime=createdatetime.substring(0,createdatetime
+						 * .indexOf("."));
+						 * createdatetime=createdatetime.replace("T", " ");
+						 * Logger.i("IQ", createdatetime);
+						 */
+						news.insert(values);
+						Const.newscount = Const.newscount + 1;
+
+					}
+					if (parser.getName().equals("content")) {
+						String content = parser.nextText();
+						values.put("content", content);
+					}
+				} else if (eventType == XmlPullParser.END_TAG) {
+					if (parser.getName().equals("message")) {
+						done = true;
+					}
+				}
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

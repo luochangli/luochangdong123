@@ -39,11 +39,11 @@ public class SessionDao {
 	}
 
 	// 判断是否包含
-	public boolean isContain(String belong, String userid) {
+	public boolean isContain(String to, String me) {
 
 		Cursor cursor = db.query(DBcolumns.TABLE_SESSION, new String[] { "*" },
 				DBcolumns.SESSION_FROM + " = ? and " + DBcolumns.SESSION_TO
-						+ " = ?", new String[] { belong, userid }, null, null,
+						+ " = ?", new String[] { to, me }, null, null,
 				null);
 		boolean flag = false;
 		while (cursor.moveToNext()) {
@@ -92,17 +92,8 @@ public class SessionDao {
 					.getColumnIndex(DBcolumns.SESSION_TO));
 			String isdispose = cursor.getString(cursor
 					.getColumnIndex(DBcolumns.SESSION_ISDISPOSE));
-			int unreadCount = 0;
-			Cursor countcursor = db
-					.rawQuery("select count(*) from " + DBcolumns.TABLE_MSG
-							+ " where " + DBcolumns.MSG_FROM + " = ? and "
-							+ DBcolumns.MSG_ISREADED + " = 0" + " AND "
-							+ DBcolumns.MSG_TO + " = ?", new String[] { from,
-							user_id });
-			if (countcursor.moveToFirst()) {
-				unreadCount = countcursor.getInt(0);
-			}
-			countcursor.close();
+			int unreadCount = ChatDao.getInstance().queryUnreadCount(from);
+			
 			session.setId(id);
 			session.setNotReadCount("" + unreadCount);
 			session.setFrom(from);

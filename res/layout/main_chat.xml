@@ -11,22 +11,29 @@
         android:layout_alignParentTop="true"
         android:background="@color/green_bg" >
 
-        <ImageView
-            android:id="@+id/tvChatLeft"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:background="@drawable/btn_back_selector" />
-
-        <TextView
-            android:id="@+id/tvChatTitle"
+        <LinearLayout
+            android:id="@+id/llLeft"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:text="聊天"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_20" />
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/tvChatLeft"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_common"
+                android:padding="@dimen/padding_10"
+                android:src="@drawable/top_back" />
+
+            <TextView
+                android:id="@+id/tvChatTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="聊天"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_20" />
+        </LinearLayout>
 
         <com.weidi.view.CircleImageView
             android:id="@+id/tvChatRight"
@@ -49,7 +56,7 @@
         android:cacheColorHint="@color/transparent"
         android:divider="@null"
         android:listSelector="@color/transparent"
-        android:transcriptMode="normal" />
+        android:transcriptMode="alwaysScroll" />
 
     <LinearLayout
         android:id="@+id/bottom"
@@ -173,7 +180,6 @@
                     android:singleLine="true"
                     android:textSize="14sp"
                     android:visibility="gone" />
-
             </RelativeLayout>
         </RelativeLayout>
 

@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,13 +13,13 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.TranslateAnimation;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -36,13 +34,11 @@ import com.weidi.activity.PicSrcPickerActivity;
 import com.weidi.activity.SearchActivity;
 import com.weidi.activity.SettingActivity;
 import com.weidi.activity.TradeActivity;
-import com.weidi.bean.User;
 import com.weidi.chat.IQOrder;
 import com.weidi.chat.groupchat.CreatChatRoomActivity;
 import com.weidi.common.base.BaseActivity;
 import com.weidi.common.scanner.BarcodeActivity;
-import com.weidi.common.view.EditExitDialog;
-import com.weidi.common.view.EditMoreDialog;
+import com.weidi.db.ChatDao;
 import com.weidi.db.ChatMsgDao;
 import com.weidi.db.NewFriendDao;
 import com.weidi.db.NewsNotice;
@@ -52,9 +48,7 @@ import com.weidi.fragment.NewsFragment;
 import com.weidi.fragment.PersonalFrag;
 import com.weidi.service.MsfService;
 import com.weidi.util.Const;
-import com.weidi.util.XmppLoadThread;
 import com.weidi.util.XmppUtil;
-import com.weidi.view.TitleBarView;
 
 public class MainActivity extends BaseActivity implements OnClickListener {
 
@@ -71,9 +65,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	FindFragment findFragment;
 	PersonalFrag settingFragment;
 	boolean isStartService = false;
-	private ChatMsgDao chatMsgDao;
+	private ChatDao chatDao;
 	private int msgCount;
-	private NewMsgReciver newMsgReciver;
+
 	private ImageView tabMore;
 	private PopupWindow popMore;
 
@@ -101,100 +95,98 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		tabMore = (ImageView) findViewById(R.id.image_window_more);
 
 	}
-	
-	public void moreDialog(){
+
+	public void moreDialog() {
 		final Dialog dialog = new Dialog(this);
-		 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		 dialog.setContentView(R.layout.activity_alert);
-		 Window dialogWindow = dialog.getWindow();
-		 dialogWindow.setBackgroundDrawableResource(R.drawable.xlbj7);
-	        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-	        dialogWindow.setGravity(Gravity.RIGHT | Gravity.TOP);
-	        lp.x=30;
-	        lp.y=140;
-	        lp.width = 400; // 宽度
-	        lp.height = 940; // 高度
-	        lp.alpha = 1f; // 透明度
-	       
-	        dialogWindow.setAttributes(lp);
-	        dialog.show();
-              
-	        RelativeLayout re_crechatroom = (RelativeLayout)dialogWindow
-					.findViewById(R.id.re_crechatroom);
-			RelativeLayout re_addfriends = (RelativeLayout)dialogWindow
-					.findViewById(R.id.re_addfriends);
-			RelativeLayout re_trade = (RelativeLayout)dialogWindow
-					.findViewById(R.id.re_trade);
-			RelativeLayout re_nearpoeple = (RelativeLayout) dialogWindow
-					.findViewById(R.id.re_nearpoeple);
-			RelativeLayout re2DimenCode = (RelativeLayout) dialogWindow
-					.findViewById(R.id.re2DimenCode);
-			RelativeLayout re_setting = (RelativeLayout) dialogWindow
-					.findViewById(R.id.re_setting);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setContentView(R.layout.activity_alert);
+		Window dialogWindow = dialog.getWindow();
+		dialogWindow.setBackgroundDrawableResource(R.drawable.xlbj7);
+		WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+		dialogWindow.setGravity(Gravity.RIGHT | Gravity.TOP);
+		lp.x = 30;
+		lp.y = 140;
+		lp.width = 400; // 宽度
+		lp.height = 940; // 高度
+		lp.alpha = 1f; // 透明度
 
-			re2DimenCode.setOnClickListener(new OnClickListener() {
+		dialogWindow.setAttributes(lp);
+		dialog.show();
 
-				@Override
-				public void onClick(View v) {
-					startActivity(new Intent(new Intent(mContext,
-							BarcodeActivity.class)));
-				}
-			});
-			re_crechatroom.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View arg0) {
-					startActivity(new Intent(MainActivity.this,
-							CreatChatRoomActivity.class));
-					dialog.dismiss();
-				}
-			});
+		RelativeLayout re_crechatroom = (RelativeLayout) dialogWindow
+				.findViewById(R.id.re_crechatroom);
+		RelativeLayout re_addfriends = (RelativeLayout) dialogWindow
+				.findViewById(R.id.re_addfriends);
+		RelativeLayout re_trade = (RelativeLayout) dialogWindow
+				.findViewById(R.id.re_trade);
+		RelativeLayout re_nearpoeple = (RelativeLayout) dialogWindow
+				.findViewById(R.id.re_nearpoeple);
+		RelativeLayout re2DimenCode = (RelativeLayout) dialogWindow
+				.findViewById(R.id.re2DimenCode);
+		RelativeLayout re_setting = (RelativeLayout) dialogWindow
+				.findViewById(R.id.re_setting);
 
-			re_addfriends.setOnClickListener(new OnClickListener() {
+		re2DimenCode.setOnClickListener(new OnClickListener() {
 
-				@Override
-				public void onClick(View arg0) {
-					startActivity(new Intent(MainActivity.this,
-							SearchActivity.class));
-					dialog.dismiss();
-				}
-			});
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(new Intent(mContext,
+						BarcodeActivity.class)));
+			}
+		});
+		re_crechatroom.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				startActivity(new Intent(MainActivity.this,
+						CreatChatRoomActivity.class));
+				dialog.dismiss();
+			}
+		});
 
-			re_trade.setOnClickListener(new OnClickListener() {
+		re_addfriends.setOnClickListener(new OnClickListener() {
 
-				@Override
-				public void onClick(View arg0) {
-					// TODO Auto-generated method stub
-					startActivity(new Intent(MainActivity.this, TradeActivity.class));
-					dialog.dismiss();
-				}
-			});
+			@Override
+			public void onClick(View arg0) {
+				startActivity(new Intent(MainActivity.this,
+						SearchActivity.class));
+				dialog.dismiss();
+			}
+		});
 
-			re_nearpoeple.setOnClickListener(new OnClickListener() {
+		re_trade.setOnClickListener(new OnClickListener() {
 
-				@Override
-				public void onClick(View arg0) {
-					// TODO Auto-generated method stub
-					startActivity(new Intent(MainActivity.this, FujinActivity.class));
-					dialog.dismiss();
-				}
-			});
-			re_setting.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				startActivity(new Intent(MainActivity.this, TradeActivity.class));
+				dialog.dismiss();
+			}
+		});
 
-				@Override
-				public void onClick(View arg0) {
-					// TODO Auto-generated method stub
-					startActivity(new Intent(MainActivity.this,
-							SettingActivity.class));
-					dialog.dismiss();
-				}
-			});
+		re_nearpoeple.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				startActivity(new Intent(MainActivity.this, FujinActivity.class));
+				dialog.dismiss();
+			}
+		});
+		re_setting.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				startActivity(new Intent(MainActivity.this,
+						SettingActivity.class));
+				dialog.dismiss();
+			}
+		});
 
 	}
 
 	private void initMsgCount() {
-		msgCount = chatMsgDao.queryAllNotReadCount();
+		msgCount = chatDao.queryAllNotReadCount();
 		if (msgCount > 0) {
 			tv_newmsg.setText("" + msgCount);
 			tv_newmsg.setVisibility(View.VISIBLE);
@@ -422,24 +414,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 	}
 
-	/**
-	 * 新消息广播接收
-	 * 
-	 * @author 白玉梁
-	 */
-	private class NewMsgReciver extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			if (intent.getAction().equals(Const.ACTION_NEW_FRIEND_MSG)) {
-				updateConstant();
-			} else {
-				initMsgCount();
-				sendBroadcast(new Intent(Const.ACTION_ADDFRIEND));
-			}
-
-		}
-
-	}
+	
 
 	public void updateConstant() {
 		// 更新界面
@@ -458,37 +433,29 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (RESULT_OK == resultCode) {
 			switch (requestCode) {
-			case PicSrcPickerActivity.CROP:
-				if (tabMe.getVisibility() == View.VISIBLE) {
-					// String imgName = data.getStringExtra("imgName");
-					// settingFragment.changeHead(data.getStringExtra("imgPath"));
-				}
+			case 100:
+
 				break;
 			default:
 				break;
 			}
 		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		unregisterReceiver(newMsgReciver);
+	    mLocalBroadcastManager.unregisterReceiver(mReceiver);
 	}
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
-		
+
 		setContentView(R.layout.activity_main);
 		mContext = this;
-		chatMsgDao = new ChatMsgDao(mContext);
-		newMsgReciver = new NewMsgReciver();
-		IntentFilter intf = new IntentFilter();
-		intf.addAction(Const.ACTION_NEW_MSG);
-		registerReceiver(newMsgReciver, intf);
-		registerReceiver(newMsgReciver, new IntentFilter(
-				Const.ACTION_NEW_FRIEND_MSG));
-
+		chatDao = ChatDao.getInstance();
+		
 		isStartService = getIntent().getBooleanExtra("isStartService", false);
 		if (isStartService) {
 			Intent intent = new Intent(mContext, MsfService.class);
@@ -500,11 +467,30 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		findView();
 		init();
 		initMsgCount();
-
+		initBroadcast();
 		// 获取群列表
 		XmppUtil.getMUCList();
 		send_NewsIQ();
 		QApp.getInstance().addActivity(MainActivity.this);
+	}
+
+	private void initBroadcast() {
+		mReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (intent.getAction().equals(Const.ACTION_NEW_FRIEND_MSG)) {
+					updateConstant();
+				} else {
+					initMsgCount();
+					sendBroadcast(new Intent(Const.ACTION_ADDFRIEND));
+				}
+			}
+		};
+		mLocalBroadcastManager.registerReceiver(mReceiver, new IntentFilter(
+				Const.ACTION_NEW_MSG));
+		mLocalBroadcastManager.registerReceiver(mReceiver, new IntentFilter(
+				Const.ACTION_NEW_FRIEND_MSG));
 	}
 
 	@Override
@@ -524,19 +510,19 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		// TODO Auto-generated method stub
 
 	}
-	
-	public void send_NewsIQ(){
-		NewsNotice news=NewsNotice.getInstance();
-		List<Map<String,Object>> news_list=news.query();
-		Map<String,Object> map=new HashMap<String, Object>();
-		if(news_list.size()!=0){
-			map=news_list.get(0);
-			String createdatetime=(String) map.get("createdatetime");
+
+	public void send_NewsIQ() {
+		NewsNotice news = NewsNotice.getInstance();
+		List<Map<String, Object>> news_list = news.query();
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (news_list.size() != 0) {
+			map = news_list.get(0);
+			String createdatetime = (String) map.get("createdatetime");
 			IQOrder.getInstance().getNews2(createdatetime);
-			
-		}else{
+
+		} else {
 			IQOrder.getInstance().getNews();
-			
+
 		}
 		mContext.sendBroadcast(new Intent(Const.NEWSNOTICE));
 	}

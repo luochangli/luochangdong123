@@ -18,6 +18,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
 import com.polites.android.GestureImageView;
 import com.weidi.R;
+import com.weidi.util.Const;
 import com.weidi.util.Logger;
 
 public class ImgPageActivity extends Activity{
@@ -42,7 +43,7 @@ public class ImgPageActivity extends Activity{
 		.displayer(new FadeInBitmapDisplayer(0))
 		.build();
 		url=getIntent().getStringExtra("url");
-		Logger.i(TAG, url);
+	    
 		initView();
 		initData();
 	}

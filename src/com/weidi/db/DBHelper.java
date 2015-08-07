@@ -1,5 +1,9 @@
 package com.weidi.db;
 
+import org.jivesoftware.smack.Chat;
+
+import com.weidi.bean.ChatItem;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -47,6 +51,20 @@ public class DBHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 
+		String sql_new_msg = "Create table IF NOT EXISTS "
+				+ ChatItem.TABLE_NAME + "(" + ChatItem.ID
+				+ "  integer primary key autoincrement, " + ChatItem.IS_GROUP
+				+ " integer," + ChatItem.USER_NICK + " text," + ChatItem.ME
+				+ " text," + ChatItem.TO + " text," + ChatItem.MUC + " text,"
+				+ ChatItem.CHAT_TYPE + " text," + ChatItem.CONTENT + " text,"
+				+ ChatItem.IS_RECV + " integer," + ChatItem.DATE + " text,"
+				+ ChatItem.FILE_STATUS + " integer," + ChatItem.VOICE_READED
+				+ " integer," + ChatItem.VIEW_TYPE + " integer,"
+				+ ChatItem.IS_READ + " integer," + ChatItem.BAK1 + " text,"
+				+ ChatItem.BAK2 + " text," + ChatItem.BAK3 + " text,"
+				+ ChatItem.BAK4 + " text," + ChatItem.BAK5 + " text,"
+				+ ChatItem.BAK6 + " text," + ChatItem.BAK7 + " text);";
+
 		/**
 		 * 聊天记录
 		 */
@@ -82,11 +100,11 @@ public class DBHelper extends SQLiteOpenHelper {
 				+ DBcolumns.SYS_NOTICE_CONTENT + " text,"
 				+ DBcolumns.SYS_NOTICE_ISDISPOSE + " text);";
 
-		String sql_vcard = "create table if not exists "+DBcolumns.TABLE_VCARD
+		String sql_vcard = "create table if not exists "
+				+ DBcolumns.TABLE_VCARD
 				+ "(vcard_id integer primary key autoincrement,"
 				+ "username text, nickname text,truename text,email text,"
-				+ " intro text, sex text,adr text,"
-				+ " mobile text)";
+				+ " intro text, sex text,adr text," + " mobile text)";
 		/**
 		 * 添加好友管理 邀请与被邀请
 		 */
@@ -96,21 +114,22 @@ public class DBHelper extends SQLiteOpenHelper {
 				+ "username text ,sendDate text,isDeal INTEGER,"
 				+ "whos text,i_filed INTEGER,t_field text)";
 		/**
-		  * 新消息管理表 记录谁有几条未读消息
-		  */
+		 * 新消息管理表 记录谁有几条未读消息
+		 */
 		String sql_msgCount = "CREATE TABLE  IF NOT EXISTS "
-		        + DBcolumns.TABLE_NEW_MSG_COUNT
+				+ DBcolumns.TABLE_NEW_MSG_COUNT
 				+ "( id INTEGER PRIMARY KEY AUTOINCREMENT,msgId text,msgCount INTEGER, whosMsg text,"
 				+ "i_field1 INTEGER, t_field1 text)";
-		
+
 		/**
-		  * 公告管理表
-		  */
-		String sql_newsNotice = "create table if not exists "+DBcolumns.NEWSNOTICE
+		 * 公告管理表
+		 */
+		String sql_newsNotice = "create table if not exists "
+				+ DBcolumns.NEWSNOTICE
 				+ "(news_id integer primary key autoincrement,"
-				+ "title text, link text,imglink text,createdatetime text,"
-				+ " content text)";
-		
+				+ "title text, link text,imglink text,createdatetime text,content text,"
+		        + " isread text DEFAULT 0)";
+
 		db.execSQL(sql_msg);
 		db.execSQL(sql_session);
 		db.execSQL(sql_notice);
@@ -118,7 +137,7 @@ public class DBHelper extends SQLiteOpenHelper {
 		db.execSQL(sql_newFriend);
 		db.execSQL(sql_msgCount);
 		db.execSQL(sql_newsNotice);
-		Log.i("RRRRRRRRR", "已经创建了很多表了");
+		db.execSQL(sql_new_msg);
 	}
 
 	@Override

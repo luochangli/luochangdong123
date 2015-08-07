@@ -1,7 +1,9 @@
 package com.weidi.fragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.XMPPConnection;
@@ -15,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,20 +30,22 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.weidi.MainActivity;
 import com.weidi.QApp;
 import com.weidi.R;
-import com.weidi.activity.ChatActivity;
 import com.weidi.activity.NoticeActivity;
 import com.weidi.adapter.SessionAdapter;
 import com.weidi.bean.Session;
+import com.weidi.chat.IQOrder;
+import com.weidi.chat.NewChatActivity;
 import com.weidi.db.ChatMsgDao;
+import com.weidi.db.NewsNotice;
 import com.weidi.db.SessionDao;
 import com.weidi.util.Const;
 import com.weidi.util.Logger;
@@ -58,14 +63,14 @@ public class NewsFragment extends Fragment implements OnRefreshListener {
 	private List<Session> sessionList = new ArrayList<Session>();
 	private SessionDao sessionDao;
 	private ChatMsgDao chatMsgDao;
-	private String userid;
+	private String userid,title,content;
 	private static String TAG = "NewsFragment";
 	private AddFriendReceiver addFriendReceiver;
 	private NewNoticeBroadcast newnoticebroadcast;
-	private TextView red_shot;
+	private TextView red_shot,notice_title,notice_content;
 	private static final int UPDATA = 10001;
-	@ViewInject(R.id.llTopRight)
-	LinearLayout llTopRight;
+	private MainActivity activity;
+	
 	@ViewInject(R.id.tvNoMsg)
 	TextView tvNoMsg;
 	
@@ -84,7 +89,7 @@ public class NewsFragment extends Fragment implements OnRefreshListener {
 			}
 		};
 	};
-	private MainActivity activity;
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -107,11 +112,20 @@ public class NewsFragment extends Fragment implements OnRefreshListener {
 		newnoticebroadcast = new NewNoticeBroadcast();
 		mContext.registerReceiver(newnoticebroadcast, new IntentFilter(
 				Const.NEWSNOTICE));
-		findView();
-		initData();
+		
+		new mm().execute();
+		
+		
+		
+		
 		return mBaseView;
 	}
 
+	@OnClick(R.id.llTopRight)
+	public void right(View v){
+		activity.moreDialog();
+	}
+	
 	@Override
 	public void onAttach(Activity activity) {
 		// TODO Auto-generated method stub
@@ -121,17 +135,22 @@ public class NewsFragment extends Fragment implements OnRefreshListener {
 	private void findView() {
 		
 		red_shot=(TextView)mBaseView.findViewById(R.id.red_shot);
-		
+		notice_title=(TextView)mBaseView.findViewById(R.id.notice_title);
+		notice_content=(TextView)mBaseView.findViewById(R.id.notice_content);
 		RelativeLayout re_notice=(RelativeLayout)mBaseView.findViewById(R.id.re_notice);
 		re_notice.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View arg0) {
+			public void onClick(View arg0) {  
 				startActivity(new Intent(mContext,NoticeActivity.class));
 				red_shot.setVisibility(View.GONE);
 				
 			}
 		});
+		
+		notice_title.setText(title);
+		notice_content.setText(content);
+		
 		mCustomListView = (CustomListView) mBaseView.findViewById(R.id.lv_news);// listview
 		mCustomListView.setOnRefreshListener(this);// 设置listview下拉刷新监听
 		// mCustomListView.setCanLoadMore(false);// 设置禁止加载更多
@@ -204,7 +223,7 @@ public class NewsFragment extends Fragment implements OnRefreshListener {
 						}
 					}
 				} else {
-					Intent intent = new Intent(mContext, ChatActivity.class);
+					Intent intent = new Intent(mContext, NewChatActivity.class);
 					if (session.getFrom().contains("g")) {
 						intent.putExtra("from", session.getFrom());
 					} else {
@@ -296,14 +315,56 @@ public class NewsFragment extends Fragment implements OnRefreshListener {
 		@Override
 		public void onReceive(Context arg0, Intent arg1) {
 			// TODO Auto-generated method stub
-			Log.i("999999999", "999999999999");
-		    if(Const.newscount!=0){
-		    	red_shot.setVisibility(View.VISIBLE);
-				red_shot.setText(""+Const.newscount);
-		    }
-			
+//		    if(Const.newscount!=0){
+//		    	red_shot.setVisibility(View.VISIBLE);
+//				red_shot.setText(""+Const.newscount);
+//		    }
+//			
 		}
 		
+	}
+	
+	public void getNewData(){
+		NewsNotice news=NewsNotice.getInstance();
+		List<Map<String,Object>> news_list=news.query();
+		Map<String,Object> map=new HashMap<String, Object>();
+		map=news_list.get(0);
+		title=(String)map.get("title");
+		content=(String)map.get("content");
+		Log.i("fff", "kkk");
+	}
+	
+	public void send_NewsIQ(){
+		NewsNotice news=NewsNotice.getInstance();
+		List<Map<String,Object>> news_list=news.query();
+		Map<String,Object> map=new HashMap<String, Object>();
+		if(news_list.size()!=0){
+			map=news_list.get(0);
+			String createdatetime=(String) map.get("createdatetime");
+			IQOrder.getInstance().getNews2(createdatetime);
+			
+		}else{
+			IQOrder.getInstance().getNews();
+			
+		}
+		mContext.sendBroadcast(new Intent(Const.NEWSNOTICE));
+	}
+	
+	class mm extends AsyncTask<Void, Integer, Integer>{
+
+		@Override
+		protected Integer doInBackground(Void... arg0) {
+			send_NewsIQ();
+			return 1;
+		}
+		@Override
+		protected void onPostExecute(Integer result) {
+			super.onPostExecute(result);
+			if(result==1)
+			getNewData();
+			findView();
+			initData();
+		}
 	}
 
 }

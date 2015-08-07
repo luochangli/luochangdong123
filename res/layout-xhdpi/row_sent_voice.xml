@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_chat_activity" >
 
-        <ImageView
+        <com.weidi.view.CircleImageView
             android:id="@+id/iv_userhead"
             android:layout_width="@dimen/size_avatar"
             android:layout_height="@dimen/size_avatar"
@@ -39,7 +39,8 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/iv_voice"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="3&apos;&apos;" />
         
         <ImageView
             android:id="@+id/msg_status"
@@ -73,17 +74,17 @@
             android:layout_toLeftOf="@id/tv_length"
             android:visibility="invisible"
             />
-          <ProgressBar 
-            android:visibility="visible"
-            android:id="@+id/pb_sending"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-                android:indeterminateDrawable="@drawable/small_prograssbar"
-				android:indeterminateOnly="true"
-				android:indeterminateBehavior="repeat"
+
+          <ProgressBar
+              android:id="@+id/progressBar"
+              android:layout_width="25dp"
+              android:layout_height="25dp"
               android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/tv_length"
-            />
+              android:layout_toLeftOf="@id/tv_length"
+              android:indeterminateBehavior="repeat"
+              android:indeterminateDrawable="@drawable/small_prograssbar"
+              android:indeterminateOnly="true"
+              android:visibility="gone" />
 
           <TextView
               android:id="@+id/timestamp"
