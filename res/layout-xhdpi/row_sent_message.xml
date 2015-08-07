@@ -19,31 +19,37 @@
             android:layout_alignParentTop="true"
             android:layout_marginRight="@dimen/margin_chat_activity"
             android:background="@drawable/head"
-            android:scaleType="fitXY" 
-            android:visibility="gone"/>
+            android:scaleType="fitXY"
+            android:visibility="gone" />
 
-       <TextView
-           android:id="@+id/tv_chatcontent"
-           style="@style/chat_content_date_style"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_marginRight="@dimen/margin_chat_activity"
-           android:layout_alignParentRight="true"
-           android:autoLink="web"
-           android:background="@drawable/chatto_bg"
-           android:lineSpacingExtra="2dp"
-           android:maxWidth="225.0dip"
-           android:padding="17dp"
-           android:paddingLeft="8dip"
-           android:text="阿隆索款到即发垃圾收到了附近奥i未婚夫哈斯勒快点恢复拉黑斯大林发牢骚款到即发垃圾收电费"
-           android:textSize="15sp" />
+        <LinearLayout
+            android:id="@+id/ll1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/margin_chat_activity"
+            android:background="@drawable/chatto_bg"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/tv_chatcontent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:clickable="true"
+                android:focusable="true"
+                android:lineSpacingExtra="2dp"
+                android:maxWidth="180.0dip"
+                android:text="阿隆索款到即发垃圾收到了附近奥i未婚夫哈斯勒快点恢复拉黑斯大林发牢骚款到即发垃圾收电费"
+                android:textSize="15sp" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/msg_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/tv_chatcontent"
+            android:layout_toLeftOf="@id/ll1"
             android:clickable="true"
             android:src="@drawable/msg_state_failed_resend"
             android:visibility="gone" />
@@ -54,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/tv_chatcontent"
+            android:layout_toLeftOf="@id/ll1"
             android:text="@string/text_ack_msg"
             android:textSize="12sp"
             android:visibility="invisible" />
@@ -65,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/tv_chatcontent"
+            android:layout_toLeftOf="@id/ll1"
             android:text="@string/text_delivered_msg"
             android:textSize="12sp"
             android:visibility="invisible" />
@@ -74,11 +80,11 @@
             android:id="@+id/progressBar"
             android:layout_width="25dp"
             android:layout_height="25dp"
-                android:indeterminateDrawable="@drawable/small_prograssbar"
-				android:indeterminateOnly="true"
-				android:indeterminateBehavior="repeat"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/tv_chatcontent"
+            android:layout_toLeftOf="@id/ll1"
+            android:indeterminateBehavior="repeat"
+            android:indeterminateDrawable="@drawable/small_prograssbar"
+            android:indeterminateOnly="true"
             android:visibility="gone" />
 
         <TextView
@@ -86,11 +92,11 @@
             style="@style/chat_text_date_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/margin_20"
-            android:layout_toLeftOf="@+id/tv_chatcontent"
             android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/margin_20"
+            android:layout_toLeftOf="@+id/ll1"
             android:text="10:30 下午" />
-
     </RelativeLayout>
+
 
 </LinearLayout>

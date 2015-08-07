@@ -212,7 +212,19 @@ public class ChatDao {
 		long row = db.update(ChatItem.TABLE_NAME, values, ChatItem.ME
 				+ " =? and " + ChatItem.TO + " =? and " + ChatItem.VOICE_READED
 				+ "=0 and " + ChatItem.ID + " =? ", new String[] {
-				item.getMe(), Const.USER_NAME, String.valueOf(item.get_id()) });
+				item.getMe(), item.getTo(), String.valueOf(item.get_id()) });
+		db.close();
+		return row;
+	}
+	
+	public long updateReaded(ChatItem item){
+		SQLiteDatabase db = helper.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put(ChatItem.IS_READ, ChatItem.STATUS_1);
+		long row = db.update(ChatItem.TABLE_NAME, values, ChatItem.ME
+				+ " =? and " + ChatItem.TO + " =? and " + ChatItem.IS_READ
+				+ "=0 and " + ChatItem.ID + " =? ", new String[] {
+				item.getMe(), item.getTo(), String.valueOf(item.get_id()) });
 		db.close();
 		return row;
 	}

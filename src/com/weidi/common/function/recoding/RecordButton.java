@@ -159,8 +159,12 @@ public class RecordButton extends Button {
 						recodeTime += 0.1;
 						// 获取音量，更新dialog
 						if (!isCanceled) {
-							voiceValue = mAudioRecorder.getAmplitude();
-							recordHandler.sendEmptyMessage(1);
+							try{
+								voiceValue = mAudioRecorder.getAmplitude();
+								recordHandler.sendEmptyMessage(1);
+							}catch(Exception e){
+								
+							}
 						}
 					} catch (InterruptedException e) {
 						e.printStackTrace();

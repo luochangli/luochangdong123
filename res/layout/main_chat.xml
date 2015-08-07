@@ -42,8 +42,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/margin_10"
-            android:scaleType="centerInside"
             android:src="@drawable/circle_head_img" />
+
     </RelativeLayout>
 
     <com.weidi.view.DropdownListView

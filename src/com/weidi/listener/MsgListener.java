@@ -21,6 +21,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.lidroid.xutils.HttpUtils;
@@ -160,7 +161,7 @@ public class MsgListener implements MessageListener, PacketListener {
 
 						HttpUtils http = new HttpUtils();
 						HttpHandler handler = http.download(downUrl, voicePath,
-								false, false, new RequestCallBack<File>() {
+								true, true, new RequestCallBack<File>() {
 
 									@Override
 									public void onSuccess(
@@ -205,8 +206,9 @@ public class MsgListener implements MessageListener, PacketListener {
 								+ fileName;
 						Logger.i(TAG, videoPath);
 						HttpUtils http = new HttpUtils();
+
 						HttpHandler handler = http.download(downUrl, videoPath,
-								false, false, new RequestCallBack<File>() {
+								true, true, new RequestCallBack<File>() {
 
 									@Override
 									public void onSuccess(
@@ -215,6 +217,14 @@ public class MsgListener implements MessageListener, PacketListener {
 										if (fileUrl.isEmpty()
 												|| fileUrl == null)
 											return;
+
+										Uri contentUri = Uri.fromFile(new File(
+												fileUrl));
+										Intent mediaScanIntent = new Intent(
+												Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+												contentUri);
+										QApp.getInstance().sendBroadcast(
+												mediaScanIntent);
 										item.setContent(fileUrl);
 										saveNoticeNoMsg(session, item);
 
@@ -241,13 +251,12 @@ public class MsgListener implements MessageListener, PacketListener {
 					item.setChatType(Const.MSG_TYPE_TEXT);
 					item.setContent(msgBody);
 					item.setViewTyep(NewChatAdapter.MESSAGE_TYPE_RECV_TXT);
-					
+
 					session = setSession(to, from, msgtime);
 					saveNoticeNoMsg(session, item);
 					showNotice(session.getFrom(), session.getContent());
 				}
 			}
-		
 
 		} catch (Exception e) {
 			e.printStackTrace();

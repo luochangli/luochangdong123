@@ -16,7 +16,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
@@ -29,10 +28,10 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,13 +39,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.weidi.R;
-import com.weidi.activity.ChatActivity;
 import com.weidi.activity.ImageGridActivity;
 import com.weidi.adapter.FaceVPAdapter;
 import com.weidi.adapter.NewChatAdapter;
 import com.weidi.bean.ChatItem;
-import com.weidi.bean.Msg;
-import com.weidi.bean.Session;
 import com.weidi.bean.User;
 import com.weidi.common.base.BaseActivity;
 import com.weidi.common.function.recoding.AudioRecorder;
@@ -120,6 +116,8 @@ public class NewChatActivity extends BaseActivity implements OnClickListener,
 	private static final int PICK_IMAGE_ACTIVITY_REQUEST_CODE = 200;
 	public static final int REQUEST_CODE_SELECT_VIDEO = 23;
 	private static final int UPDATE_ADAPTER = 2;
+	private static final int RECV_MSG = 6;
+	
 	private static String picFileFullName;
 
 	@Override
@@ -200,16 +198,16 @@ public class NewChatActivity extends BaseActivity implements OnClickListener,
 			tvChatRight.setImageResource(R.drawable.btn_from);
 			ImgConfig.showHeadImg(YOU, tvChatRight);
 			tvChatRight.setOnClickListener(new OnClickListener() {
-
+				
 				@Override
 				public void onClick(View v) {
 					Intent intent = new Intent(NewChatActivity.this,
 							ChatInfoActi.class);
 					intent.putExtra(Const.YOU, YOU);
 					startActivity(intent);
-
 				}
 			});
+		
 		}
 	}
 
@@ -223,7 +221,11 @@ public class NewChatActivity extends BaseActivity implements OnClickListener,
 							.getSerializableExtra(ChatItem.TABLE_NAME);
 					if (item.getTo().equals(YOU)) {
 						item.setIsRead(ChatItem.STATUS_1);
-						toHandle(item);
+						chatDao.updateReaded(item);
+						Message msg = Message.obtain();
+						msg.what = RECV_MSG;
+						msg.obj = item;
+						mHandler.sendMessage(msg);
 					}
 
 				}
@@ -300,7 +302,7 @@ public class NewChatActivity extends BaseActivity implements OnClickListener,
 
 	@Override
 	protected void setListener() {
-		tvChatRight.setOnClickListener(this);
+
 		tvChatLeft.setOnClickListener(this);
 		btnVoice.setOnClickListener(this);
 		btnSendSms.setOnClickListener(this);
@@ -371,21 +373,31 @@ public class NewChatActivity extends BaseActivity implements OnClickListener,
 	protected void handleMsg(Message msg) {
 		switch (msg.what) {
 		case UPDATE_ADAPTER:
-			try {
-				ChatItem item = (ChatItem) msg.obj;
-				int row = (int) chatDao.insert(item);
-				Logger.i(TAG, "数据保存：" + row);
-				item.set_id(row);
-				listChat.add(item);
-				offset = listChat.size();
-				chatListView.setSelection(chatListView.getBottom());
-				adapter.notifyDataSetChanged();
-
-			} catch (Exception e) {
-
-			}
-
+			sendMsg(msg);
 			break;
+		case RECV_MSG:
+			ChatItem item = (ChatItem) msg.obj;
+			listChat.add(item);
+			offset = listChat.size();
+			chatListView.setSelection(chatListView.getBottom());
+			adapter.notifyDataSetChanged();
+			break;
+		}
+	}
+
+	private void sendMsg(Message msg) {
+		try {
+			ChatItem item = (ChatItem) msg.obj;
+			int row = (int) chatDao.insert(item);
+			Logger.i(TAG, "数据保存：" + row);
+			item.set_id(row);
+			listChat.add(item);
+			offset = listChat.size();
+			chatListView.setSelection(chatListView.getBottom());
+			adapter.notifyDataSetChanged();
+
+		} catch (Exception e) {
+
 		}
 	}
 

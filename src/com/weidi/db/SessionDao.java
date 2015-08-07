@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.weidi.QApp;
 import com.weidi.bean.Session;
 import com.weidi.util.Const;
+import com.weidi.util.Logger;
 
 /**
  * 聊天回话列表的管理
@@ -72,6 +73,7 @@ public class SessionDao {
 	// 返回全部列表
 	public List<Session> queryAllSessions(String user_id) {
 		List<Session> list = new ArrayList<Session>();
+		Logger.e("TAG", "回话列表"+user_id);
 		Cursor cursor = db.query(DBcolumns.TABLE_SESSION, new String[] { "*" },
 				DBcolumns.SESSION_TO + " = ? order by session_time desc",
 				new String[] { user_id }, null, null, null);

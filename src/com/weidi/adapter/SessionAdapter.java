@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,9 +80,9 @@ public class SessionAdapter extends BaseAdapter {
 		}
 
 		holder.tv_name.setText(session.getFrom());
-		holder.tv_content.setText(ExpressionUtil.prase(mContext,
-				holder.tv_content,
-				session.getContent() == null ? "" : session.getContent()));
+		SpannableStringBuilder sb = ExpressionUtil.prase(mContext,
+				holder.tv_content, session.getContent());// 对内容做处理
+	   holder.tv_content.setText(sb.toString());
 		holder.tv_time.setText(session.getTime());
 		if (!TextUtils.isEmpty(session.getNotReadCount())
 				&& Integer.parseInt(session.getNotReadCount()) > 0) {

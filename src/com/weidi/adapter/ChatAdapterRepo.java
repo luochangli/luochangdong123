@@ -126,6 +126,8 @@ public class ChatAdapterRepo {
 		showRecvHead(recvVoice.userhead, recvVoice.nickname, item);
 		if (item.getVoiceReaded() == 1) {  
 			recvVoice.unread.setVisibility(View.GONE);
+		}else{
+			recvVoice.unread.setVisibility(View.VISIBLE);
 		}
 		MediaManager.getVoiceTime(item.getContent(), recvVoice.length);
 	}
@@ -134,15 +136,17 @@ public class ChatAdapterRepo {
 		ViewHolderRecvVideo recvVideo = (ViewHolderRecvVideo) object;
 		recvVideo.timestamp.setText(item.getDate());
 		showRecvHead(recvVideo.userhead, recvVideo.nickname, item);
+		Bitmap videoImg = VideoThumbnail.getVideoThumbnail(item.getContent(), 120,
+				120, MediaStore.Images.Thumbnails.MICRO_KIND);
+		recvVideo.video.setImageBitmap(videoImg);
 		VideoEntity entty = GetMediaInfo.getVideoFile(item.getContent(),
 				mContext);
 		if(entty == null)
 			return;
-		Bitmap videoImg = VideoThumbnail.getVideoThumbnail(entty.filePath, 120,
-				120, MediaStore.Images.Thumbnails.MICRO_KIND);
+	
 		recvVideo.size.setText(VideoThumbnail.bytes2kb(entty.size));
 		recvVideo.lenght.setText(DateUtil.date2Str(entty.duration, "mm:ss"));
-		recvVideo.video.setImageBitmap(videoImg);
+	
 	}
 
 	private void handleRecvImg(ChatItem item, Object object) {
