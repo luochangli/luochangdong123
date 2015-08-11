@@ -1,10 +1,12 @@
 package com.weidi.chat;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.jivesoftware.smack.util.StringUtils;
+import org.xbill.DNS.tests.primary;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -27,6 +29,10 @@ import android.widget.TextView;
 import com.weidi.MainActivity;
 import com.weidi.R;
 import com.weidi.activity.FriendActivity;
+import com.weidi.chat.bean.GroupInfo;
+import com.weidi.chat.bean.GroupInfoDao;
+import com.weidi.chat.bean.Menbers;
+import com.weidi.chat.bean.MenbersDao;
 import com.weidi.chat.groupchat.CreatChatRoomActivity;
 import com.weidi.common.CommonAdapter;
 import com.weidi.common.ViewHolder;
@@ -57,11 +63,16 @@ public class GroupChatSettingActi extends BaseActivity implements
 		OnClickListener {
 
 	public static final String GROUP_MENBER_LIST = "group_menber_list";
-	public static final String MUC_INFO = "muc_info";
+
 	private static final int MY_MUCNICK = 100;
 	private static final int KICK_MENBER = 110;
+	public static final int INFO = 113;
+	public static final int MUC_MENBERS = 115;
+
 	private static String TAG = "GroupChatSettingActi";
 	private TextView tvMucNick, tvMyNick;
+	private ImageView topLeft;
+	private TextView topTitle, topRight;
 	// 成员总数
 	int m_total = 0;
 	// 成员列表
@@ -76,87 +87,41 @@ public class GroupChatSettingActi extends BaseActivity implements
 	private ImageView iv_switch_chattotop, iv_switch_unchattotop,
 			iv_switch_block_groupmsg, iv_switch_unblock_groupmsg,
 			ivOpenSaveConstact, ivCloseSaveConstact;
-	private ImageView ivBack;
 
 	// 删除并退出
 
 	private Button exitBtn;
 	private String I;
-	public static String YOU;
+	private String YOU;
 
 	// 是否是管理员
 	boolean isAdmin = false;
 	List<ObtainMUCmemberIQ.Item> existMenbers;
 	String longClickUsername = null;
-	private CommonAdapter<ObtainMUCmemberIQ.Item> adapter;
+	private CommonAdapter<Menbers> adapter;
 	private ProgressDialog progressDialog;
 	private boolean isInDeleteMode = false;
-	List<ObtainMUCmemberIQ.Item> menberList;
-	private ObtainMUCInfoIQ mucInfo;
+
+	List<Menbers> menbers;
+	private MucChatRepo repo;
 
 	@Override
 	protected void initView(Bundle savedInstanceState) {
 		setContentView(R.layout.social_groupchatsetting_activity);
 		YOU = getIntent().getStringExtra(Const.YOU);
 		I = Const.USER_NAME;
-		menberList = new ArrayList<ObtainMUCmemberIQ.Item>();
-		mucInfo = new ObtainMUCInfoIQ();
 		existMenbers = new ArrayList<ObtainMUCmemberIQ.Item>();
+		menbers = new ArrayList<Menbers>();
+		repo = new MucChatRepo(mContext, mHandler);
 		initView();
-		initBroadcast();
-
-		getMenberList();
-
-	}
-
-	private void getMenberList() {
-		new XmppLoadThread(this) {
-
-			@Override
-			protected void result(Object object) {
-				ObtainMUCmemberIQ iq = (ObtainMUCmemberIQ) object;
-				if (iq == null) {
-					ToastUtil.showShortToast(mContext, "获取群信息失败！");
-					return;
-				}
-				Logger.i(TAG, "群信息Acti:" + iq.getChildElementXML());
-				handleMenbers(iq);
-				IQOrder.getInstance().obtainMUCInfo(XmppUtil.getFullMUC(YOU));
-			}
-
-			@Override
-			protected Object load() {
-				ObtainMUCmemberIQ menberIQ = IQOrder.getInstance()
-						.obtainMUCGetmember(XmppUtil.getFullMUC(YOU));
-				return menberIQ;
-			}
-		};
+		
+		initData();
 
 	}
 
-	private void initBroadcast() {
-		mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
-		mReceiver = new BroadcastReceiver() {
-
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				handleBroadcast(intent);
-			}
-
-			private void handleBroadcast(Intent intent) {
-
-				if (intent.getAction().equals(MUC_INFO)) {
-					mucInfo = (ObtainMUCInfoIQ) intent
-							.getSerializableExtra(MUC_INFO);
-					Logger.i(TAG, mucInfo.getName());
-					tvMucNick.setText(mucInfo.getName());
-				}
-
-			}
-
-		};
-		mLocalBroadcastManager.registerReceiver(mReceiver, new IntentFilter(
-				GROUP_MENBER_LIST));
+	private void initData() {
+		repo.getMenbByDb(YOU);
+		repo.getInfoFromDb(YOU);
 	}
 
 	@Override
@@ -168,13 +133,7 @@ public class GroupChatSettingActi extends BaseActivity implements
 		rlSwitchSaveConstact.setOnClickListener(this);
 		re_clear.setOnClickListener(this);
 		exitBtn.setOnClickListener(this);
-		ivBack.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
+		topLeft.setOnClickListener(this);
 
 	}
 
@@ -187,14 +146,22 @@ public class GroupChatSettingActi extends BaseActivity implements
 	@Override
 	protected void handleMsg(Message msg) {
 		switch (msg.what) {
-		case MY_MUCNICK:
-			ObtainMUCmemberIQ.Item item = (ObtainMUCmemberIQ.Item) msg.obj;
-			tvMyNick.setText(item.getNick());
+		case INFO:
+			GroupInfo item = (GroupInfo) msg.obj;
+			tvMucNick.setText(item.getName());
+
 			if (isAdmin)
 				exitBtn.setText("销毁群");
 			break;
+		case MUC_MENBERS:
+			@SuppressWarnings("unchecked")
+			ArrayList<Menbers> items = (ArrayList<Menbers>) msg.obj;
+			menbers.clear();
+			menbers = items;
+			handleMenbers();
+			break;
 		case KICK_MENBER:
-			getMenberList();
+
 			ToastUtil.showShortToast(mContext, "踢人成功");
 			break;
 
@@ -204,7 +171,7 @@ public class GroupChatSettingActi extends BaseActivity implements
 
 	}
 
-	@SuppressLint("ClickableViewAccessibility")
+	
 	private void initView() {
 
 		progressDialog = new ProgressDialog(this);
@@ -225,7 +192,13 @@ public class GroupChatSettingActi extends BaseActivity implements
 		iv_switch_block_groupmsg = (ImageView) findViewById(R.id.iv_switch_block_groupmsg);
 		iv_switch_unblock_groupmsg = (ImageView) findViewById(R.id.iv_switch_unblock_groupmsg);
 		exitBtn = (Button) findViewById(R.id.btn_exit_grp);
-		ivBack = (ImageView) findViewById(R.id.ivBack);
+
+		topLeft = (ImageView) findViewById(R.id.topLeft);
+		topTitle = (TextView) findViewById(R.id.topTitle);
+		topRight = (TextView) findViewById(R.id.topRight);
+		topTitle.setText("群信息");
+		topRight.setVisibility(View.GONE);
+
 		initAdapter();
 		gvMenberHead.setAdapter(adapter);
 		// 退出删除模式
@@ -251,12 +224,11 @@ public class GroupChatSettingActi extends BaseActivity implements
 	}
 
 	private void initAdapter() {
-		adapter = new CommonAdapter<ObtainMUCmemberIQ.Item>(this, existMenbers,
+		adapter = new CommonAdapter<Menbers>(this, menbers,
 				R.layout.social_chatsetting_gridview_item) {
 
 			@Override
-			public void convert(ViewHolder helper,
-					final ObtainMUCmemberIQ.Item item) {
+			public void convert(ViewHolder helper, final Menbers item) {
 				final CircleImageView ivAvatar = (CircleImageView) helper
 						.getView(R.id.ivMucAvatar);
 				TextView tv_username = helper.getView(R.id.tv_username);
@@ -306,7 +278,7 @@ public class GroupChatSettingActi extends BaseActivity implements
 						delPerson.setVisibility(View.GONE);
 					}
 
-					ImgConfig.showHeadImg(StringUtils.parseName(item.getJid()),
+					ImgConfig.showHeadImg(item.getJid(),
 							ivAvatar);
 					tv_username.setText(item.getNick());
 					ivAvatar.setOnClickListener(new OnClickListener() {
@@ -325,25 +297,12 @@ public class GroupChatSettingActi extends BaseActivity implements
 
 						@Override
 						public void onClick(View v) {
-							new XmppLoadThread() {
 
-								@Override
-								protected void result(Object object) {
-									ObtainMUCKickIQ iq = (ObtainMUCKickIQ) object;
-									if (iq != null) {
-										mHandler.sendEmptyMessage(KICK_MENBER);
-									}
-								}
-
-								@Override
-								protected Object load() {
-									Logger.i(TAG, item.getMuc()+":"+item.getJid());
-									ObtainMUCKickIQ iq = IQOrder.getInstance()
-											.mucKick(item.getMuc(),
-													item.getJid());
-									return iq;
-								}
-							};
+							ObtainMUCKickIQ iq = IQOrder.getInstance().mucKick(
+									item.getMuc(), item.getJid());
+							if (iq != null) {
+								mHandler.sendEmptyMessage(KICK_MENBER);
+							}
 
 						}
 					});
@@ -365,6 +324,9 @@ public class GroupChatSettingActi extends BaseActivity implements
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.topLeft:
+			finish();
+			break;
 		case R.id.rlSaveConstact:// 保存到通讯录
 			if (ivOpenSaveConstact.getVisibility() == View.VISIBLE) {
 				ivOpenSaveConstact.setVisibility(View.INVISIBLE);
@@ -438,19 +400,17 @@ public class GroupChatSettingActi extends BaseActivity implements
 	}
 
 	private void exitMUC() {
+
+		finish();
+		NewChatActivity.instance.finish();
 		SessionDao.getInstance().deleteYou(YOU);
-		Intent intent = new Intent();
-		intent.setClass(GroupChatSettingActi.this, MainActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);// 设置不要刷新将要跳到的界面
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);// 它可以关掉所要到的界面中间的activity
-		startActivity(intent);
+
 	}
 
-	private void handleMenbers(ObtainMUCmemberIQ iq) {
+	private void handleMenbers() {
 
-		menberList = iq.getItems();
-		for (ObtainMUCmemberIQ.Item item : menberList) {
-			if (StringUtils.parseName(item.getJid()).equals(Const.USER_NAME)) {
+		for (Menbers item : menbers) {
+			if (item.getJid().equals(Const.USER_NAME)) {
 
 				if (item.getAffiliation().equals(Const.Lord)) {
 					isAdmin = true;// 群主
@@ -458,25 +418,18 @@ public class GroupChatSettingActi extends BaseActivity implements
 				} else {
 					isAdmin = false;
 				}
-				android.os.Message msg = new Message();
-				msg.what = MY_MUCNICK;
-				msg.obj = item;
-				mHandler.sendMessage(msg);
+				tvMyNick.setText(item.getNick());
 			}
 
 		}
 
-		menberList.add(new Item());
-		menberList.add(new Item());
-		Logger.i(TAG, "阿萨德" + menberList.size());
-		adapter.clear();
-		adapter.addAll(menberList);
+		menbers.add(new Menbers());
+		menbers.add(new Menbers());
+		adapter.addAll(menbers);
 	}
 
 	@Override
 	protected void onDestroy() {
-		YOU = null;
-		mLocalBroadcastManager.unregisterReceiver(mReceiver);
 		super.onDestroy();
 
 	}

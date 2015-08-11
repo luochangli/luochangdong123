@@ -5,32 +5,7 @@
     android:background="@color/luo_win_base"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_top_bar"
-        android:background="@color/green_bg" >
-
-        <ImageView
-            android:id="@+id/ivBack"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:onClick="back"
-            android:scaleType="centerInside"
-            android:src="@drawable/btn_back_selector" />
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="群聊名称"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-    </RelativeLayout>
+  <include layout="@layout/top_luo"/>
 
     <ScrollView
         android:layout_width="match_parent"

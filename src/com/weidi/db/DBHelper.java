@@ -3,6 +3,8 @@ package com.weidi.db;
 import org.jivesoftware.smack.Chat;
 
 import com.weidi.bean.ChatItem;
+import com.weidi.chat.bean.GroupInfo;
+import com.weidi.chat.bean.Menbers;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,7 +18,7 @@ import android.util.Log;
 public class DBHelper extends SQLiteOpenHelper {
 
 	private static final String DB_NAME = "weidi_byl";
-	private static final int DB_VERSION = 2;
+	private static final int DB_VERSION = 3;
 	private static DBHelper mInstance;
 
 	public DBHelper(Context context) {
@@ -50,6 +52,17 @@ public class DBHelper extends SQLiteOpenHelper {
 	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
+
+		String sql_menbers = "Create table IF NOT EXISTS " + Menbers.TABLE
+				+ "(" + Menbers.ID + " integer primary key autoincrement, "
+				+ Menbers.AFFILIATION + " text," + Menbers.JID + " text,"
+				+ Menbers.MUC + " text," + Menbers.NICK + " text," + Menbers.ME
+				+ " text);";
+		String sql_groupInfo = "Create table IF NOT EXISTS " + GroupInfo.TABLE
+				+ "(" + GroupInfo.ID + "  integer primary key autoincrement, "
+				+ GroupInfo.CREATEDATE + " text," + GroupInfo.DESCRIPTION
+				+ " text," + GroupInfo.MUC + " text," + GroupInfo.NAME
+				+ " text," + GroupInfo.ME + " text);";
 
 		String sql_new_msg = "Create table IF NOT EXISTS "
 				+ ChatItem.TABLE_NAME + "(" + ChatItem.ID
@@ -128,7 +141,7 @@ public class DBHelper extends SQLiteOpenHelper {
 				+ DBcolumns.NEWSNOTICE
 				+ "(news_id integer primary key autoincrement,"
 				+ "title text, link text,imglink text,createdatetime text,content text,"
-		        + " isread text DEFAULT 0)";
+				+ " isread text DEFAULT 0)";
 
 		db.execSQL(sql_msg);
 		db.execSQL(sql_session);
@@ -138,6 +151,8 @@ public class DBHelper extends SQLiteOpenHelper {
 		db.execSQL(sql_msgCount);
 		db.execSQL(sql_newsNotice);
 		db.execSQL(sql_new_msg);
+		db.execSQL(sql_groupInfo);
+		db.execSQL(sql_menbers);
 	}
 
 	@Override

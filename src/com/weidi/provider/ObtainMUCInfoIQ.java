@@ -10,7 +10,7 @@ import org.jivesoftware.smack.util.StringUtils;
  * @date 创建时间：2015-7-9 上午11:27:05
  * @Description 1.0 获取指定群信息
  */
-public class ObtainMUCInfoIQ extends IQ implements Serializable{
+public class ObtainMUCInfoIQ extends IQ implements Serializable {
 
 	/**
 	 * 
@@ -20,6 +20,17 @@ public class ObtainMUCInfoIQ extends IQ implements Serializable{
 	private String name;
 	private String description;
 	private String crieatdatetime;
+	private String errorCode;
+	
+	
+
+	public String getErrorCode() {
+		return errorCode;
+	}
+
+	public void setErrorCode(String errorCode) {
+		this.errorCode = errorCode;
+	}
 
 	public String getMuc() {
 		return muc;
@@ -61,17 +72,24 @@ public class ObtainMUCInfoIQ extends IQ implements Serializable{
 		if (this.getType().equals(IQ.Type.RESULT)) {
 			return getInfo();
 		}
+		if(getType().equals(IQ.Type.ERROR)){
+			return getErrorCode();
+		}
 		return null;
 	}
 
 	private String getInfo() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("query xmlns=\"com:jsm:group\" event=\"groupinfo\">");
-		sb.append("<muc>").append(StringUtils.escapeForXML(getMuc())).append("</muc>");
-		sb.append("<name>").append(StringUtils.escapeForXML(getName())).append("</name>");
-		sb.append("<description>").append(StringUtils.escapeForXML(getDescription()))
+		sb.append("<muc>").append(StringUtils.escapeForXML(getMuc()))
+				.append("</muc>");
+		sb.append("<name>").append(StringUtils.escapeForXML(getName()))
+				.append("</name>");
+		sb.append("<description>")
+				.append(StringUtils.escapeForXML(getDescription()))
 				.append("</description>");
-		sb.append("<createdatetime>").append(StringUtils.escapeForXML(getCrieatdatetime()))
+		sb.append("<createdatetime>")
+				.append(StringUtils.escapeForXML(getCrieatdatetime()))
 				.append("</createdatetime>");
 		sb.append("</query>");
 		return sb.toString();
@@ -82,7 +100,8 @@ public class ObtainMUCInfoIQ extends IQ implements Serializable{
 			return null;
 		StringBuilder sb = new StringBuilder();
 		sb.append("<query xmlns=\"com:jsm:group\" event=\"groupinfo\">");
-		sb.append("<muc>").append(StringUtils.escapeForXML(getMuc())).append("</muc>");
+		sb.append("<muc>").append(StringUtils.escapeForXML(getMuc()))
+				.append("</muc>");
 		sb.append("</query>");
 		return sb.toString();
 	}

@@ -17,6 +17,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/btn_common"
             android:padding="@dimen/padding_10"
+            android:scaleType="fitCenter"
             android:src="@drawable/top_back" />
 
         <TextView

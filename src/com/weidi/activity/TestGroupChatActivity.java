@@ -50,13 +50,13 @@ public class TestGroupChatActivity extends Activity{
 			sendPresence();
 		break;
 		case R.id.button10:
-			IQOrder.getInstance().getFriendRemark("1000275");
+			IQOrder.getInstance().getRemark("1000275");
 		break;
 		case R.id.button11:
-			IQOrder.getInstance().saveFriendRemark("g10013@conference.jsmny","");
+			IQOrder.getInstance().saveRemark("g10013@conference.jsmny","");
 		break;
 		case R.id.button12:
-			IQOrder.getInstance().delFriendRemark("huangziohui");
+			IQOrder.getInstance().delRemark("huangziohui");
 		break;
 		
 		case R.id.button15:

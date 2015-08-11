@@ -8,31 +8,20 @@ import android.util.Log;
 /**
  * @author luochangdong E-mail: 2270333671@qq.com
  * @date 创建时间：2015-7-9 上午11:27:05
- * @Description 1.0 获取指定群信息
+ * @Description 1.0 获取好友备注
  */
-public class GetFriend_ReMarkIQ extends IQ {
+public class GetRemarkIQ extends IQ {
 
 	private String username;
 	private String nickname;
-	private String myerror;
-	private String attr_error;
+	private String errorCode;
 
-	
-
-	public String getmyError() {
-		return myerror;
+	public String getErrorCode() {
+		return errorCode;
 	}
 
-	public void setmyError(String myerror) {
-		this.myerror = myerror;
-	}
-
-	public String getAttr_error() {
-		return attr_error;
-	}
-
-	public void setAttr_error(String attr_error) {
-		this.attr_error = attr_error;
+	public void setErrorCode(String errorCode) {
+		this.errorCode = errorCode;
 	}
 
 	public String getUsername() {
@@ -59,42 +48,34 @@ public class GetFriend_ReMarkIQ extends IQ {
 		if (this.getType().equals(IQ.Type.RESULT)) {
 			return getresult();
 		}
-		if(this.getType().equals(IQ.Type.ERROR)){
-			Log.i("TAG", "HUILAI ERROR");
-			return error();
+		if (this.getType().equals(IQ.Type.ERROR)) {
+			return getErrorCode();
 		}
 		return null;
 	}
 
 	private String getresult() {
-		if(getUsername()==null)
+		if (getUsername() == null)
 			return null;
 		StringBuilder sb = new StringBuilder();
 		sb.append("<query xmlns=\"com:jsm:remark\" event=\"get\">");
-		sb.append("<username>").append(StringUtils.escapeForXML(getUsername())).append("</username>");
+		sb.append("<username>").append(StringUtils.escapeForXML(getUsername()))
+				.append("</username>");
 		sb.append("<vCard>");
-		sb.append("<nickname>").append(StringUtils.escapeForXML(getNickname())).append("</nickname>");
+		sb.append("<nickname>").append(StringUtils.escapeForXML(getNickname()))
+				.append("</nickname>");
 		sb.append("</vCard>");
 		sb.append("</query>");
 		return sb.toString();
 	}
 
 	private String send() {
-		if (getUsername()==null)
+		if (getUsername() == null)
 			return null;
 		StringBuilder sb = new StringBuilder();
 		sb.append("<query xmlns=\"com:jsm:remark\" event=\"get\">");
-		sb.append("<username>").append(StringUtils.escapeForXML(getUsername())).append("</username>");
-		sb.append("</query>");
-		return sb.toString();
-	}
-	
-	private String error() {
-		if (getmyError()==null)
-			return null;
-		StringBuilder sb = new StringBuilder();
-		sb.append("<query xmlns=\"com:jsm:remark\" event=\"get\">");
-		sb.append("<error code=").append(StringUtils.escapeForXML(getAttr_error())).append(">").append(StringUtils.escapeForXML(getmyError())).append("</error>");
+		sb.append("<username>").append(StringUtils.escapeForXML(getUsername()))
+				.append("</username>");
 		sb.append("</query>");
 		return sb.toString();
 	}

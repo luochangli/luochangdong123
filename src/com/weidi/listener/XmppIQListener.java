@@ -27,25 +27,9 @@ public class XmppIQListener implements PacketListener {
 	public void processPacket(Packet packet) {
 		Logger.i(TAG, packet.toXML());
 		String xml = packet.toXML();
-		if (xml.contains("event=\"getgroupinfo\"")) {
-			
-		}
-		if (xml.contains("event=\"getmember\"")) {
-//			ObtainMUCmemberIQ iq = (ObtainMUCmemberIQ) packet;
-//			Intent intent = new Intent(GroupChatSettingActi.GROUP_MENBER_LIST);
-//			Bundle bundle = new Bundle();
-//			bundle.putSerializable(GroupChatSettingActi.GROUP_MENBER_LIST, iq);
-//			intent.putExtras(bundle);
-//			QApp.mLocalBroadcastManager.sendBroadcast(intent);
-		}
-		if (xml.contains("event=\"groupinfo\"")) {
-			ObtainMUCInfoIQ iq = (ObtainMUCInfoIQ) packet;
-			Intent intent = new Intent(GroupChatSettingActi.MUC_INFO);
-			Bundle bundle = new Bundle();
-			bundle.putSerializable(GroupChatSettingActi.MUC_INFO, iq);
-			intent.putExtras(bundle);
-			QApp.mLocalBroadcastManager.sendBroadcast(intent);
-		}
+	
+
+	
 		if (xml.contains("jabber:iq:roster")
 				&& xml.contains(" subscription=\"both\"")) {
 			QApp.mLocalBroadcastManager.sendBroadcast(new Intent(

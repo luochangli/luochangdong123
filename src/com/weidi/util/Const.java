@@ -9,7 +9,7 @@ public class Const {
 
 	 public static final String XMPP_HOST = "120.25.157.196";
 //	public static final String XMPP_HOST = "192.168.0.10";
-	// public static final String XMPP_HOST = "192.168.0.21";
+//	 public static final String XMPP_HOST = "192.168.0.21";
 	public static String XMPP_DOMAIN = "jsmny";
 	public static final String RESOUCE_ID = "jsm"; // 资源名
 	public static final int XMPP_PORT = 5222;

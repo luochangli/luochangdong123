@@ -97,6 +97,8 @@ public class VCardDao {
 		long row = db.insert(DBcolumns.TABLE_VCARD, null, values);
 		return row;
 	}
+	
+	
 
 	// 修改一个回话
 	public long updateSession(User user) {

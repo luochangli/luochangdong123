@@ -70,7 +70,7 @@ public class NewChatActivity extends BaseActivity implements OnClickListener,
 		OnRefreshListenerHeader {
 
 	public static final String TAG = NewChatActivity.class.getSimpleName();
-
+	public static NewChatActivity instance = null;
 	ImageView tvChatLeft;
 
 	TextView tvChatTitle;
@@ -109,7 +109,8 @@ public class NewChatActivity extends BaseActivity implements OnClickListener,
 	private User friend;
 	private SimpleDateFormat sd;
 	private int offset;
-	private String YOU, I;
+	public static String YOU;
+	private String I;
 
 	// 打开相机用到的参数
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
@@ -117,7 +118,7 @@ public class NewChatActivity extends BaseActivity implements OnClickListener,
 	public static final int REQUEST_CODE_SELECT_VIDEO = 23;
 	private static final int UPDATE_ADAPTER = 2;
 	private static final int RECV_MSG = 6;
-	
+
 	private static String picFileFullName;
 
 	@Override
@@ -125,7 +126,7 @@ public class NewChatActivity extends BaseActivity implements OnClickListener,
 		setContentView(R.layout.main_chat);
 		YOU = getIntent().getStringExtra("from");
 		initBroadcast();
-
+		instance = this;
 		initView();
 		initData();
 
@@ -198,7 +199,7 @@ public class NewChatActivity extends BaseActivity implements OnClickListener,
 			tvChatRight.setImageResource(R.drawable.btn_from);
 			ImgConfig.showHeadImg(YOU, tvChatRight);
 			tvChatRight.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					Intent intent = new Intent(NewChatActivity.this,
@@ -207,7 +208,7 @@ public class NewChatActivity extends BaseActivity implements OnClickListener,
 					startActivity(intent);
 				}
 			});
-		
+
 		}
 	}
 
@@ -255,9 +256,14 @@ public class NewChatActivity extends BaseActivity implements OnClickListener,
 		offset = 0;
 		I = PreferencesUtils.getSharePreStr("weidi");
 		friend = userDao.getUser(YOU);
-		if (friend != null) {
-			tvChatTitle.setText(friend.getNickname() == null ? YOU : friend
-					.getNickname());
+
+		if (MUC_CHAT) {
+			tvChatTitle.setText(YOU);
+		} else {
+			if (friend != null) {
+				tvChatTitle.setText(friend.getNickname() == null ? YOU : friend
+						.getNickname());
+			}
 		}
 
 		listChat = chatDao.queryMsg(I, YOU, offset);
@@ -536,6 +542,7 @@ public class NewChatActivity extends BaseActivity implements OnClickListener,
 	}
 
 	private void showEditState() {
+		hideContainer();
 		input.setVisibility(View.VISIBLE);
 		btnChatKeyboard.setVisibility(View.GONE);
 		btnVoice.setVisibility(View.VISIBLE);
@@ -568,6 +575,12 @@ public class NewChatActivity extends BaseActivity implements OnClickListener,
 		btnChatKeyboard.setVisibility(View.VISIBLE);
 		tvSpeek.setVisibility(View.VISIBLE);
 		hideSoftInputView();// 隐藏软键盘
+		hideContainer();
+	}
+
+	private void hideContainer() {
+		chat_add_container.setVisibility(View.GONE);
+		chat_face_container.setVisibility(View.GONE);
 	}
 
 	/**
@@ -647,6 +660,8 @@ public class NewChatActivity extends BaseActivity implements OnClickListener,
 	@Override
 	protected void onDestroy() {
 		mLocalBroadcastManager.unregisterReceiver(mReceiver);
+		instance = null;
+		YOU = null;
 		super.onDestroy();
 	}
 

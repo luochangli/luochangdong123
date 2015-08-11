@@ -15,7 +15,7 @@
         android:paddingLeft="5dip"
         android:paddingTop="5dip"
         android:text="A"
-        android:textColor="@color/luo_win_base" />
+        android:textColor="@color/text_color_light" />
 
     <RelativeLayout
         android:layout_width="match_parent"

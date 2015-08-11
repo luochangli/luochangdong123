@@ -105,11 +105,6 @@ public class LoginActivity extends Activity {
 		QApp.getInstance().addActivity(LoginActivity.this);
 	}
 
-	private void testLogin() {
-		IQOrder.getInstance().getPwdHint("14708641234");
-		IQOrder.getInstance().getAccountByPhone("14708641234");
-	}
-
 	private void initReceiver() {
 		receiver = new BroadcastReceiver() {
 			@Override

@@ -124,9 +124,9 @@ public class ChatAdapterRepo {
 		recvVoice.timestamp.setText(item.getDate());
 
 		showRecvHead(recvVoice.userhead, recvVoice.nickname, item);
-		if (item.getVoiceReaded() == 1) {  
+		if (item.getVoiceReaded() == 1) {
 			recvVoice.unread.setVisibility(View.GONE);
-		}else{
+		} else {
 			recvVoice.unread.setVisibility(View.VISIBLE);
 		}
 		MediaManager.getVoiceTime(item.getContent(), recvVoice.length);
@@ -136,17 +136,17 @@ public class ChatAdapterRepo {
 		ViewHolderRecvVideo recvVideo = (ViewHolderRecvVideo) object;
 		recvVideo.timestamp.setText(item.getDate());
 		showRecvHead(recvVideo.userhead, recvVideo.nickname, item);
-		Bitmap videoImg = VideoThumbnail.getVideoThumbnail(item.getContent(), 120,
-				120, MediaStore.Images.Thumbnails.MICRO_KIND);
+		Bitmap videoImg = VideoThumbnail.getVideoThumbnail(item.getContent(),
+				120, 120, MediaStore.Images.Thumbnails.MICRO_KIND);
 		recvVideo.video.setImageBitmap(videoImg);
 		VideoEntity entty = GetMediaInfo.getVideoFile(item.getContent(),
 				mContext);
-		if(entty == null)
+		if (entty == null)
 			return;
-	
+
 		recvVideo.size.setText(VideoThumbnail.bytes2kb(entty.size));
 		recvVideo.lenght.setText(DateUtil.date2Str(entty.duration, "mm:ss"));
-	
+
 	}
 
 	private void handleRecvImg(ChatItem item, Object object) {
@@ -175,6 +175,7 @@ public class ChatAdapterRepo {
 
 		if (item.getFileStatus() == ChatItem.STATUS_0) {
 			sentVoice.progressBar.setVisibility(View.VISIBLE);
+			item.setFileStatus(ChatItem.STATUS_1);
 			sendVoiceMsg(sentVoice, item);
 
 		}
@@ -196,6 +197,7 @@ public class ChatAdapterRepo {
 		sentVideo.video.setImageBitmap(videoImg);
 		if (item.getFileStatus() == ChatItem.STATUS_0) {
 			sentVideo.llLoad.setVisibility(View.VISIBLE);
+			item.setFileStatus(ChatItem.STATUS_1);
 			sentVideoMsg(sentVideo, item);
 		}
 		if (item.getFileStatus() == ChatItem.STATUS_2) {
@@ -210,6 +212,7 @@ public class ChatAdapterRepo {
 				+ item.getContent());
 		if (item.getFileStatus() == ChatItem.STATUS_0) {
 			sentPicture.llLoad.setVisibility(View.VISIBLE);
+			item.setFileStatus(ChatItem.STATUS_1);
 			sentPicMsg(sentPicture, item);
 		}
 		if (item.getFileStatus() == ChatItem.STATUS_2) {
@@ -225,10 +228,10 @@ public class ChatAdapterRepo {
 		sentText.content.setText(sb);
 		Linkify.addLinks(sentText.content, Linkify.ALL);// 增加文本链接类型
 		sentText.timestamp.setText(item.getDate());
-		sentText.timestamp.setText(item.getDate());
 
 		if (item.getFileStatus() == ChatItem.STATUS_0) {
 			sentText.progressBar.setVisibility(View.VISIBLE);
+			item.setFileStatus(ChatItem.STATUS_1);
 			sendTXTMsg(item, sentText);
 		}
 		if (item.getFileStatus() == ChatItem.STATUS_2) {
@@ -261,7 +264,7 @@ public class ChatAdapterRepo {
 		fileName.append(ext);
 		final String upUrl;
 		if (item.getIsGroup() == 1) {
-			upUrl = upLoadUrl(item.getMe(), fileName.toString());
+			upUrl = upLoadUrl(item.getTo(), fileName.toString());
 		} else {
 			upUrl = upLoadUrl(item.getMe(), fileName.toString());
 		}
@@ -280,7 +283,7 @@ public class ChatAdapterRepo {
 								sentVoice.progressBar.setVisibility(View.GONE);
 							}
 						});
-						item.setFileStatus(ChatItem.STATUS_1);
+				
 						long row = chatDao.updateMsgStatus(item);
 						Logger.i(TAG, "数据上传成功" + row);
 						updateSession(item);
@@ -323,7 +326,11 @@ public class ChatAdapterRepo {
 		fileName.append(ext);
 		final String upUrl;
 
-		upUrl = upLoadUrl(item.getMe(), fileName.toString());
+		if (item.getIsGroup() == 1) {
+			upUrl = upLoadUrl(item.getTo(), fileName.toString());
+		} else {
+			upUrl = upLoadUrl(item.getMe(), fileName.toString());
+		}
 
 		new Thread(new Runnable() {
 
@@ -340,7 +347,7 @@ public class ChatAdapterRepo {
 								sentVideo.llLoad.setVisibility(View.GONE);
 							}
 						});
-						item.setFileStatus(ChatItem.STATUS_1);
+
 						long row = chatDao.updateMsgStatus(item);
 						Logger.i(TAG, "数据上传成功" + row);
 						updateSession(item);
@@ -353,7 +360,7 @@ public class ChatAdapterRepo {
 							final float num = (float) current / (float) total;
 							final DecimalFormat df = new DecimalFormat("0.00");// 格式化小数
 							final String s = df.format(num * 100);// 返回的是String类型
-							Logger.e(TAG, "进度值：" + s);
+
 							mHandler.post(new Runnable() {
 								@Override
 								public void run() {
@@ -390,7 +397,11 @@ public class ChatAdapterRepo {
 		fileName.append(ext);
 		final String upUrl;
 
-		upUrl = upLoadUrl(item.getMe(), fileName.toString());
+		if (item.getIsGroup() == 1) {
+			upUrl = upLoadUrl(item.getTo(), fileName.toString());
+		} else {
+			upUrl = upLoadUrl(item.getMe(), fileName.toString());
+		}
 
 		new Thread(new Runnable() {
 
@@ -407,7 +418,7 @@ public class ChatAdapterRepo {
 								sentPicture2.llLoad.setVisibility(View.GONE);
 							}
 						});
-						item.setFileStatus(ChatItem.STATUS_1);
+
 						long row = chatDao.updateMsgStatus(item);
 						Logger.e(TAG, "上传成功：" + row);
 						updateSession(item);
@@ -488,14 +499,12 @@ public class ChatAdapterRepo {
 		}
 	}
 
-
 	private void sendTXTMsg(ChatItem item, ViewHolderSentText sentText) {
 
 		try {
 			XmppUtil.sendTextMsg(item.getContent(), item.getTo());
-			item.setFileStatus(ChatItem.STATUS_1);
+
 			long row = chatDao.updateMsgStatus(item);
-			Logger.i(TAG, "数据上传成功" + row);
 			updateSession(item);
 			sentText.progressBar.setVisibility(View.GONE);
 

@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.weidi.R;
 import com.weidi.adapter.SearchAdapter;
+import com.weidi.chat.RemarkRepo;
 import com.weidi.common.base.LuoBaseActivity;
 import com.weidi.db.NewFriendDao;
 
@@ -74,6 +75,7 @@ public class NewFriendActivity extends LuoBaseActivity {
 		});
 		initData();
 
+		new RemarkRepo();
 	}
 
 	@Override

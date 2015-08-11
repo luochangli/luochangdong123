@@ -8,30 +8,18 @@ import org.jivesoftware.smack.util.StringUtils;
  * @date 创建时间：2015-7-9 上午11:27:05
  * @Description 1.0 获取指定群信息
  */
-public class DeleteFriend_ReMarkIQ extends IQ {
+public class DelRemarkIQ extends IQ {
 
 	private String username;
 	private String nickname;
-	private String error;
-	private String attr_error;
-	
+	private String errorCode;
 
-	
-
-	public String getAttr_error() {
-		return attr_error;
+	public String getErrorCode() {
+		return errorCode;
 	}
 
-	public void setAttr_error(String attr_error) {
-		this.attr_error = attr_error;
-	}
-
-	public String getmyError() {
-		return error;
-	}
-
-	public void setmyError(String error) {
-		this.error = error;
+	public void setErrorCode(String errorCode) {
+		this.errorCode = errorCode;
 	}
 
 	public String getUsername() {
@@ -56,19 +44,16 @@ public class DeleteFriend_ReMarkIQ extends IQ {
 			return send();
 		}
 		if (this.getType().equals(IQ.Type.RESULT)) {
-			return getresult();
-		}else if(this.getType().equals(IQ.Type.ERROR)){
-			error();
-			return null;
-		}else{
-			return null;
+			return getResult();
 		}
-		
+		if (this.getType().equals(IQ.Type.ERROR)) {
+			return getErrorCode();
+		}
+		return null;
+
 	}
 
-	private String getresult() {
-		if(getUsername()==null)
-			return null;
+	private String getResult() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<query xmlns=\"com:jsm:remark\" event=\"del\">");
 		sb.append("</query>");
@@ -76,20 +61,12 @@ public class DeleteFriend_ReMarkIQ extends IQ {
 	}
 
 	private String send() {
-		if (getUsername()==null)
+		if (getUsername() == null)
 			return null;
 		StringBuilder sb = new StringBuilder();
 		sb.append("<query xmlns=\"com:jsm:remark\" event=\"del\">");
-		sb.append("<username>").append(StringUtils.escapeForXML(getUsername())).append("</username>");
-		sb.append("</query>");
-		return sb.toString();
-	}
-	private String error() {
-		if (getmyError()==null)
-			return null;
-		StringBuilder sb = new StringBuilder();
-		sb.append("<query xmlns=\"com:jsm:remark\" event=\"del\">");
-		sb.append("<error code=").append(StringUtils.escapeForXML(getAttr_error())).append(">").append(StringUtils.escapeForXML(getmyError())).append("</error>");
+		sb.append("<username>").append(StringUtils.escapeForXML(getUsername()))
+				.append("</username>");
 		sb.append("</query>");
 		return sb.toString();
 	}

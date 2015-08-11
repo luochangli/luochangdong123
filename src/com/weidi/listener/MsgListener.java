@@ -2,9 +2,7 @@ package com.weidi.listener;
 
 import java.io.File;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.MessageListener;
@@ -36,11 +34,11 @@ import com.weidi.adapter.NewChatAdapter;
 import com.weidi.bean.ChatItem;
 import com.weidi.bean.Msg;
 import com.weidi.bean.Session;
+import com.weidi.chat.NewChatActivity;
 import com.weidi.chat.groupchat.CreatChatRoomActivity;
 import com.weidi.common.DateUtil;
 import com.weidi.common.UploadUtil;
 import com.weidi.db.ChatDao;
-import com.weidi.db.ChatMsgDao;
 import com.weidi.db.NewsNotice;
 import com.weidi.db.SessionDao;
 import com.weidi.util.Const;
@@ -108,7 +106,7 @@ public class MsgListener implements MessageListener, PacketListener {
 			item.setIsRecv(ChatItem.STATUS_1);
 
 			int isRead;
-			if (ChatActivity.YOU != null && from.equals(ChatActivity.YOU)) {
+			if (NewChatActivity.YOU != null && from.equals(NewChatActivity.YOU)) {
 				isRead = ChatItem.STATUS_1;
 			} else {
 				isRead = ChatItem.STATUS_0;
@@ -122,6 +120,8 @@ public class MsgListener implements MessageListener, PacketListener {
 			if (mucChat) {
 				String mucFrom = XmppUtil.getMucFrom(message.getFrom());
 				item.setMucFrom(mucFrom);
+				item.setIsGroup(ChatItem.STATUS_1);
+				
 			}
 			// 文件信息处理
 			if (!xml.isEmpty() && xml != null) {
@@ -359,7 +359,7 @@ public class MsgListener implements MessageListener, PacketListener {
 		mNotification.ledOnMS = 500;
 		mNotification.ledOffMS = 1000;
 		mNotification.flags |= Notification.FLAG_SHOW_LIGHTS;
-		Intent intent = new Intent(QApp.getInstance(), ChatActivity.class);
+		Intent intent = new Intent(QApp.getInstance(), NewChatActivity.class);
 		intent.putExtra("from", you);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 				| Intent.FLAG_ACTIVITY_NEW_TASK);

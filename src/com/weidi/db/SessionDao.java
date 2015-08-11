@@ -153,8 +153,9 @@ public class SessionDao {
 	public Boolean deleteYou(String you) {
 		long row = deleteSessionByYou(you);
 		long chat = ChatMsgDao.getInstance().deleteYouMsg(you);
-		QApp.getInstance().sendBroadcast(new Intent(Const.ACTION_ADDFRIEND));
-		if (row > 0 && chat > 0) {
+	
+		if (row > 0) {
+			QApp.getInstance().sendBroadcast(new Intent(Const.ACTION_ADDFRIEND));
 			return true;
 		}
 		return false;

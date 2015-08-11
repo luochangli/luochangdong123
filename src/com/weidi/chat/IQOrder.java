@@ -18,8 +18,8 @@ import com.weidi.provider.BingNewPhoneIQ;
 import com.weidi.provider.BingNewPhoneProvider;
 import com.weidi.provider.CreateMUCIQ;
 import com.weidi.provider.CreateMUCProvider;
-import com.weidi.provider.DeleteFriend_ReMarkIQ;
-import com.weidi.provider.DeleteFriend_ReMarkProvider;
+import com.weidi.provider.DelRemarkIQ;
+import com.weidi.provider.DelRemarkProvider;
 import com.weidi.provider.EntryMUCPresence;
 import com.weidi.provider.ForgetPasswordIQ;
 import com.weidi.provider.ForgetPasswrodProvider;
@@ -27,8 +27,8 @@ import com.weidi.provider.GetAccountByPhoneIQ;
 import com.weidi.provider.GetAccountByPhoneProvider;
 import com.weidi.provider.GetBindPhoneIQ;
 import com.weidi.provider.GetBindPhoneProvider;
-import com.weidi.provider.GetFriend_ReMarkIQ;
-import com.weidi.provider.GetFriend_ReMarkProvider;
+import com.weidi.provider.GetRemarkIQ;
+import com.weidi.provider.GetRemarkProvider;
 import com.weidi.provider.GetPassWordHintProvider;
 import com.weidi.provider.GetPasswordHintIQ;
 import com.weidi.provider.MUCAddmemberIQ;
@@ -54,8 +54,8 @@ import com.weidi.provider.RegAuthcodeIQ;
 import com.weidi.provider.RegAuthcodeProvider;
 import com.weidi.provider.RegIQ;
 import com.weidi.provider.RegProvider;
-import com.weidi.provider.SaveFriend_ReMarkIQ;
-import com.weidi.provider.SaveFriend_ReMarkProvider;
+import com.weidi.provider.SaveRemarkIQ;
+import com.weidi.provider.SaveRemarkProvider;
 import com.weidi.provider.testProvider;
 import com.weidi.util.Const;
 import com.weidi.util.Logger;
@@ -91,7 +91,7 @@ public class IQOrder {
 		try {
 			CreateMUCIQ iq = new CreateMUCIQ(mucName, description, usernick);
 			iq.setType(IQ.Type.SET);
-			
+
 			pm.addIQProvider(Const.QUERY, Const.XMLNS, new CreateMUCProvider());
 			PacketFilter filter = new AndFilter(new PacketIDFilter(
 					iq.getPacketID()), new PacketTypeFilter(CreateMUCIQ.class));
@@ -137,17 +137,26 @@ public class IQOrder {
 	 * 
 	 * @param muc
 	 */
-	public void obtainMUCInfo(String muc) {
+	public ObtainMUCInfoIQ obtainMUCInfo(String muc) {
 		try {
 			pm.addIQProvider(Const.QUERY, Const.XMLNS,
 					new ObtainMUCInfoProvider());
 			ObtainMUCInfoIQ iq = new ObtainMUCInfoIQ();
 			iq.setMuc(muc);
 			iq.setType(IQ.Type.GET);
-			Log.i("TAG", iq.toXML());
+
+			PacketFilter filter = new AndFilter(new PacketIDFilter(
+					iq.getPacketID()), new PacketTypeFilter(
+					ObtainMUCInfoIQ.class));
+			PacketCollector collector = conn.createPacketCollector(filter);
 			conn.sendPacket(iq);
+			ObtainMUCInfoIQ result = (ObtainMUCInfoIQ) collector
+					.nextResult(SmackConfiguration.getPacketReplyTimeout());
+
+			return result;
 		} catch (Exception e) {
-			// TODO: handle exception
+			Logger.e(TAG, e.toString());
+			return null;
 		}
 
 	}
@@ -307,6 +316,7 @@ public class IQOrder {
 			ObtainMUCmemberIQ iq = new ObtainMUCmemberIQ();
 			iq.setType(IQ.Type.GET);
 			iq.setMuc(muc);
+
 			PacketFilter filter = new AndFilter(new PacketIDFilter(
 					iq.getPacketID()), new PacketTypeFilter(
 					ObtainMUCmemberIQ.class));
@@ -350,17 +360,22 @@ public class IQOrder {
 	 * @param muc
 	 * @param nickname
 	 */
-	public void getFriendRemark(String username) {
+	public GetRemarkIQ getRemark(String username) {
 		try {
 			pm.addIQProvider(Const.QUERY_REMARK, Const.XMLNS_REMARK,
-					new GetFriend_ReMarkProvider());
-			GetFriend_ReMarkIQ iq = new GetFriend_ReMarkIQ();
+					new GetRemarkProvider());
+			GetRemarkIQ iq = new GetRemarkIQ();
 			iq.setType(IQ.Type.GET);
 			iq.setUsername(username);
-			Log.i("TAG", iq.toXML());
+			PacketFilter filter = new AndFilter(new PacketIDFilter(
+					iq.getPacketID()), new PacketTypeFilter(GetRemarkIQ.class));
+			PacketCollector collector = conn.createPacketCollector(filter);
 			conn.sendPacket(iq);
+			GetRemarkIQ result = (GetRemarkIQ) collector
+					.nextResult(SmackConfiguration.getPacketReplyTimeout());
+			return result;
 		} catch (Exception e) {
-			// TODO: handle exception
+			return null;
 		}
 
 	}
@@ -371,18 +386,24 @@ public class IQOrder {
 	 * @param muc
 	 * @param nickname
 	 */
-	public void saveFriendRemark(String username, String nickname) {
+	public SaveRemarkIQ saveRemark(String username, String nickname) {
 		try {
 			pm.addIQProvider(Const.QUERY_REMARK, Const.XMLNS_REMARK,
-					new SaveFriend_ReMarkProvider());
-			SaveFriend_ReMarkIQ iq = new SaveFriend_ReMarkIQ();
+					new SaveRemarkProvider());
+			SaveRemarkIQ iq = new SaveRemarkIQ();
 			iq.setType(IQ.Type.SET);
 			iq.setUsername(username);
 			iq.setNickname(nickname);
-			Log.i("TAG", iq.toXML());
+
+			PacketFilter filter = new AndFilter(new PacketIDFilter(
+					iq.getPacketID()), new PacketTypeFilter(SaveRemarkIQ.class));
+			PacketCollector collector = conn.createPacketCollector(filter);
 			conn.sendPacket(iq);
+			SaveRemarkIQ result = (SaveRemarkIQ) collector
+					.nextResult(SmackConfiguration.getPacketReplyTimeout());
+			return result;
 		} catch (Exception e) {
-			// TODO: handle exception
+			return null;
 		}
 
 	}
@@ -393,15 +414,25 @@ public class IQOrder {
 	 * @param muc
 	 * @param nickname
 	 */
-	public void delFriendRemark(String username) {
-		pm.addIQProvider(Const.QUERY_REMARK, Const.XMLNS_REMARK,
-				new DeleteFriend_ReMarkProvider());
+	public DelRemarkIQ delRemark(String username) {
+		try {
+			pm.addIQProvider(Const.QUERY_REMARK, Const.XMLNS_REMARK,
+					new DelRemarkProvider());
 
-		DeleteFriend_ReMarkIQ iq = new DeleteFriend_ReMarkIQ();
-		iq.setType(IQ.Type.SET);
-		iq.setUsername(username);
-		Log.i("TAG", iq.toXML());
-		conn.sendPacket(iq);
+			DelRemarkIQ iq = new DelRemarkIQ();
+			iq.setType(IQ.Type.SET);
+			iq.setUsername(username);
+
+			PacketFilter filter = new AndFilter(new PacketIDFilter(
+					iq.getPacketID()), new PacketTypeFilter(DelRemarkIQ.class));
+			PacketCollector collector = conn.createPacketCollector(filter);
+			conn.sendPacket(iq);
+			DelRemarkIQ result = (DelRemarkIQ) collector
+					.nextResult(SmackConfiguration.getPacketReplyTimeout());
+			return result;
+		} catch (Exception e) {
+			return null;
+		}
 
 	}
 
@@ -596,7 +627,7 @@ public class IQOrder {
 		}
 
 	}
-	
+
 	/**
 	 * 获取新闻
 	 * 

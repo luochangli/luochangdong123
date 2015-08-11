@@ -48,6 +48,7 @@ import com.weidi.activity.FriendInfoActi;
 import com.weidi.activity.NewFriendActivity;
 import com.weidi.activity.SearchActivity;
 import com.weidi.bean.User;
+import com.weidi.chat.RemarkRepo;
 import com.weidi.common.CharacterParser;
 import com.weidi.common.ClearEditText;
 import com.weidi.common.PinyinComparator;
@@ -78,7 +79,7 @@ public class NewConstactFragment extends BaseFragment {
 	public static final String REFRESH_CONSTACT = "refresh_constacts";
 	public static final String SHOW_NEW_FRIEND = "show_new_friend";
 	public static final String SEARCH = "search";
-	
+
 	private ListView sortListView;
 	private SideBar sideBar;
 	private TextView dialog;
@@ -159,8 +160,9 @@ public class NewConstactFragment extends BaseFragment {
 				if (intent.getAction().equals(SHOW_NEW_FRIEND)) {
 					updateConstant();
 				}
-				if(intent.getAction().equals(SEARCH)){
-					TranslateAnimation animation = new TranslateAnimation(0, 0, -y, 0);
+				if (intent.getAction().equals(SEARCH)) {
+					TranslateAnimation animation = new TranslateAnimation(0, 0,
+							-y, 0);
 					animation.setDuration(500);
 					animation.setFillAfter(true);
 					llConstact.startAnimation(animation);
@@ -172,7 +174,8 @@ public class NewConstactFragment extends BaseFragment {
 				REFRESH_CONSTACT));
 		mLocalBroadcastManager.registerReceiver(mReceiver, new IntentFilter(
 				SHOW_NEW_FRIEND));
-		mLocalBroadcastManager.registerReceiver(mReceiver, new IntentFilter(SEARCH));
+		mLocalBroadcastManager.registerReceiver(mReceiver, new IntentFilter(
+				SEARCH));
 	}
 
 	private void initView() {
@@ -244,7 +247,7 @@ public class NewConstactFragment extends BaseFragment {
 					// showPopupWindow(view, from);
 					Intent in = new Intent(mContext, FriendInfoActi.class);
 					Bundle bundle = new Bundle();
-					bundle.putString(Const.USER_NAME, from);
+					bundle.putString(Const.YOU, from);
 					in.putExtras(bundle);
 					startActivity(in);
 
@@ -307,7 +310,8 @@ public class NewConstactFragment extends BaseFragment {
 
 				y = llSearch.getY();
 				height = llSearch.getHeight();
-				TranslateAnimation animation = new TranslateAnimation(0, 0, 0, -y);
+				TranslateAnimation animation = new TranslateAnimation(0, 0, 0,
+						-y);
 				animation.setDuration(300);
 				animation.setFillAfter(true);
 				animation.setAnimationListener(new AnimationListener() {
@@ -315,13 +319,13 @@ public class NewConstactFragment extends BaseFragment {
 					@Override
 					public void onAnimationEnd(Animation arg0) {
 						// TODO Auto-generated method stub
-						
+
 					}
 
 					@Override
 					public void onAnimationRepeat(Animation arg0) {
 						// TODO Auto-generated method stub
-						
+
 					}
 
 					@Override
@@ -329,11 +333,12 @@ public class NewConstactFragment extends BaseFragment {
 						Intent intent = new Intent();
 						intent.setClass(mContext, ConstactSearchActi.class);
 						startActivity(intent);
-						activity.overridePendingTransition(R.anim.animation_2,R.anim.animation_1);
+						activity.overridePendingTransition(R.anim.animation_2,
+								R.anim.animation_1);
 					}
-					
+
 				});
-				
+
 				llConstact.startAnimation(animation);
 			}
 		});
@@ -352,19 +357,21 @@ public class NewConstactFragment extends BaseFragment {
 		for (int i = 0; i < data.size(); i++) {
 			try {
 				SortModel sortModel = new SortModel();
-				user = VCardDao.getInstance().getUser(
-						StringUtils.parseName(data.get(i)));
-				if (user == null) {
+				// user = VCardDao.getInstance().getUser(
+				// StringUtils.parseName(data.get(i)));
+				String to = StringUtils.parseName(data.get(i));
+				String toNick = RemarkRepo.getRemark(to);
+				if (toNick == null) {
 					user = new User(XmppUtil.getUserInfo(StringUtils
 							.parseName(data.get(i))));
+					toNick = user.getNickname() == null ? user.getUsername()
+							: user.getNickname();
 				}
-				String nick = user.getNickname() == null ? user.getUsername()
-						: user.getNickname();
-				sortModel.setName(nick);
-				sortModel.setValue(user.getUsername());
+				sortModel.setName(toNick);
+				sortModel.setValue(to);
 
 				// 汉字转换成拼音
-				String pinyin = characterParser.getSelling(nick);
+				String pinyin = characterParser.getSelling(toNick);
 				String sortString = pinyin.substring(0, 1).toUpperCase();
 
 				// 正则表达式，判断首字母是否是英文字母
@@ -517,7 +524,7 @@ public class NewConstactFragment extends BaseFragment {
 		popFriendMore.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//addPopWindow.showPopupWindow(null);
+				// addPopWindow.showPopupWindow(null);
 
 			}
 		});

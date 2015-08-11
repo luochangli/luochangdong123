@@ -155,7 +155,8 @@ public class FriendActivity extends BaseActivity implements OnClickListener {
 				XmppUtil.addUsers(QApp.getXmppConnection().getRoster(),XmppUtil.getFullUsername(username),username,"friend");
 				ToastUtil
 						.showShortToast(getApplicationContext(), "添加成功，等待通过验证");
-			    QApp.mLocalBroadcastManager.sendBroadcast(new Intent(NewConstactFragment.REFRESH_CONSTACT));
+				QApp.mLocalBroadcastManager.sendBroadcast(new Intent(
+						NewConstactFragment.REFRESH_CONSTACT));
 			    finish();
 			} else if (operBtn.getText().equals("移出通讯录")) {
 				XmppUtil.removeUser(QApp.getXmppConnection().getRoster(), XmppUtil.getFullUsername(username));

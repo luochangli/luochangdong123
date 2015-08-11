@@ -39,22 +39,29 @@
             android:layout_marginLeft="@dimen/margin_chat_activity"
             android:layout_toRightOf="@id/iv_userhead" >
 
-            <ImageView
-                android:id="@+id/iv_recvPicture"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:background="@drawable/chatfrom_bg"
-                android:padding="17dp"
-                android:scaleType="fitCenter" />
+            <LinearLayout
+                android:id="@+id/llpic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/iv_recvPicture"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/chatfrom_bg"
+                    android:padding="17dp"
+                    android:scaleType="fitCenter" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ll_loading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/iv_recvPicture"
+                android:layout_toRightOf="@id/llpic"
                 android:gravity="center"
-                android:orientation="vertical" 
-                android:visibility="gone">
+                android:orientation="vertical"
+                android:visibility="gone" >
 
                 <ProgressBar
                     android:id="@+id/progressBar"
@@ -86,7 +93,6 @@
             android:layout_toRightOf="@+id/row_recv_pic"
             android:maxLines="2"
             android:text="10:30  下午" />
-
     </RelativeLayout>
 
 </LinearLayout>

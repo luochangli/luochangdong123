@@ -23,6 +23,9 @@ public class ObtainMUCInfoProvider implements IQProvider {
 					String muc = parser.nextText();
 					provider.setMuc(muc);
 				}
+				if (parser.getName().equals("error")) {
+					provider.setErrorCode(parser.getAttributeValue(0));
+				}
 				if (parser.getName().equals("name")) {
 					provider.setName(parser.nextText());
 				}

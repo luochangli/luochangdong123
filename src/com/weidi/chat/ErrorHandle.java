@@ -15,6 +15,28 @@ import com.weidi.util.ToastUtil;
 public class ErrorHandle {
 	private static Context mContext = QApp.getInstance();
 
+	public static void mucChatError(String errorCode) {
+		if (errorCode.equals(MucChatRepo.Error_DB)) {
+			ToastUtil.showShortLuo(MucChatRepo.Error_DB_S);
+		}
+		if (errorCode.equals(MucChatRepo.Error_Muc_Not_Exist)) {
+			ToastUtil.showShortLuo(MucChatRepo.Error_Muc_Not_Exist_S);
+		}
+		if (errorCode.equals(MucChatRepo.Error_Not_FoundUser)) {
+			ToastUtil.showShortLuo(MucChatRepo.Error_Not_FoundUser_S);
+		}
+		if (errorCode.equals(MucChatRepo.Error_Not_Power)) {
+			ToastUtil.showShortLuo(MucChatRepo.Error_Not_Power_S);
+		}
+		if (errorCode.equals(MucChatRepo.Error_Param)) {
+			ToastUtil.showShortLuo(MucChatRepo.Error_Param_S);
+		}
+		if (errorCode.equals(MucChatRepo.Error_Room_Existed)) {
+			ToastUtil.showShortLuo(MucChatRepo.Error_Room_Existed_S);
+		}
+
+	}
+
 	public static void errorCodeHint(String errorCode) {
 
 		if (errorCode.equals(Const.CODE_1)) {

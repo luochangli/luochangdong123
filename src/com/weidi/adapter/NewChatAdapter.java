@@ -458,6 +458,7 @@ public class NewChatAdapter extends BaseAdapter {
 			if (item.getIsRecv() == ChatItem.STATUS_1) {
 				final ViewHolderRecvVoice voiceRecv = (ViewHolderRecvVoice) object;
 				voiceRecv.unread.setVisibility(View.GONE);
+				item.setVoiceReaded(ChatItem.STATUS_1);
 				ChatDao.getInstance().updateVoiceReaded(item);
 				showVoiceAnim(voiceRecv.btnPlayVoice, item);
 				MediaManager.playSound(item.getContent(),

@@ -178,7 +178,7 @@
                     android:background="@drawable/caht_input_bg"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:textSize="14sp"
+                    android:textSize="13sp"
                     android:visibility="gone" />
             </RelativeLayout>
         </RelativeLayout>

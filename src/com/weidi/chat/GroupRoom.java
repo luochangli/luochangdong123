@@ -7,6 +7,7 @@ import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 
 import com.weidi.QApp;
+import com.weidi.listener.MsgListener;
 import com.weidi.util.Const;
 
 /**
@@ -28,7 +29,7 @@ public class GroupRoom {
 
 		try {
 			multiChat = new MultiUserChat(QApp.getXmppConnection(), muc);
-//			multiChat.addMessageListener(new MsgListener());
+			multiChat.addMessageListener(new MsgListener());
 			multiChat.join(Const.USER_NAME);
 		
 

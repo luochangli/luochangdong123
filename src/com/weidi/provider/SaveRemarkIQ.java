@@ -8,29 +8,20 @@ import org.jivesoftware.smack.util.StringUtils;
  * @date 创建时间：2015-7-9 上午11:27:05
  * @Description 1.0 获取指定群信息
  */
-public class SaveFriend_ReMarkIQ extends IQ {
+public class SaveRemarkIQ extends IQ {
 
 	private String username;
 	private String nickname;
-	private String error;
-	private String attr_error;
+	private String errorCode;
 
-	
 
-	public String getmyError() {
-		return error;
+
+	public String getErrorCode() {
+		return errorCode;
 	}
 
-	public void setmyError(String error) {
-		this.error = error;
-	}
-
-	public String getAttr_error() {
-		return attr_error;
-	}
-
-	public void setAttr_error(String attr_error) {
-		this.attr_error = attr_error;
+	public void setErrorCode(String errorCode) {
+		this.errorCode = errorCode;
 	}
 
 	public String getUsername() {
@@ -58,14 +49,12 @@ public class SaveFriend_ReMarkIQ extends IQ {
 			return getresult();
 		}
 		if(this.getType().equals(IQ.Type.ERROR)){
-			error();
+			return getErrorCode();
 		}
 		return null;
 	}
 
 	private String getresult() {
-		if(getUsername()==null)
-			return null;
 		StringBuilder sb = new StringBuilder();
 		sb.append("<query xmlns=\"com:jsm:remark\" event=\"save\">");
 		sb.append("</query>");
@@ -85,14 +74,6 @@ public class SaveFriend_ReMarkIQ extends IQ {
 		return sb.toString();
 	}
 	
-	private String error() {
-		if (getmyError()==null)
-			return null;
-		StringBuilder sb = new StringBuilder();
-		sb.append("<query xmlns=\"com:jsm:remark\" event=\"save\">");
-		sb.append("<error code=").append(StringUtils.escapeForXML(getAttr_error())).append(">").append(StringUtils.escapeForXML(getmyError())).append("</error>");
-		sb.append("</query>");
-		return sb.toString();
-	}
+	
 
 }

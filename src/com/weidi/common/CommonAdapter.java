@@ -74,6 +74,7 @@ public abstract class CommonAdapter<T> extends BaseAdapter
 	 * @param elem
 	 */
 	public void addAll(List<T> elem) {
+
 		mDatas.addAll(elem);
         notifyDataSetChanged();
     }

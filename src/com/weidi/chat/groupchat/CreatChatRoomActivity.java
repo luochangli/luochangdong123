@@ -34,6 +34,7 @@ import com.weidi.activity.ChatActivity;
 import com.weidi.chat.GroupChatSettingActi;
 import com.weidi.chat.GroupRoom;
 import com.weidi.chat.IQOrder;
+import com.weidi.chat.NewChatActivity;
 import com.weidi.common.CommonAdapter;
 import com.weidi.common.SortModel;
 import com.weidi.common.ViewHolder;
@@ -268,13 +269,12 @@ public class CreatChatRoomActivity extends BaseActivity {
 								XmppUtil.getFullUsername(item.getValue()),
 								item.getName() == null ? item.getValue() : item
 										.getName());
-						Intent intent1 = new Intent(mContext,
-								ChatActivity.class);
-						intent1.putExtra("from",
-								StringUtils.parseName(iq.getMuc()));
-						startActivity(intent1);
-						finish();
+
 					}
+					Intent intent1 = new Intent(mContext, NewChatActivity.class);
+					intent1.putExtra("from", StringUtils.parseName(iq.getMuc()));
+					startActivity(intent1);
+					finish();
 
 				}
 			}
