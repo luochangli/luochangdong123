@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:background="#262c35" >
+        
+        <RelativeLayout
+            android:id="@+id/contact_list_back_btnll"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp" >
+
+            <ImageButton
+                android:id="@+id/contact_list_back_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/detail_03back" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="90dip"
+            android:layout_height="30dip"
+            android:layout_centerInParent="true"
+            android:text="手机联系人"
+            android:gravity="center"
+            android:textColor="#a7dce3"
+            android:textSize="15dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/contact_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="2dp"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/contact_list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="#00000000"
+            android:background="#E8E8E8"
+            android:scrollbars="none" />
+
+        <com.weidi.chat.repository.MyLetterListView
+            android:id="@+id/ContactLetterListView"
+            android:layout_width="30dip"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:background="#40000000" />
+    </RelativeLayout>
+
+</LinearLayout>

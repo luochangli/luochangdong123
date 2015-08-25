@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+   
+    android:id="@+id/ll" >
+    <RelativeLayout 
+        android:id="@+id/re_mm"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="200dp"
+       android:alpha="0.4"
+        android:background="@drawable/btn_reg_next_nomal">
+        
+        <RelativeLayout 
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/re_title"
+           >
+            <TextView 
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="公告"
+            android:layout_centerInParent="true"
+            android:textSize="20sp"/> 
+            <ImageView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/img"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="30dp"
+                android:src="@drawable/friend_close_selector"
+                android:layout_toRightOf="@+id/title"/>
+            
+       
+        </RelativeLayout>
+       
+    <RelativeLayout 
+          android:id="@+id/re_ct"
+          android:layout_below="@+id/re_content"
+          android:layout_width="match_parent"
+          android:layout_height="50dp"
+          android:background="#ffffff"
+         >
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="content"
+            android:textSize="14sp"
+            android:layout_centerVertical="true"
+            android:textColor="#646464" 
+            android:layout_marginLeft="8dp"
+            android:textScaleX="1.5"/>
+        
+       
+          
+      </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/re_content"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/re_title"
+        android:background="#ffffff" >
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="content"
+            android:textSize="14sp"
+            android:layout_marginLeft="8dp"
+            android:textColor="#323232" />
+    </RelativeLayout>
+    
+    </RelativeLayout>
+    
+</LinearLayout>
